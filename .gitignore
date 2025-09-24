@@ -49,3 +49,6 @@ build/            # 自定义构建目录（如有）
 .idea/            # JetBrains IDE 配置目录
 .DS_Store         # macOS 系统文件
 Thumbs.db         # Windows 缩略图缓存
+0-Template/MDK-ARM/.vscode/uv4.log
+0-Template/MDK-ARM/.vscode/uv4.log.lock
+0-Template/MDK-ARM/Template/Template.build_log.htm
