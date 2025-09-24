@@ -127,7 +127,7 @@ int main(void)
 		// ********************  while循环  ********************
 		if (Key_Check(KEY_1 , KEY_SINGLE))
 		{
-			HAL_GPIO_TogglePin(LED1_GPIO_Port , LED1_Pin) ;
+			HAL_GPIO_TogglePin(LED2_GPIO_Port , LED2_Pin) ;
 		}
 		
 		// ********************  while实验区域  ********************
@@ -196,7 +196,7 @@ void HAL_SYSTICK_Callback(void)
 	// 功能1: 
 	if (ms_count % 1000 == 0) 
 	{
-		
+		HAL_GPIO_TogglePin(LED2_GPIO_Port , LED2_Pin) ;
 	}
 	
 	// 功能2: 按键检测
