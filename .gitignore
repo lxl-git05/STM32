@@ -77,3 +77,8 @@ Thumbs.db        # Windows 缩略图缓存
 #   - 工程配置: *.uvprojx
 #   - RTE 配置: *.rteconfig
 #   - 链接文件: *.sct (如果团队共享)
+
+# Keil 编译日志文件（全局忽略）
+**/uv4.log
+**/uv4.log.lock
+**/Template.build_log.htm
