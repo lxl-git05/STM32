@@ -4,8 +4,12 @@
 #include "stdio.h"
 #include "main.h"
 
-// 定义接受长度
+// 定义IDE接受长度
 #define USART_RX_BUF_LEN 25 
+// 定义数据包整体长度
+#define Data_Serial 15	
+// 定义溢出长度
+#define OutLen 20
 
 void Serial_Rx_init(void);
 

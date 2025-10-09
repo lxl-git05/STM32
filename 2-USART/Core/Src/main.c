@@ -63,12 +63,12 @@ void SystemClock_Config(void);
 // *******************全局变量*******************
 // 接收状态和缓冲区
 extern uint8_t USART_RX_BUF[] ;
-
+extern int DataArr[] ;
 // *******************实验区域*******************
 int check1 ;
 int check2 ;
-int check[6] ;
-int usart_check[USART_RX_BUF_LEN] ;
+int check[100] ;
+
 
 /* USER CODE END 0 */
 
@@ -109,8 +109,12 @@ int main(void)
 	// 初始化OLED
 	OLED_Init() ;
 	OLED_ShowString(0 , 0 , "Hello World" , OLED_8X16 ) ;
-  // 接收中断初始化
-	HAL_UARTEx_ReceiveToIdle_IT(&huart1, USART_RX_BUF, USART_RX_BUF_LEN);
+	
+//  // 接收中断初始化
+//	HAL_UARTEx_ReceiveToIdle_IT(&huart1, USART_RX_BUF, USART_RX_BUF_LEN);
+	
+	// 单字符接收中断初始化
+	HAL_UART_Receive_IT(&huart1, USART_RX_BUF, 1);  // 每次接收1字节
 	
 	// ******************* 实验区域 *******************
 
@@ -131,8 +135,20 @@ int main(void)
 		}
 		
 		// ******************* 实验区域 *******************
+		// 展示接收的数据
+		if (Serial_GetRxFlag() == 1)
+		{
+//			check[check2] = Serial_GetRxData();
+//			Serial_SendByte(check[check2]);
+//			OLED_ShowHexNum(0, 20, check[check2++], 2 , OLED_8X16 );
+		}
 		
-		
+//		OLED_ShowHexNum(0  , 20 , DataArr[0] , 2 , OLED_6X8 ) ;
+//		OLED_ShowNum(0  , 40 , DataArr[1] , 2 , OLED_6X8 ) ;
+//		OLED_ShowNum(20 , 40 , DataArr[2] , 2 , OLED_6X8 ) ;
+//		OLED_ShowNum(40 , 40 , DataArr[3] , 2 , OLED_6X8 ) ;
+//		OLED_ShowNum(60 , 40 , DataArr[4] , 2 , OLED_6X8 ) ;
+
 		// 必须存在:OLED更新
 		OLED_Update() ;
   }
