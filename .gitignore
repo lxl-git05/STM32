@@ -26,26 +26,35 @@
 *.iex
 
 # Keil 工程临时/个性化配置
-*.bak            # 备份文件
-*.dep            # 依赖文件
-*.uvoptx         # 用户环境配置（调试窗口布局等，因人而异）
-*.uvguix.*       # Keil GUI 配置文件（因人而异）
+# 备份文件
+*.bak            
+# 依赖文件
+*.dep          
+# 用户环境配置（调试窗口布局等，因人而异）  
+*.uvoptx         
+# Keil GUI 配置文件（因人而异）
+*.uvguix.*       
 
 # ==========================
 # IntelliJ IDEA / JetBrains
 # ==========================
 
-.idea/           # IDEA 工程配置目录
-*.iml            # 模块文件
-*.iws            # 工作区文件
-out/             # 默认编译输出目录
+# IDEA 工程配置目录
+/.idea/          
+# 模块文件
+*.iml            
+# 工作区文件
+*.iws            
+# 默认编译输出目录
+out/             
 
 # =================
 # VS Code
 # =================
-
-.vscode/         # VS Code 配置目录
-*.code-workspace # VS Code 工作区文件
+# VS Code 配置目录
+.vscode/         
+# VS Code 工作区文件
+*.code-workspace 
 
 # 可选：只保留部分配置（如要共享调试/编译配置）
 # .vscode/*
@@ -55,19 +64,24 @@ out/             # 默认编译输出目录
 # =================
 # 通用系统垃圾文件
 # =================
-
-.DS_Store        # macOS Finder 缓存
-Thumbs.db        # Windows 缩略图缓存
-*.log            # 日志文件
-*.tmp            # 临时文件
+# macOS Finder 缓存
+.DS_Store        
+# Windows 缩略图缓存
+Thumbs.db        
+# 日志文件
+*.log            
+# 临时文件
+*.tmp            
 
 # =================
 # 输出目录（可选）
 # =================
-
-/build/          # 常见构建目录
-/Debug/          # Keil/MDK Debug 输出
-/Release/        # Keil/MDK Release 输出
+# 常见构建目录
+/build/          
+# Keil/MDK Debug 输出
+/Debug/          
+# Keil/MDK Release 输出
+/Release/        
 
 # ========================================
 # 建议提交的文件（不要忽略）
@@ -82,3 +96,12 @@ Thumbs.db        # Windows 缩略图缓存
 **/uv4.log
 **/uv4.log.lock
 **/Template.build_log.htm
+
+# ========================================
+# Latex(vscode编辑器)忽略配置
+# ========================================
+
+**/main.log
+**/main.pdf
+**/main.synctex.gz
+**/main.aux
