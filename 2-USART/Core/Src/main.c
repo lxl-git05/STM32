@@ -56,11 +56,18 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 // *******************库/函数导入*******************
+// 系统库
+#include <stdlib.h>
+#include "string.h"
+#include <stdio.h>
+// 自设库
 #include "OLED.h"
 #include "Key.h"
-#include "string.h"
 #include "Serial.h"
+#include "PID.h"
 // *******************全局变量*******************
+// PID + VOFA+调试代码
+//#define PID_VOFA	// 记得打开文本模式的函数哦
 // 接收状态和缓冲区
 extern uint8_t USART_RX_BUF[] ;
 extern int DataArr[] ;
@@ -69,7 +76,19 @@ int check1 ;
 int check2 ;
 int check[100] ;
 
+// 江协版 文本:
+extern char Serial_RxPacket[] ;
 
+#ifdef PID_VOFA
+// 实验:PID + VOFA
+Pid_Typedef PID ;
+float Kp;			// 比例系数				0.7
+float Ki;			// 积分系数				0.05
+float Kd;			// 微分系数				0.01
+float goalPoint = 5.0 ;
+float setPoint ;
+float realPoint ;
+#endif
 /* USER CODE END 0 */
 
 /**
@@ -117,7 +136,9 @@ int main(void)
 	HAL_UART_Receive_IT(&huart1, USART_RX_BUF, 1);  // 每次接收1字节
 	
 	// ******************* 实验区域 *******************
-
+	#ifdef PID_VOFA
+	PID_Init(&PID , Kp , Ki , Kd , goalPoint ) ;
+	#endif
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -137,16 +158,48 @@ int main(void)
 		}
 		
 		// ******************* 实验区域 *******************
+		#ifdef PID_VOFA
+		realPoint = setPoint * 1.2f ;
+		#endif
+		
 		// 展示接收的数据
 		if (Serial_GetRxFlag() == 1)
 		{
-			printf("\r\nDataNum: %d \r\n" , DataArr[0]) ;
-			int i ;
-			for(i = 1 ; i < 8 ; i ++)
-			{
-				printf("%d " , DataArr[i]) ;
-			}
-			printf("%d \n" , DataArr[i]) ;
+			// 自己版测试:
+//			printf("\r\nDataNum: %d \r\n" , DataArr[0]) ;
+//			int i ;
+//			for(i = 1 ; i < 8 ; i ++)
+//			{
+//				printf("%d " , DataArr[i]) ;
+//			}
+//			printf("%d \n" , DataArr[i]) ;
+			// 江协 文本版 测试
+//			printf("Text \n") ;
+//			if (strcmp(Serial_RxPacket, "LED_Change") == 0)
+//			{
+//				HAL_GPIO_TogglePin(LED0_GPIO_Port , LED0_Pin) ;
+//			}
+//			printf("%s\n" , Serial_RxPacket) ;
+			// 江协 文本版 PID测试
+				#ifdef PID_VOFA
+				if ( strstr(Serial_RxPacket , "Kp") != NULL )
+				{
+					sscanf(Serial_RxPacket, "Kp=%f\n", &Kp);
+					printf("Kp = %.2f\n" , Kp) ;
+				}
+				else if ( strstr(Serial_RxPacket , "Ki") != NULL )
+				{
+					sscanf(Serial_RxPacket, "Ki=%f", &Ki);
+					printf("Ki = %.2f\n" , Ki) ;
+				}
+				else if ( strstr(Serial_RxPacket , "Kd") != NULL )
+				{
+					sscanf(Serial_RxPacket, "Kd=%f", &Kd);
+					printf("Kd = %.2f\n" , Kd) ;
+				}
+				#endif
+			// 江协 HEX 测试
+				
 		}
 		// OLED显示
 //		OLED_ShowHexNum(0  , 20 , DataArr[0] , 2 , OLED_6X8 ) ;
@@ -216,6 +269,15 @@ void HAL_SYSTICK_Callback(void)
 	}
 	// 功能2: 按键
 	Key_Tick() ;
+	// 实验
+	#ifdef PID_VOFA
+	if (count_sys % 40 == 0) 
+	{
+		PID_Set(&PID , Kp , Kd , Ki , goalPoint ) ;
+		setPoint = PID_Cal(&PID , realPoint , -5 , 15 ) ;
+		printf("%f , %f , %f \n" , goalPoint , setPoint , realPoint ) ;
+	}
+	#endif
 }
 
 /* USER CODE END 4 */

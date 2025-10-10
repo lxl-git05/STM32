@@ -6,20 +6,25 @@
 // *************串口功能参数*************
 uint8_t USART_RX_BUF[USART_RX_BUF_LEN] ;
 
+// 串口接收数据和标志位变量
 int Serial_RxData ;	// 接收到的1个字节的数据
 int Serial_RxFlag ;	// 接收到数据的标志位(注意不要直接引用这个,Serial_GetRxFlag才是正确的)
 
-// *************状态机处理数据参数*************
-
-// 状态机处理数据参数
-int DataState = 0 ;
-int isDataNumByte = 0 ;
 // 接收数据数组
 int TempArr[Data_Serial] ;	// 临时数据
 int DataArr[Data_Serial]	;	// 正式数据
 
 // 错误查询参数
 int error_Serial ;	
+
+// 1. *************我自己的版本的变量*************
+
+// 状态机处理数据参数
+int DataState = 0 ;
+int isDataNumByte = 0 ;
+
+// 2. *************江协版(HEX)变量*************
+char Serial_RxPacket[100];	// 文本包
 
 // ************* 函数定义 *************
 
@@ -103,6 +108,7 @@ uint16_t Merge_2Bytes(uint8_t high, uint8_t low)
 }
 
 // ************** 数据分配端	**************
+// 自己的HEX
 void DataCheck(void)
 {
 	// 接收数据
@@ -191,6 +197,73 @@ void DataCheck(void)
  }
 }
 
+// 江协版 文本
+void DataCheck_Text_JX(void)
+{
+	static uint8_t RxState = 0;		//定义表示当前状态机状态的静态变量
+	static uint8_t pRxPacket = 0;	//定义表示当前接收数据位置的静态变量
+	// 接收数据
+	uint8_t RxData = Serial_RxData ;
+	// 状态机
+	// 任务:等待帧头:'@'并且是开始接受数据而不是内部
+	if (RxState == 0)
+	{
+		if (RxData == '@' && Serial_RxFlag == 0 )
+		{
+			RxState = 1 ;				// 任务:等待帧头完成,进入下一个状态
+			pRxPacket = 0 ;			// 操作:开始记录数据
+			error_Serial = 0 ;  // 暂时没有错误
+		}
+		else
+		{
+			error_Serial = 1 ;// 错误1:帧头错误 
+		}
+	}
+	// 任务:等待帧尾的第1帧:'$'
+	else if (RxState == 1)
+	{
+		if (RxData == '$')
+		{
+			RxState = 2 ; // 任务:等待第1个结束帧完成,进入下一个状态
+		}
+		else	// 接收的是正常的数据
+		{
+			// 操作:开始录入数据
+			Serial_RxPacket[pRxPacket++] = RxData ; // 录入正常包
+		}
+		if (pRxPacket >= OutLen)	// 新增防止溢出,如果帧尾没有出现'$'
+		{
+			RxState = 0 ;	// 状态归零
+			memset(Serial_RxPacket, 0, sizeof(Serial_RxPacket));	// 清空记录数据
+			pRxPacket = 0 ;
+			error_Serial = 2 ; // 错误2:数据溢出('$'帧尾未出现)
+		}
+	}
+	// 任务:等待接收第2个结束帧:'#'
+	else if (RxState == 2)
+	{
+		if (RxData == '#')// 任务:等待第2个结束帧完成,本次循环大功告成
+		{
+			RxState = 0 ;	// 状态归零
+			Serial_RxPacket[pRxPacket] = '\0' ;	// 结束标志
+			Serial_RxFlag = 1 ;	// *标志位置1 , 标志本轮数据包解读成功*
+		}
+		else	// 2号帧尾出现问题
+		{
+			RxState = 0 ;	// 状态归零
+			memset(Serial_RxPacket, 0, sizeof(Serial_RxPacket));	// 清空记录数据
+			pRxPacket = 0 ;
+			error_Serial = 3 ; // 错误3:帧尾错误('#'帧尾未出现)
+		}
+	}
+}
+
+// 江协版 HEX 
+void DataCheck_HEX_JX(void)
+{
+	
+}
+
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     if (huart->Instance == USART1)
@@ -200,9 +273,19 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         
         // 接收数据处理
 				Serial_RxData = rx ;
-				// 数据包处理
-				DataCheck() ;
+				/* 数据包处理,一共有3种方法: 
+				1.自己写的可变数据包检测代码,问题:1. 数据不能与帧尾相同 2. 帧头丢失时数据包不能有帧头数据 
+				2.江协版(我进行了部分修改)可变 HEX  数据包处理
+				3.江协版(我进行了部分修改)可变 文本 数据包处理
+				注意:建议三个只取消注释一个,防止互相干扰
+				*/
+				// 1. 我自己的版本
+				// DataCheck() ;
 			
+				// 2. 江协版 文本
+//				DataCheck_Text_JX() ;
+			
+				// 3. 
         // 再次打开中断接收
         HAL_UART_Receive_IT(&huart1, USART_RX_BUF, 1);
     }
