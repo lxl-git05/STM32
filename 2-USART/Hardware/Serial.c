@@ -12,6 +12,10 @@ int Serial_RxFlag ;	// ½ÓÊÕµ½Êı¾İµÄ±êÖ¾Î»(×¢Òâ²»ÒªÖ±½ÓÒıÓÃÕâ¸ö,Serial_GetRxFlag²
 
 // ½ÓÊÕÊı¾İÊı×é
 int TempArr[Data_Serial] ;	// ÁÙÊ±Êı¾İ
+int DataArr[Data_Serial]	;	// ÕıÊ½Êı¾İ
+
+// ´íÎó²éÑ¯²ÎÊı
+int error_Serial ;	
 
 // 1. *************ÎÒ×Ô¼ºµÄ°æ±¾µÄ±äÁ¿*************
 
@@ -20,7 +24,7 @@ int DataState = 0 ;
 int isDataNumByte = 0 ;
 
 // 2. *************½­Ğ­°æ(ÎÄ±¾)±äÁ¿*************
-// ·ÅÔÚ.hÀïÃæÁË
+char Serial_RxPacket[100];	// ÎÄ±¾°ü
 
 // ************* º¯Êı¶¨Òå *************
 

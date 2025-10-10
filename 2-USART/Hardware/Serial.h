@@ -50,13 +50,6 @@
 // 定义溢出长度
 #define OutLen 20
 
-// HEX-正式数据
-int DataArr[Data_Serial];	
-// 错误查询参数
-int error_Serial ;	
-// 文本包
-char Serial_RxPacket[100];	
-
 // 串口发送一个字节
 void Serial_SendByte(uint8_t Byte);
 // 串口发送数组数据
