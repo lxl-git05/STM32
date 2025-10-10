@@ -64,15 +64,17 @@ void SystemClock_Config(void);
 // 自设库
 #include "OLED.h"
 #include "Key.h"
+#include "Serial.h"
 // *******************全局变量*******************
-// DMA串口接收变量
-#define RX_USART1_LEN 50
-uint8_t RX_USART1[RX_USART1_LEN] ;	// 接收数组
+extern uint8_t RX_SerialArr[RX_Serial_LEN];
 
 // *******************实验区域*******************
-int check1 ;
-int check2 ;
+int check1 		;
+int check2 		;
 int check[50] ;
+
+// *******************串口参数*******************
+extern int Serial_New_Package[] ;	// 串口数据包 : 数据长度 + 数据
 
 /* USER CODE END 0 */
 
@@ -114,11 +116,9 @@ int main(void)
 	// 初始化OLED
 	OLED_Init() ;
 	OLED_ShowString(0 , 0 , "Hello World" , OLED_8X16 ) ;
-	// DMA发送数据初始化
-	uint8_t sendbuff[] = "hello" ;
 	
-	// *开启DMA+接收空闲中断*
-	HAL_UARTEx_ReceiveToIdle_DMA(&huart1 , RX_USART1 , RX_USART1_LEN ) ;
+	// 开启DMA+接收空闲中断
+	HAL_UARTEx_ReceiveToIdle_DMA(&huart1 , RX_SerialArr , RX_Serial_LEN ) ;
 	
 	// ******************* 实验区域 *******************
 
@@ -136,15 +136,23 @@ int main(void)
 		if (Key_Check(KEY_1 , KEY_SINGLE))
 		{
 			HAL_GPIO_TogglePin(LED0_GPIO_Port , LED0_Pin) ;
-			// DMA发送功能(不要和printf放在一起)
-			HAL_UART_Transmit_DMA(&huart1, (uint8_t *)sendbuff, sizeof(sendbuff));
+			Serial_SendData_DMA((uint8_t*)"hello" , strlen("hello")) ;
+			Serial_SendData_DMA((uint8_t*)"\r\n" , strlen("\r\n")) ;
 		}
 		else if (Key_Check(KEY_2 , KEY_SINGLE))
 		{
-			printf("\n%s\n" , RX_USART1) ;	// 打印DMA接收值
+			printf("\n%s\n" , RX_SerialArr) ;	// 打印DMA接收值
 		}
 		// ******************* 实验区域 *******************
-		
+		if (Serial_GetNewPackageFlag() == 1)
+		{
+			// OLED展示各个数据
+//			OLED_ShowNum(0 , 20 , Serial_New_Package[0] , 1 , OLED_8X16 ) ;
+//			for (int i = 1 ; i < Serial_New_Package[0] + 1 ; i ++)
+//			{
+//				OLED_ShowNum(20 , 10 + 10 * i , Serial_New_Package[i] , 5 , OLED_6X8 ) ;
+//			}
+		}
 		
 		// 必须存在:OLED更新
 		OLED_Update() ;
@@ -207,27 +215,6 @@ void HAL_SYSTICK_Callback(void)
 	Key_Tick() ;
 }
 
-// 串口空闲中断回调函数
-void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
-{
-	if (huart->Instance == USART1)
-	{
-		// 加上'\0'防止越界
-		if (Size < RX_USART1_LEN)
-		{
-			RX_USART1[Size] = '\0';
-		}
-		
-		// 清理缓冲区剩余数据，防止旧数据残留
-    memset(RX_USART1 + Size, 0, RX_USART1_LEN - Size);
-		
-		// 发送回显
-		HAL_UART_Transmit_DMA(&huart1, (uint8_t *)RX_USART1, sizeof(RX_USART1));
-		
-		// 每次处理完需要重新开启DMA中断
-		HAL_UARTEx_ReceiveToIdle_DMA(&huart1 , RX_USART1 , RX_USART1_LEN ) ;
-	}
-}
 
 // 串口printf重定向
 int fputc(int ch , FILE *f)
