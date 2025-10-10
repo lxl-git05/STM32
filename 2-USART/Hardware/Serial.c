@@ -152,7 +152,7 @@ void DataCheck(void)
      {
        // 临时数组数据结果处理转入正式数组
        DataArr[0] = DataNum ;  // 数据数量
-       // 高低位合并
+       // 高低位合并,这里的逻辑稍微改一改就能适应别的数据类型了
        for (int i = 0 , j = 1 ; i < DataNum ; i += 2 , j ++ )
        {
          DataArr[j] = Merge_2Bytes( TempArr[i] , TempArr[i + 1] ) ;
@@ -160,7 +160,8 @@ void DataCheck(void)
        // 清空临时数组（全部置为0）
        memset(TempArr, 0, sizeof(TempArr));
        // 回到初始状态
-			 error_Serial = 0 ;	// 本轮数据处理无错误
+			 Serial_RxFlag = 1 ;		// 接收成功
+			 error_Serial  = 0 ;		// 本轮数据处理无错误
        DataState = 0 ;
      }
    }
@@ -199,7 +200,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         
         // 接收数据处理
 				Serial_RxData = rx ;
-        Serial_RxFlag = 1 ;
 				// 数据包处理
 				DataCheck() ;
 			

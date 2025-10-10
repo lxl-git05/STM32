@@ -21,8 +21,9 @@ void Serial_SendString(char *String) ;
 
 void Serial_SendNumber(uint32_t Number , uint8_t Length) ;
 
-uint8_t Serial_GetRxFlag(void) ;
+uint8_t Serial_GetRxFlag(void) ;	// ***重要,得到有效数据接收成功标志位***
 
-uint8_t Serial_GetRxData(void) ;
+uint8_t Serial_GetRxData(void) ;	// 得到单个字节数据
 	
+int Serial_GetError(void) ;
 #endif

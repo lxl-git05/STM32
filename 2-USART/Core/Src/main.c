@@ -132,22 +132,30 @@ int main(void)
 		if (Key_Check(KEY_1 , KEY_SINGLE))
 		{
 			HAL_GPIO_TogglePin(LED0_GPIO_Port , LED0_Pin) ;
+			// 一旦数据发送失败,可以按按键检查出错原因
+			printf("\r\nError : %d \r\n" , Serial_GetError() ) ;
 		}
 		
 		// ******************* 实验区域 *******************
 		// 展示接收的数据
 		if (Serial_GetRxFlag() == 1)
 		{
-//			check[check2] = Serial_GetRxData();
-//			Serial_SendByte(check[check2]);
-//			OLED_ShowHexNum(0, 20, check[check2++], 2 , OLED_8X16 );
+			printf("\r\nDataNum: %d \r\n" , DataArr[0]) ;
+			int i ;
+			for(i = 1 ; i < 8 ; i ++)
+			{
+				printf("%d " , DataArr[i]) ;
+			}
+			printf("%d \n" , DataArr[i]) ;
 		}
-		
+		// OLED显示
 //		OLED_ShowHexNum(0  , 20 , DataArr[0] , 2 , OLED_6X8 ) ;
+//		
 //		OLED_ShowNum(0  , 40 , DataArr[1] , 2 , OLED_6X8 ) ;
 //		OLED_ShowNum(20 , 40 , DataArr[2] , 2 , OLED_6X8 ) ;
 //		OLED_ShowNum(40 , 40 , DataArr[3] , 2 , OLED_6X8 ) ;
 //		OLED_ShowNum(60 , 40 , DataArr[4] , 2 , OLED_6X8 ) ;
+
 
 		// 必须存在:OLED更新
 		OLED_Update() ;
