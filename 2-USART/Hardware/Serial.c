@@ -12,10 +12,6 @@ int Serial_RxFlag ;	// ½ÓÊÕµ½Êý¾ÝµÄ±êÖ¾Î»(×¢Òâ²»ÒªÖ±½ÓÒýÓÃÕâ¸ö,Serial_GetRxFlag²
 
 // ½ÓÊÕÊý¾ÝÊý×é
 int TempArr[Data_Serial] ;	// ÁÙÊ±Êý¾Ý
-int DataArr[Data_Serial]	;	// ÕýÊ½Êý¾Ý
-
-// ´íÎó²éÑ¯²ÎÊý
-int error_Serial ;	
 
 // 1. *************ÎÒ×Ô¼ºµÄ°æ±¾µÄ±äÁ¿*************
 
@@ -23,8 +19,8 @@ int error_Serial ;
 int DataState = 0 ;
 int isDataNumByte = 0 ;
 
-// 2. *************½­Ð­°æ(HEX)±äÁ¿*************
-char Serial_RxPacket[100];	// ÎÄ±¾°ü
+// 2. *************½­Ð­°æ(ÎÄ±¾)±äÁ¿*************
+// ·ÅÔÚ.hÀïÃæÁË
 
 // ************* º¯Êý¶¨Òå *************
 
@@ -258,12 +254,6 @@ void DataCheck_Text_JX(void)
 	}
 }
 
-// ½­Ð­°æ HEX 
-void DataCheck_HEX_JX(void)
-{
-	
-}
-
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     if (huart->Instance == USART1)
@@ -273,11 +263,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
         
         // ½ÓÊÕÊý¾Ý´¦Àí
 				Serial_RxData = rx ;
-				/* Êý¾Ý°ü´¦Àí,Ò»¹²ÓÐ3ÖÖ·½·¨: 
-				1.×Ô¼ºÐ´µÄ¿É±äÊý¾Ý°ü¼ì²â´úÂë,ÎÊÌâ:1. Êý¾Ý²»ÄÜÓëÖ¡Î²ÏàÍ¬ 2. Ö¡Í·¶ªÊ§Ê±Êý¾Ý°ü²»ÄÜÓÐÖ¡Í·Êý¾Ý 
-				2.½­Ð­°æ(ÎÒ½øÐÐÁË²¿·ÖÐÞ¸Ä)¿É±ä HEX  Êý¾Ý°ü´¦Àí
-				3.½­Ð­°æ(ÎÒ½øÐÐÁË²¿·ÖÐÞ¸Ä)¿É±ä ÎÄ±¾ Êý¾Ý°ü´¦Àí
-				×¢Òâ:½¨ÒéÈý¸öÖ»È¡Ïû×¢ÊÍÒ»¸ö,·ÀÖ¹»¥Ïà¸ÉÈÅ
+				/* Êý¾Ý°ü´¦Àí,Ò»¹²ÓÐ2ÖÖ·½·¨: 
+				1.HEX°æ:	×Ô¼ºÐ´µÄ¿É±äÊý¾Ý°ü¼ì²â´úÂë,ÎÊÌâ:1. Êý¾Ý²»ÄÜÓëÖ¡Î²ÏàÍ¬ 2. Ö¡Í·¶ªÊ§Ê±Êý¾Ý°ü²»ÄÜÓÐÖ¡Í·Êý¾Ý 
+				2.ÎÄ±¾°æ:	½­Ð­°æ(ÎÒ½øÐÐÁË²¿·ÖÐÞ¸Ä)¿É±ä ÎÄ±¾ Êý¾Ý°ü´¦Àí
+				×¢Òâ:½¨Òé2¸öÖ»È¡Ïû×¢ÊÍ1¸ö,·ÀÖ¹»¥Ïà¸ÉÈÅ
 				*/
 				// 1. ÎÒ×Ô¼ºµÄ°æ±¾
 				// DataCheck() ;
@@ -285,8 +274,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				// 2. ½­Ð­°æ ÎÄ±¾
 //				DataCheck_Text_JX() ;
 			
-				// 3. 
-        // ÔÙ´Î´ò¿ªÖÐ¶Ï½ÓÊÕ
         HAL_UART_Receive_IT(&huart1, USART_RX_BUF, 1);
     }
 }
