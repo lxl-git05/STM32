@@ -61,20 +61,25 @@ void SystemClock_Config(void);
 #include <stdlib.h>
 #include "string.h"
 #include <stdio.h>
+#include <stdbool.h>
 // 自设库
 #include "OLED.h"
 #include "Key.h"
 #include "Serial.h"
+
 // *******************全局变量*******************
-extern uint8_t RX_SerialArr[RX_Serial_LEN];
+
+// *******************串口参数*******************
+extern uint8_t RX_SerialArr[RX_Serial_LEN];	// DMA数据传输缓冲数组
+extern int  Serial_New_Package_HEX[]  ;			// HEX数据包 : 数据长度 + 数据
+extern char Serial_New_Package_ABC[]	; 		// 文本数据包:	 纯文本
 
 // *******************实验区域*******************
 int check1 		;
 int check2 		;
 int check[50] ;
+float test1 ;
 
-// *******************串口参数*******************
-extern int Serial_New_Package[] ;	// 串口数据包 : 数据长度 + 数据
 
 /* USER CODE END 0 */
 
@@ -118,7 +123,7 @@ int main(void)
 	OLED_ShowString(0 , 0 , "Hello World" , OLED_8X16 ) ;
 	
 	// 开启DMA+接收空闲中断
-	HAL_UARTEx_ReceiveToIdle_DMA(&huart1 , RX_SerialArr , RX_Serial_LEN ) ;
+	HAL_UARTEx_ReceiveToIdle_DMA(&Serial_huart , RX_SerialArr , RX_Serial_LEN ) ;
 	
 	// ******************* 实验区域 *******************
 
@@ -136,24 +141,29 @@ int main(void)
 		if (Key_Check(KEY_1 , KEY_SINGLE))
 		{
 			HAL_GPIO_TogglePin(LED0_GPIO_Port , LED0_Pin) ;
-			Serial_SendData_DMA((uint8_t*)"hello" , strlen("hello")) ;
-			Serial_SendData_DMA((uint8_t*)"\r\n" , strlen("\r\n")) ;
 		}
 		else if (Key_Check(KEY_2 , KEY_SINGLE))
 		{
 			printf("\n%s\n" , RX_SerialArr) ;	// 打印DMA接收值
 		}
 		// ******************* 实验区域 *******************
-		if (Serial_GetNewPackageFlag() == 1)
+		if (Serial_GetNewPackageFlag_HEX() == 1)
 		{
 			// OLED展示各个数据
-//			OLED_ShowNum(0 , 20 , Serial_New_Package[0] , 1 , OLED_8X16 ) ;
-//			for (int i = 1 ; i < Serial_New_Package[0] + 1 ; i ++)
+//			OLED_ShowNum(0 , 20 , Serial_New_Package_HEX[0] , 1 , OLED_8X16 ) ;
+//			for (int i = 1 ; i < Serial_New_Package_HEX[0] + 1 ; i ++)
 //			{
-//				OLED_ShowNum(20 , 10 + 10 * i , Serial_New_Package[i] , 5 , OLED_6X8 ) ;
+//				OLED_ShowNum(20 , 10 + 10 * i , Serial_New_Package_HEX[i] , 5 , OLED_6X8 ) ;
 //			}
 		}
-		
+		if (Serial_GetNewPackageFlag_ABC() == 1)
+		{
+			// 文本包调试程序
+//			Serial_SetFloatData("Kp" , "Kp=%f" , &test1) ;
+//			Serial_SetIntData("test" , "test=%d" , &check1) ;
+//			OLED_ShowFloatNum(20 , 50 , test1 , 1 , 6 , OLED_6X8) ;
+//			OLED_ShowNum(0 , 20 , check1 , 3 , OLED_8X16 ) ;
+		}
 		// 必须存在:OLED更新
 		OLED_Update() ;
   }
