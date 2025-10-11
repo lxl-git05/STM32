@@ -76,7 +76,7 @@ void Serial_Data_Check_HEX(void)
 	// 2. 借数据长度检测帧尾合规性
 	else if (RX_SerialArr[RX_SerialArr[1] + 2] != 0xFE)
 	{
-		error_Serial_HEX = 2 ;	// 错误1:数据长度有问题或者帧尾空缺
+		error_Serial_HEX = 2 ;	// 错误2:数据长度有问题或者帧尾空缺
 		// 操作:
 		// 清空正式数组,后续调用会显示空数据
 		memset(Serial_New_Package_HEX, 0, sizeof(Serial_New_Package_HEX));
