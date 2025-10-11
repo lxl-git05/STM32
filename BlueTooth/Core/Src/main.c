@@ -113,6 +113,7 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_USART1_UART_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 	
 	// ******************* setup *******************
@@ -150,19 +151,19 @@ int main(void)
 		if (Serial_GetNewPackageFlag_HEX() == 1)
 		{
 			// OLED展示各个数据
-//			OLED_ShowNum(0 , 20 , Serial_New_Package_HEX[0] , 1 , OLED_8X16 ) ;
-//			for (int i = 1 ; i < Serial_New_Package_HEX[0] + 1 ; i ++)
-//			{
-//				OLED_ShowNum(20 , 10 + 10 * i , Serial_New_Package_HEX[i] , 5 , OLED_6X8 ) ;
-//			}
+			OLED_ShowNum(0 , 20 , Serial_New_Package_HEX[0] , 1 , OLED_8X16 ) ;
+			for (int i = 1 ; i < Serial_New_Package_HEX[0] + 1 ; i ++)
+			{
+				OLED_ShowNum(20 , 10 + 10 * i , Serial_New_Package_HEX[i] , 5 , OLED_6X8 ) ;
+			}
 		}
 		if (Serial_GetNewPackageFlag_ABC() == 1)
 		{
 			// 文本包调试程序
-//			Serial_SetFloatData("Kp" , "Kp=%f" , &test1) ;
-//			Serial_SetIntData("test" , "test=%d" , &check1) ;
-//			OLED_ShowFloatNum(20 , 50 , test1 , 1 , 6 , OLED_6X8) ;
-//			OLED_ShowNum(0 , 20 , check1 , 3 , OLED_8X16 ) ;
+			Serial_SetFloatData("Kp" , "Kp=%f" , &test1) ;
+			Serial_SetIntData("test" , "test=%d" , &check1) ;
+			OLED_ShowFloatNum(20 , 50 , test1 , 1 , 6 , OLED_6X8) ;
+			OLED_ShowNum(0 , 20 , check1 , 3 , OLED_8X16 ) ;
 		}
 		// 必须存在:OLED更新
 		OLED_Update() ;

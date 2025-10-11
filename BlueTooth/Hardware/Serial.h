@@ -4,8 +4,8 @@
 #include "main.h"
 #include <stdbool.h>
 
-#define Serial_huart huart1
-#define Serial_USART USART1
+#define Serial_huart huart2
+#define Serial_USART USART2
 
 // DMA接收数组长度
 #define RX_Serial_LEN 50
