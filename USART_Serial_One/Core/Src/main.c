@@ -150,10 +150,12 @@ int main(void)
 		if (Key_Check(KEY_1 , KEY_SINGLE))
 		{
 			HAL_GPIO_TogglePin(LED0_GPIO_Port , LED0_Pin) ;
-			Serial_SendData_DMA((uint8_t*)"hello\n" , strlen("hello\n")) ;
+			Set_Current_USART(USART1_IDX); /* 想要指定不同串口必须在printf前加上此函数 */
+			printf("Serial=1\n");
 		}
 		else if (Key_Check(KEY_2 , KEY_SINGLE))
 		{
+			Set_Current_USART(USART2_IDX); /* 想要指定不同串口必须在printf前加上此函数 */
 			printf("world\n") ;	
 		}
 		// ******************* 实验区域 *******************
@@ -250,15 +252,6 @@ void HAL_SYSTICK_Callback(void)
 		printf("%f,%f,%f\n" , realPoint , goalPoint , setPoint) ;
 	}
 	#endif
-}
-
-// 串口printf重定向
-int fputc(int ch , FILE *f)
-{
-	HAL_UART_Transmit_IT(&huart2, (uint8_t *)&ch, 1);
-	// 检查UART是否就绪,如果不等待肯定出问题
-	while (huart2.gState != HAL_UART_STATE_READY) ;
-	return ch ;
 }
 
 /* USER CODE END 4 */

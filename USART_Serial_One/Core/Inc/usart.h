@@ -45,6 +45,19 @@ void MX_USART2_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
+/*** 定义USART索引枚举 ***/
+typedef enum {
+	USART_NONE,			/* 无USART */
+	USART1_IDX,			/* USART1索引 */
+	USART2_IDX,			/* USART2索引 */
+	USART3_IDX,			/* USART3索引 */
+}Current_USART_Indx;
+
+extern UART_HandleTypeDef* Current_USART_Handle;		  /* 当前某个USART的句柄 */
+extern Current_USART_Indx Current_USART_Printf_Indx;	/* 当前某个USART的索引 */
+ 
+void Set_Current_USART(Current_USART_Indx indx);			/* 函数声明，用于设置当前使用的USART */
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

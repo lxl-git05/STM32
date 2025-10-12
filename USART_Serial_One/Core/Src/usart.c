@@ -21,7 +21,7 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-
+#include <stdio.h>
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;
@@ -276,5 +276,93 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+
+/*** 定义USART索引枚举 ***/
+
+// !!!!!!!!!!!记得开!!!!!!!!!!!!!!!!
+#define USART1_SET
+#define USART2_SET
+//#define USART3_SET
+// !!!!!!!!!!!记得开!!!!!!!!!!!!!!!!
+
+UART_HandleTypeDef* Current_USART_Handle;		  /* 当前某个USART的句柄 */
+Current_USART_Indx Current_USART_Printf_Indx;	/* 当前某个USART的索引 */
+
+/* 
+ * 简介：设置当前使用的USART
+ * 参数：indx - 要设置的USART索引
+ * 这个参数可以是：USARTx_IDX，其中x可以从1~3
+ * 使用举例：（必须要将其放在printf函数前面，指定其中一个串口）
+ * 		Set_Current_USART(USART1_IDX);
+ * 		printf("我是串口1\r\n");
+ */
+void Set_Current_USART(Current_USART_Indx indx)
+{
+	switch(indx)
+  {
+		#ifdef USART1_SET
+    case USART1_IDX:
+    Current_USART_Handle = &huart1;
+    Current_USART_Printf_Indx = USART1_IDX;
+    break;
+		#endif
+		#ifdef USART2_SET
+    case USART2_IDX:
+    Current_USART_Handle = &huart2;
+    Current_USART_Printf_Indx = USART2_IDX;
+    break;
+		#endif
+		#ifdef USART3_SET
+    case USART3_IDX:
+    Current_USART_Handle = &huart3;
+    Current_USART_Printf_Indx = USART3_IDX;
+    break;
+		#endif
+    default:
+    Current_USART_Handle = NULL;
+    Current_USART_Printf_Indx = USART_NONE;
+    break;
+  }
+}
+
+/* 
+ * 简介：重定义fputc函数，用于将字符输出到当前设置的USART
+ * 参数：
+ * ch - 要发送的字符
+ * f  - 文件指针（在此实现中未使用）
+ * 返回值：发送的字符（或EOF如果出错）
+ */
+
+int fputc(int ch, FILE *f)
+{
+  if(Current_USART_Handle == NULL)
+	{			/* 如果当前没有设置USART句柄，则返回EOF表示错误 */
+    return EOF;
+  }
+  /* 根据当前设置的USART句柄，选择对应的USART外设发送字符 */
+	#ifdef USART1_SET
+  if(Current_USART_Handle == &huart1)
+	{		
+		while ((USART1->SR & 0X40) == 0); 		/* 等待USART1发送完成，然后发送字符 */
+		USART1->DR = (uint8_t)ch; 				/* 将要发送的字符 ch 写入到DR寄存器 */
+  }
+	#endif
+	#ifdef USART2_SET
+  else if(Current_USART_Handle == &huart2)
+	{
+		while ((USART2->SR & 0X40) == 0); 		/* 等待USART2发送完成，然后发送字符 */
+		USART2->DR = (uint8_t)ch; 				/* 将要发送的字符 ch 写入到DR寄存器 */
+  }
+	#endif
+	#ifdef USART3_SET
+  else if(Current_USART_Handle == &huart3)
+	{
+		while ((USART3->ISR & 0X40) == 0); 		/* 等待USART3发送完成，然后发送字符 */
+		USART3->TDR = (uint8_t)ch; 				/* 将要发送的字符 ch 写入到DR寄存器 */
+  }
+	#endif
+  return ch;								/* 返回发送的字符 */
+}
+
 
 /* USER CODE END 1 */
