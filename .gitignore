@@ -105,3 +105,73 @@ Thumbs.db
 **/main.pdf
 **/main.synctex.gz
 **/main.aux
+
+# === Vivado 核心忽略规则（必须保留）===
+# 项目文件
+*.xpr
+*.xpr.user
+*.xml
+*.xml.user
+
+# 缓存和运行目录（最大的垃圾制造者）
+*.cache/
+*.hw/
+*.sim/
+*.ip_user_files/
+*.runs/
+.Xil/
+
+# 日志和临时文件
+*.jou
+*.log
+*.str
+*.debug
+*.backup*
+*.tmp
+*.bak
+
+# IP 相关（这些都是自动生成的，绝对不要提交）
+*.srcs/sources_1/ip/**/synth/
+*.srcs/sources_1/ip/**/simulation/
+*.srcs/sources_1/ip/**/sim_scripts/
+*.srcs/sources_1/ip/**/example_design/
+*.srcs/sources_1/ip/**/doc/
+*.srcs/sources_1/ip/**/.upgrade_log
+*.srcs/sources_1/ip/**/component.xml
+*.srcs/sources_1/ip/**/synth_*.log
+*.srcs/sources_1/ip/**/sim_*.log
+
+# Block Design 生成的垃圾
+*.bd
+*.bd.user
+*.srcs/sources_1/bd/**/hdl/
+*.srcs/sources_1/bd/**/ip/
+*.srcs/sources_1/bd/**/ui/
+
+# 导出文件（偶尔会有人误提交）
+*.xsa
+*.bit
+*.bin
+*.mcs
+*.prm
+*.dcp
+*.rpt
+*.txt
+*.csv
+
+# Vivado Lab Edition / Vitis 相关
+*.ltx
+*.mmi
+*.hbs
+*.xpe
+*.xpr.zip
+*.zip
+
+# 其他常见
+*.gen/
+*.tmp/
+*.data/
+*.webtalk/
+webtalk_*.log
+vivado*.backup.jou
+vivado*.backup.log
