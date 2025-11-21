@@ -19,11 +19,6 @@ void Mymain(void)
 	while(1)
 	{
 		// ******************* while *******************
-		// 测试按键功能
-		if (Key_Check(KEY_1 , KEY_SINGLE))
-		{
-			HAL_GPIO_TogglePin(LED0_GPIO_Port , LED0_Pin) ;
-		}
 		// ******************* 实验区域 *******************
 		
 		// 必须存在:OLED更新
