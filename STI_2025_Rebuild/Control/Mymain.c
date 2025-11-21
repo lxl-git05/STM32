@@ -19,15 +19,6 @@ void Mymain(void)
 	while(1)
 	{
 		// ******************* while *******************
-		// ??????
-		if (Key_Check(KEY_1 , KEY_SINGLE))
-		{
-			HAL_GPIO_TogglePin(LED0_GPIO_Port , LED0_Pin) ;
-		}
-		else if (Key_Check(KEY_1 , KEY_DOUBLE))
-		{
-			HAL_GPIO_TogglePin(LED0_GPIO_Port , LED0_Pin) ;
-		}
 		// ******************* ???? *******************
 		
 		// ????:OLED??
