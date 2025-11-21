@@ -8,7 +8,7 @@ void Mymain(void)
 		HAL_SYSTICK_Config(SystemCoreClock / 1000);
 		OLED_Init() ;
 		Serial_Init(&Serial_huart) ;
-		// ***全部初始化完毕后再开启Systick中断***
+		// ***全部初始化完毕后再开启Systick中断,所以涉及sys的都需要在这个后面提交***
 		__enable_irq();	
 	}
 	// *******************实验区域*******************
@@ -21,6 +21,10 @@ void Mymain(void)
 		// ******************* while *******************
 		// 测试按键功能
 		if (Key_Check(KEY_1 , KEY_SINGLE))
+		{
+			HAL_GPIO_TogglePin(LED0_GPIO_Port , LED0_Pin) ;
+		}
+		else if (Key_Check(KEY_1 , KEY_DOUBLE))
 		{
 			HAL_GPIO_TogglePin(LED0_GPIO_Port , LED0_Pin) ;
 		}
