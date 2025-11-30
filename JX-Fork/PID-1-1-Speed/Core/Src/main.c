@@ -157,6 +157,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 		// ******************* while *******************
+		OLED_Clear() ;
 		// ²âÊÔ°´¼ü¹¦ÄÜ
 		if (Key_Check(KEY_1 , KEY_SINGLE))
 		{
