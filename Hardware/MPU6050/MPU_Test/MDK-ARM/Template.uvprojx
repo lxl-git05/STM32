@@ -939,6 +939,16 @@
               <FileType>5</FileType>
               <FilePath>..\Control\Task.h</FilePath>
             </File>
+            <File>
+              <FileName>MPU6050_Angle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Control\MPU6050_Angle.c</FilePath>
+            </File>
+            <File>
+              <FileName>MPU6050_Angle.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Control\MPU6050_Angle.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -26,6 +26,7 @@
 #include "Key_Check.h"
 #include "Menu_Key.h"
 #include "MPU6050_lxl.h"
+#include "MPU6050_Angle.h"
 
 // ½ØºúÖ÷º¯Êý
 void Mymain(void) ;
