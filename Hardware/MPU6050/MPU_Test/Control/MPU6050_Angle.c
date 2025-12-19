@@ -77,7 +77,15 @@ void MPU6050_Raw_Deal(int Deal_dt_ms)
 	gyroAngleY += MPU_Cali.GY * Deal_dt_ms * 1.0 / 1000;
 	
 	// 得到偏航角yaw
-//	MPU_Real.yaw += MPU_Cali.GZ * Deal_dt_ms * 1.0 / 1000;
+	if (MPU_Cali.GZ < 0)
+	{
+		MPU_Real.yaw += MPU_Cali.GZ * Deal_dt_ms * 1.0  / 1000;
+	}
+	else
+	{
+		MPU_Real.yaw += MPU_Cali.GZ * Deal_dt_ms * 1.08 / 1000;		// 标定的误差参数
+	}
+	
 	
 	// 得到互补滤波角度
 	gyroAngleX = 0.98 * gyroAngleX + 0.02 * accAngleX;
