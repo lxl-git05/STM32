@@ -2,9 +2,8 @@
 #include "Initial.h"
 // =================== 全局变量 ===================
 float check1 = 5.0f;
-float check[50] ;
-int k = 0 ;
 int flag = 0 ;
+float yaw_total ;
 // =================== 实验区域 ===================
 
 void Mymain(void)
@@ -38,8 +37,9 @@ void Mymain(void)
 		cnt ++ ;
 		
 		Set_Current_USART(USART1_IDX) ;
-		printf("%f,%f,%f,%d\n" ,  MPU_Raw_Data.GZ , MPU_Cali.GZ , MPU_Real.yaw,cnt) ;
-		
+		Timer_Counter_Begin() ;
+		printf("%f,%f,%f,%d\n" ,  yaw_total , MPU_Cali.GZ , MPU_Real.yaw,cnt) ;
+		Timer_Counter_End() ;
 		OLED_Update() ;
 	}
 }
@@ -61,6 +61,23 @@ void HAL_SYSTICK_Callback(void)
 	{
 		MPU_Count = 0 ;
 		MPU6050_Raw_Deal(10) ;	// 10ms更新
+		if (MPU_Cali.GZ > check1 || MPU_Cali.GZ < -check1)	// 大于阈值,开始更新
+		{
+			flag = 1 ;	// 正在积累
+			if (MPU_Cali.GZ < 0)
+			{
+				yaw_total += MPU_Cali.GZ * 10 * 1.0  / 1000;
+			}
+			else
+			{
+				yaw_total += MPU_Cali.GZ * 10 * 1.08 / 1000;		// 标定的误差参数
+			}
+		}
+		else
+		{
+			yaw_total = 0.0f ;
+			flag = 0 ;	// 采样结束
+		}
 	}
 	// 实验
 	if (MPU_Cali.GZ > check1 || MPU_Cali.GZ < -check1)
@@ -71,4 +88,5 @@ void HAL_SYSTICK_Callback(void)
 	{
 		LED_Flash_Mode_Set_Mode(LED_Flash_OFF) ;
 	}
+	// 时间
 }
