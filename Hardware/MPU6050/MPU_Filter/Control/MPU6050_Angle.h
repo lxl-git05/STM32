@@ -3,6 +3,20 @@
 
 #include "MPU6050_lxl.h"
 
+// 预先给定的MPU6050零漂值
+#define MPU6050_AX_Offset	0.0367513411f
+#define MPU6050_AY_Offset	0.00807421841f
+#define MPU6050_AZ_Offset	0.129159927f
+#define MPU6050_GX_Offset -10.6366377f
+#define MPU6050_GY_Offset 0.509746492f
+#define MPU6050_GZ_Offset -0.00763365673f
+
+// 零漂自校准
+#define STILL_ACCEL_THRES_BASE_SQ   (0.05f * 0.05f)   // 基础阈值 0.05g
+#define STILL_GYRO_THRES_BASE_SQ    (3.0f * 3.0f)     // 基础阈值 3°/s
+#define STILL_REQUIRED_CNT          100               // 连续100次满足才确认静止（可调 50~150）
+#define OFFSET_LEARNING_RATE 				0.001f						// 零漂自校准趋近率
+
 // 角度和加速度误差值
 typedef struct
 {
@@ -43,6 +57,7 @@ typedef struct
 extern ImuOffset_Typedef  MPU_Offset;			// 误差纠正参数
 extern ImuCali_Typedef	  MPU_Cali	 ;		// 纠正后的数据
 extern ImuReal_Typedef 	  MPU_Real  ;			// 最终的确定角度
+extern int isMPU_Still_Flag ;
 
 // ************函数************
 // 自动纠正误差(可配合按键使用)
@@ -51,6 +66,8 @@ void MPU6050_Data_Error_Check(int Sanple_Cnt) ;
 void MPU6050_Raw_Error_Update(void) ;
 // 数据深度处理
 void MPU6050_Raw_Deal(int Deal_dt_ms) ;
-
-
+// 检测静止状态函数
+void MPU_Still_Check(void);
+// 静止检测后自动纠正零漂
+void MPU6050_Data_Error_Check_Auto(void) ;
 #endif

@@ -1,5 +1,7 @@
 #include "MPU6050_lxl.h"
 #include "MyI2C.h"
+#include "LED_Flash.h"
+#include "Timer_Counter.h"
 
 // 宏定义MPU6050的寄存器信息,使得更好理解
 // 寄存器地址宏定义
@@ -90,6 +92,58 @@ void MPU6050_Init(void)
 	MPU6050_WriteReg(MPU6050_GYRO_CONFIG, GYRO_RANGE);	  // 陀螺仪配置寄存器
 	MPU6050_WriteReg(MPU6050_ACCEL_CONFIG, ACCEL_RANGE);	// 加速度计配置寄存器
 }
+
+// 硬件IIC故障修复函数
+HAL_StatusTypeDef MPU6050_I2C_Recover(void)
+{
+    // 1. 先禁用 I2C 外设
+    __HAL_RCC_I2C2_CLK_DISABLE();  // 根据自己的 I2C 改成 I2C1 或 I2C2
+    HAL_Delay(10);
+    __HAL_RCC_I2C2_CLK_ENABLE();
+    HAL_Delay(10);
+
+    // 2. 把 SDA 和 SCL 引脚恢复为 GPIO，强制产生 9 个时钟脉冲（标准 I2C 总线恢复）
+    GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+    // 假设你的 I2C2: SCL=PB10, SDA=PB11（根据 CubeMX 修改）
+    GPIO_InitStruct.Pin = GPIO_PIN_10 | GPIO_PIN_11;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD;  // 开漏输出
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+    HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+    // 强制拉高 SDA 和 SCL
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10 | GPIO_PIN_11, GPIO_PIN_SET);
+
+    HAL_Delay(1);
+
+    // 产生 9 个 SCL 时钟脉冲（SDA 保持高）
+    for(int i = 0; i < 9; i++) {
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);
+        HAL_Delay(1);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET);
+        HAL_Delay(1);
+    }
+
+    // 产生一个 STOP 条件（SDA 从低到高，SCL 高）
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_RESET);
+    HAL_Delay(1);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET);
+    HAL_Delay(1);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, GPIO_PIN_SET);
+    HAL_Delay(1);
+
+    // 3. 重新初始化 I2C 外设
+    HAL_I2C_DeInit(hi2c_MPU6050);
+    HAL_Delay(10);
+    if(HAL_I2C_Init(hi2c_MPU6050) != HAL_OK) {
+        return HAL_ERROR;
+    }
+
+    HAL_Delay(50);
+    return HAL_OK;
+}
+
 // 写入数据
 void MPU6050_WriteReg(uint8_t RegAddress , uint8_t Data)
 {
@@ -233,7 +287,23 @@ void MPU6050_Update_Data(void)
 	// 停止
 	MyI2C_Stop();
 	#else
-	HAL_I2C_Mem_Read(hi2c_MPU6050,MPU6050_ADDRESS,MPU6050_ACCEL_XOUT_H,I2C_MEMADD_SIZE_8BIT,buf,14,1000);
+	// 硬件IIC可能读取失败,此时需要进行重启,而软件IIC问题就没有那么大,这里的修复逻辑有大量的delay,*待处理*
+	uint8_t retry = 5 ;
+	while(retry--) 
+	{
+		if (HAL_I2C_Mem_Read(hi2c_MPU6050,MPU6050_ADDRESS,MPU6050_ACCEL_XOUT_H,I2C_MEMADD_SIZE_8BIT,buf,14,1000) == HAL_OK)
+		{
+			retry = 0 ;
+		}
+		else	// 一般就是错误了
+		{
+			LED_Flash_Mode_Set_Mode(LED_Flash_Fast) ;
+			Timer_Counter_Begin() ;
+			MPU6050_I2C_Recover();
+			Timer_Counter_End() ;
+		}
+		// 修不成就寄了,待处理
+	}
 	#endif
 	
 	// 数据处理
