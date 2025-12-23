@@ -4,7 +4,7 @@
 // =================== 全局变量 ===================
 
 // =================== 实验区域 ===================
-int check1 = 1 ;
+int RPM = 0 ;
 
 void Mymain(void)
 {
@@ -12,18 +12,27 @@ void Mymain(void)
 	__enable_irq(); // 与Systick有关的在Systick初始化后初始化
 	
 	// 初始化28BYJ
-	BYJ_Delay_Init() ;
+	BYJ_Init() ;
 	
 	while(1)
 	{
-//		Menu_Func() ;
+		// DEBUG配置RPM
+//		BYJ_Set_RPM(RPM) ;
 		
-		for(int i = 0 ; i < 8 ; i ++)
+		if (Key_Check(KEY_1 , KEY_SINGLE))
 		{
-			BYJ_Half_Drive(i) ;
-			HAL_Delay(check1) ;
+			BYJ_Set_RPM(RPM++) ;	// 加速
+		}
+		else if (Key_Check(KEY_1 , KEY_DOUBLE))
+		{
+			BYJ_Stop() ;											// 停止运动
+		}
+		else if (Key_Check(KEY_1 , KEY_LONG))
+		{
+			BYJ_Set_Position(BYJ_Pos_Ni) ;		// 逆时针旋转
 		}
 		
+		OLED_Update() ;	// OLED更新
 	}
 }
 
@@ -32,8 +41,4 @@ void HAL_SYSTICK_Callback(void)
 {
 	// 功能1: 按键
 	Key_Tick() ;
-	// 功能2: LED闪烁指示灯
-	LED_Flash_Mode_Tick() ;
-	// 功能3: 单次任务处理序列
-	task_Once_Cnt_Tick() ;
 }
