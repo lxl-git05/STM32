@@ -789,14 +789,14 @@
               <FilePath>..\Hardware\Key.h</FilePath>
             </File>
             <File>
-              <FileName>28byj48.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Hardware\28byj48.h</FilePath>
-            </File>
-            <File>
               <FileName>28byj48.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Hardware\28byj48.c</FilePath>
+            </File>
+            <File>
+              <FileName>28byj48.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\28byj48.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -872,6 +872,16 @@
               <FileName>Task.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Control\Task.h</FilePath>
+            </File>
+            <File>
+              <FileName>Con_28BYJ.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Control\Con_28BYJ.c</FilePath>
+            </File>
+            <File>
+              <FileName>Con_28BYJ.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Control\Con_28BYJ.h</FilePath>
             </File>
           </Files>
         </Group>

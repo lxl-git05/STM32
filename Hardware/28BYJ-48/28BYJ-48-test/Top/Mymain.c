@@ -1,6 +1,6 @@
 #include "Mymain.h"
 #include "Initial.h"
-#include "28byj48.h"
+#include "Con_28BYJ.h"
 // =================== 全局变量 ===================
 
 // =================== 实验区域 ===================
@@ -12,24 +12,29 @@ void Mymain(void)
 	__enable_irq(); // 与Systick有关的在Systick初始化后初始化
 	
 	// 初始化28BYJ
-	BYJ_Init() ;
+	Con_BYJ_Init() ;
 	
 	while(1)
-	{
-		// DEBUG配置RPM
-//		BYJ_Set_RPM(RPM) ;
-		
+	{	
 		if (Key_Check(KEY_1 , KEY_SINGLE))
 		{
-			BYJ_Set_RPM(RPM++) ;	// 加速
+			Con_BYJ_Set_RPM(++RPM) ;	// 加速
 		}
 		else if (Key_Check(KEY_1 , KEY_DOUBLE))
 		{
-			BYJ_Stop() ;											// 停止运动
+			Con_BYJ_Stop() ;											// 停止运动
 		}
 		else if (Key_Check(KEY_1 , KEY_LONG))
 		{
-			BYJ_Set_Position(BYJ_Pos_Ni) ;		// 逆时针旋转
+			Con_BYJ_Set_Position(BYJ_Ni) ;		// 逆时针旋转
+		}
+		else if (Key_Check(KEY_2 , KEY_SINGLE))
+		{
+			Con_BYJ_Set_Tar_Angle(BYJ_MAX_Rotate_RPM , 90) ;
+		}
+		else if (Key_Check(KEY_2 , KEY_LONG))
+		{
+			Con_BYJ_Set_Tar_Angle(BYJ_MAX_Rotate_RPM , -180) ;
 		}
 		
 		OLED_Update() ;	// OLED更新
