@@ -5,7 +5,8 @@
 ImuOffset_Typedef  MPU_Offset;			// 误差纠正参数
 ImuCali_Typedef		 MPU_Cali	 ;			// 纠正后的数据
 ImuReal_Typedef 	 MPU_Real  ;			// 最终的确定角度
-							
+int isMPU_Still_Flag ;							// MPU6050静止状态检测
+
 // 积分后的角度
 float gyroAngleX = 0.0f ;
 float gyroAngleY = 0.0f ;
@@ -49,6 +50,70 @@ void MPU6050_Data_Error_Check(int Sample_Cnt)
     MPU_Real.AccX = 0.0f;
     MPU_Real.AccY = 0.0f;
     MPU_Real.AccZ = 1.0f;  // 重点
+}
+// 检测静止状态函数 18us , 检测静止使用了历史数据，待优化为随环境而变
+void MPU_Still_Check(void)
+{
+	// 函数顺序执行，确保得到小车真实的状态
+	static int still_times_cnt = 0;	// 静止状态次数统计,超过100次视为静止
+	
+	float MPU_Temp_Cali_Data[6] = {MPU_Raw_Data.AX - MPU6050_AX_Offset , MPU_Raw_Data.AY - MPU6050_AY_Offset , MPU_Raw_Data.AZ - MPU6050_AZ_Offset,
+													MPU_Raw_Data.GX - MPU6050_GX_Offset , MPU_Raw_Data.GY - MPU6050_GY_Offset , MPU_Raw_Data.GZ - MPU6050_GZ_Offset};
+	// 先检测ACC,综合大于0.05g即为运动,千万记得AZ - 1
+	if ( MPU_Temp_Cali_Data[0] * MPU_Temp_Cali_Data[0] + MPU_Temp_Cali_Data[1] * MPU_Temp_Cali_Data[1] + (MPU_Temp_Cali_Data[2] - 1.0f) * (MPU_Temp_Cali_Data[2] - 1.0f) > STILL_ACCEL_THRES_BASE_SQ )
+	{
+		still_times_cnt = 0 ;
+		isMPU_Still_Flag = 0 ;	// 在运动
+		return ;
+	}
+	// 综合角速度大于3度为运动
+	if ( MPU_Temp_Cali_Data[3] * MPU_Temp_Cali_Data[3] + MPU_Temp_Cali_Data[4] * MPU_Temp_Cali_Data[4] + MPU_Temp_Cali_Data[5] * MPU_Temp_Cali_Data[5]> STILL_GYRO_THRES_BASE_SQ)
+	{
+		still_times_cnt = 0 ;
+		isMPU_Still_Flag = 0 ;	// 在运动
+		return ;
+	}
+	// 静止
+	still_times_cnt ++ ;
+	// 确定静止
+	if (still_times_cnt == STILL_REQUIRED_CNT)
+	{
+		still_times_cnt = 0 ;
+		isMPU_Still_Flag = 1 ;
+	}
+}
+
+// 静止检测后自动纠正零漂 30us左右
+void MPU6050_Data_Error_Check_Auto(void)
+{
+	if (isMPU_Still_Flag == 1)  // 确认静止
+	{
+		// 加速度（X/Y趋0，Z趋1g）
+		MPU_Offset.AccErrorX += (MPU_Raw_Data.AX - MPU_Offset.AccErrorX) * OFFSET_LEARNING_RATE;
+		MPU_Offset.AccErrorY += (MPU_Raw_Data.AY - MPU_Offset.AccErrorY) * OFFSET_LEARNING_RATE;
+		MPU_Offset.AccErrorZ += ( (MPU_Raw_Data.AZ - 1.0f) - MPU_Offset.AccErrorZ) * OFFSET_LEARNING_RATE;
+		
+		// 陀螺仪零偏缓慢向当前静止值收敛
+		MPU_Offset.GyroErrorX += (MPU_Raw_Data.GX - MPU_Offset.GyroErrorX) * OFFSET_LEARNING_RATE;
+		MPU_Offset.GyroErrorY += (MPU_Raw_Data.GY - MPU_Offset.GyroErrorY) * OFFSET_LEARNING_RATE;
+		MPU_Offset.GyroErrorZ += (MPU_Raw_Data.GZ - MPU_Offset.GyroErrorZ) * OFFSET_LEARNING_RATE;
+	}
+}
+
+
+uint8_t is_stationary_fast(float ax, float ay, float az, float gx, float gy, float gz)
+{
+    // 陀螺仪平方和（避免 sqrt）
+    float gyro_sq = gx*gx + gy*gy + gz*gz;
+    if (gyro_sq > 4.0f) return 0;  // 阈值 2°/s 的平方 = 4
+
+    // 加速度平方和 与 1g 的平方比较
+    float accel_sq = ax*ax + ay*ay + az*az;
+    float diff_sq = accel_sq - 1.0f;      // 先减1
+    if (diff_sq < 0) diff_sq = -diff_sq;  // 取绝对值
+    if (diff_sq > 0.0025f) return 0;      // 阈值 0.05g 的平方 = 0.0025
+
+    return 1;
 }
 // 减去误差后的归零数据
 void MPU6050_Raw_Error_Update(void)

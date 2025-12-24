@@ -1,9 +1,8 @@
 #include "Mymain.h"
 #include "Initial.h"
 // =================== 全局变量 ===================
-float check1 = 5.0f;
+int Print_Choice ;	// 串口打印数据
 int flag = 0 ;
-float yaw_total ;
 // =================== 实验区域 ===================
 
 void Mymain(void)
@@ -12,17 +11,29 @@ void Mymain(void)
 	__enable_irq(); // 与Systick有关的在Systick初始化后初始化
 	
 	MPU6050_Init() ;
+	
+	// MPU6050初始化,等待0.1秒（可根据你的模块调整 3~10秒）
+	OLED_ShowString(0, 0, "MPU Warming...", OLED_8X16);
+	OLED_Update() ;
+	HAL_Delay(100);
+	
 	MPU6050_Data_Error_Check(1000) ;
 	
 	while(1)
 	{
 //		Menu_Func() ;
+		Timer_Counter_Func() ;
 		// 3. MPU6050读取数据	
 		MPU6050_Update_Data() ;
 		
 		if (Key_Check(KEY_1 , KEY_SINGLE))
 		{
 			MPU6050_Data_Error_Check(1000) ;
+		}
+		else if (Key_Check(KEY_1 , KEY_DOUBLE))
+		{
+			Print_Choice ++ ;
+			Print_Choice %= 4 ;
 		}
 		
 		OLED_ShowFloatNum(0,0  ,MPU_Real.roll,3,3,OLED_8X16) ;
@@ -37,9 +48,31 @@ void Mymain(void)
 		cnt ++ ;
 		
 		Set_Current_USART(USART1_IDX) ;
-		Timer_Counter_Begin() ;
-		printf("%f,%f,%f,%d\n" ,  yaw_total , MPU_Cali.GZ , MPU_Real.yaw,cnt) ;
-		Timer_Counter_End() ;
+		if (Print_Choice == 0)
+		{
+			printf("%f,%f,%f,%d\n" ,  MPU_Raw_Data.AX , MPU_Raw_Data.AY , MPU_Raw_Data.AZ ,100) ;
+		}
+		else if (Print_Choice == 1)
+		{
+			printf("%f,%f,%f,%d\n" ,  MPU_Cali.AX , MPU_Cali.AY , MPU_Cali.AZ ,200) ;
+		}
+		else if (Print_Choice == 2)
+		{
+			printf("%f,%f,%f,%d\n" ,  MPU_Raw_Data.GX , MPU_Raw_Data.GY , MPU_Raw_Data.GZ ,300) ;
+		}
+		else if (Print_Choice == 3)
+		{
+			printf("%f,%f,%f,%d\n" ,  MPU_Cali.GX , MPU_Cali.GY , MPU_Cali.GZ ,400) ;
+		}
+		// 静止检测 + 自动调节零漂 -> 45us
+		MPU_Still_Check() ;
+		MPU6050_Data_Error_Check_Auto() ;
+		
+		// 打印计时时间
+		OLED_ShowNum(0 , 50 , time_us , 8 , OLED_6X8 ) ;
+		OLED_ShowNum(60 , 50 , time_Func_us , 8 , OLED_6X8 ) ;
+		
+		// 更新OLED状态
 		OLED_Update() ;
 	}
 }
@@ -51,9 +84,7 @@ void HAL_SYSTICK_Callback(void)
 	Key_Tick() ;
 	// 功能2: LED闪烁指示灯
 	LED_Flash_Mode_Tick() ;
-	// 功能3: 单次任务处理序列
-	task_Once_Cnt_Tick() ;
-	// 功能4 : 得到积分角度
+	// 功能3 : 得到积分角度
 	MPU6050_Raw_Error_Update();	// 更新去零参数
 	static int MPU_Count  = 0 ;
 	MPU_Count ++ ;
@@ -61,32 +92,14 @@ void HAL_SYSTICK_Callback(void)
 	{
 		MPU_Count = 0 ;
 		MPU6050_Raw_Deal(10) ;	// 10ms更新
-		if (MPU_Cali.GZ > check1 || MPU_Cali.GZ < -check1)	// 大于阈值,开始更新
-		{
-			flag = 1 ;	// 正在积累
-			if (MPU_Cali.GZ < 0)
-			{
-				yaw_total += MPU_Cali.GZ * 10 * 1.0  / 1000;
-			}
-			else
-			{
-				yaw_total += MPU_Cali.GZ * 10 * 1.08 / 1000;		// 标定的误差参数
-			}
-		}
-		else
-		{
-			yaw_total = 0.0f ;
-			flag = 0 ;	// 采样结束
-		}
 	}
 	// 实验
-	if (MPU_Cali.GZ > check1 || MPU_Cali.GZ < -check1)
-	{
-		LED_Flash_Mode_Set_Mode(LED_Flash_ON) ;
-	}
-	else
-	{
-		LED_Flash_Mode_Set_Mode(LED_Flash_OFF) ;
-	}
-	// 时间
+//	if (MPU_Cali.GZ > 5.0f || MPU_Cali.GZ < -5.0f)
+//	{
+//		LED_Flash_Mode_Set_Mode(LED_Flash_ON) ;
+//	}
+//	else
+//	{
+//		LED_Flash_Mode_Set_Mode(LED_Flash_OFF) ;
+//	}
 }
