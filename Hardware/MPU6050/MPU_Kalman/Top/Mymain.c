@@ -1,28 +1,31 @@
 #include "Mymain.h"
 #include "Initial.h"
+#include "MPU6050.h"
+
 // =================== 全局变量 ===================
 int Print_Choice ;	// 串口打印数据
 int flag = 0 ;
 // =================== 实验区域 ===================
+MPU6050_t MPU6050;
 
 void Mymain(void)
 {
 	Initial_ALL() ;	
 	__enable_irq(); // 与Systick有关的在Systick初始化后初始化
-	
+	while (MPU6050_Init_Kalman(&hi2c2) == 1);
+	/*
 	MPU6050_Init() ;
-	
 	// MPU6050初始化,等待0.1秒（可根据你的模块调整 3~10秒）
 	OLED_ShowString(0, 0, "MPU Warming...", OLED_8X16);
 	OLED_Update() ;
 	HAL_Delay(100);
-	
 	MPU6050_Data_Error_Check(1000) ;
-	
+	*/
 	while(1)
 	{
 //		Menu_Func() ;
 		Timer_Counter_Func() ;
+		/*
 		// 3. MPU6050读取数据	
 		MPU6050_Update_Data() ;
 		
@@ -67,6 +70,14 @@ void Mymain(void)
 		// 静止检测 + 自动调节零漂 -> 45us
 		MPU_Still_Check() ;
 		MPU6050_Data_Error_Check_Auto() ;
+		*/
+		// 卡尔曼滤波实验
+		MPU6050_Read_All(&hi2c2, &MPU6050);
+		HAL_Delay (100);
+		
+		// 打印
+		OLED_ShowFloatNum(70,0 ,MPU6050.KalmanAngleX,3,3,OLED_8X16) ;
+		OLED_ShowFloatNum(70,20,MPU6050.KalmanAngleY,3,3,OLED_8X16) ;
 		
 		// 打印计时时间
 		OLED_ShowNum(0 , 50 , time_us , 8 , OLED_6X8 ) ;
@@ -85,6 +96,7 @@ void HAL_SYSTICK_Callback(void)
 	// 功能2: LED闪烁指示灯
 	LED_Flash_Mode_Tick() ;
 	// 功能3 : 得到积分角度
+	/*
 	MPU6050_Raw_Error_Update();	// 更新去零参数
 	static int MPU_Count  = 0 ;
 	MPU_Count ++ ;
@@ -93,13 +105,5 @@ void HAL_SYSTICK_Callback(void)
 		MPU_Count = 0 ;
 		MPU6050_Raw_Deal(10) ;	// 10ms更新
 	}
-	// 实验
-//	if (MPU_Cali.GZ > 5.0f || MPU_Cali.GZ < -5.0f)
-//	{
-//		LED_Flash_Mode_Set_Mode(LED_Flash_ON) ;
-//	}
-//	else
-//	{
-//		LED_Flash_Mode_Set_Mode(LED_Flash_OFF) ;
-//	}
+	*/
 }
