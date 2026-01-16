@@ -697,6 +697,16 @@
               <FileType>5</FileType>
               <FilePath>..\System\DList.h</FilePath>
             </File>
+            <File>
+              <FileName>MySPI.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\System\MySPI.c</FilePath>
+            </File>
+            <File>
+              <FileName>MySPI.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\System\MySPI.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -731,6 +741,21 @@
               <FileName>Key.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Hardware\Key.h</FilePath>
+            </File>
+            <File>
+              <FileName>NRF24L01.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\NRF24L01.c</FilePath>
+            </File>
+            <File>
+              <FileName>NRF24L01.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\NRF24L01.h</FilePath>
+            </File>
+            <File>
+              <FileName>NRF24L01_Define.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\NRF24L01_Define.h</FilePath>
             </File>
           </Files>
         </Group>
