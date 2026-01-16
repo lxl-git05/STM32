@@ -3,6 +3,8 @@
 
 #include "main.h"
 
+//#define SPI_Software_Mode_Enable	// 注释该语句表示开启硬件SPI
+
 // SPI初始化
 void MySPI_Init(void);
 	

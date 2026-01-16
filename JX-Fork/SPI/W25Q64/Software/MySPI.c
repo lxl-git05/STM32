@@ -1,4 +1,6 @@
 #include "MySPI.h"
+#include "SPI.h"
+void MySPI_W_SS(uint8_t BitValue) ;
 
 // =================== 初始化 ===================
 void MySPI_Init(void)
@@ -14,15 +16,11 @@ void MySPI_Init(void)
 	//#define SPI_DI_GPIO_Port GPIOA
 	// 记得SCK作为时钟先是0(从而满足模式0的第一个沿为上升沿)
 	// SS最开始为1,表示不选中(因为是低电平有效)
+	MySPI_W_SS(0) ;
 }
 
 // =================== 引脚操作 ===================
-
-// 引脚操作:SS写入
-void MySPI_W_SS(uint8_t BitValue)
-{
-	HAL_GPIO_WritePin(SPI_SS_GPIO_Port , SPI_SS_Pin , (GPIO_PinState)BitValue) ;
-}
+#ifdef SPI_Software_Mode_Enable
 
 // 引脚操作:SCK写入
 void MySPI_W_SCK(uint8_t BitValue)
@@ -41,10 +39,15 @@ uint8_t MySPI_R_MISO(void)
 {
 	return HAL_GPIO_ReadPin(SPI_DO_GPIO_Port , SPI_DO_Pin) ;
 }
+#endif
 
+// 引脚操作:SS写入
+void MySPI_W_SS(uint8_t BitValue)
+{
+	HAL_GPIO_WritePin(SPI_SS_GPIO_Port , SPI_SS_Pin , (GPIO_PinState)BitValue) ;
+}
 
-
-// =================== 模拟时序 ===================
+// =================== 时序 ===================
 // 开启SPI通信
 void MySPI_Start(void)
 {
@@ -60,6 +63,8 @@ void MySPI_Stop(void)
 uint8_t MySPI_SwapByte(uint8_t ByteSend)
 {
 	uint8_t ByteReceive = 0x00 ;
+	// ============= 软件SPI ============= 
+	#ifdef SPI_Software_Mode_Enable
 	// 在for循环之前有SS下降沿,所以从机早就准备好了输出数据,并且存入到了移位寄存器,所以for_loop一开始就需要输出数据
 	for (int i = 0 ; i < 8 ; i ++)
 	{
@@ -68,6 +73,11 @@ uint8_t MySPI_SwapByte(uint8_t ByteSend)
 		if (MySPI_R_MISO() == 1) { ByteReceive |= (0x80 >> i) ; }
 		MySPI_W_SCK(0) ;	// 下降沿,主机从机输出下一位数据到移位寄存器
 	}
+	#else
+	// ============= 硬件SPI =============
+	HAL_SPI_TransmitReceive( &hspi1 , &ByteSend , &ByteReceive , 1 , 100000 );
+	#endif
 	
-	return ByteReceive ;
+	return ByteReceive;
+	
 }
