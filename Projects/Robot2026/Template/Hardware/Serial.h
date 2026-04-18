@@ -6,14 +6,14 @@
 
 // =============== define声明 ===============
 
-//#define Serial_Debug					// Debug模式
+//#define Serial_Debug						// Debug模式
 
 #define Serial1_Enable						// USART1串口DMA模式开启
-//#define Serial2_Enable						// USART2串口DMA模式开启
-//#define Serial3_Enable						// USART3串口DMA模式开启
+//#define Serial2_Enable					// USART2串口DMA模式开启
+//#define Serial3_Enable					// USART3串口DMA模式开启
 
-#define RX_Serial_LEN 40				// DMA接收数组长度,一次接受的数据不能大于这个长度
-#define Serial_Wait_Tail_MAX 25	// DMA等待帧尾判断溢出阈值
+#define RX_Serial_LEN 40					// DMA接收数组长度,一次接受的数据不能大于这个长度
+#define Serial_Wait_Tail_MAX 25				// DMA等待帧尾判断溢出阈值
 
 // =============== 结构体初始化 ===============
 // 数据接收过程标志位
@@ -28,6 +28,8 @@ typedef enum
 	
 	RX_Error_Tail_HEX = 0x6U,		// 数据尾帧出错,导致数据溢出
 	RX_Error_Tail_ABC = 0x7U,		// 数据尾帧出错,导致数据溢出
+
+	RX_Error,
 }Serial_RX_FLAG_Typedef;
  
 // 数据包检测错误处理
@@ -101,7 +103,7 @@ extern Serial_Typedef 		 Serial3 ; 		// 串口3
 
 
 // =============== 函数声明 ===============
-// DMA串口接收初始化
+// 串口接收初始化
 void Serial_Init(void) ;
 
 // 串口发送数组
@@ -127,6 +129,6 @@ bool Serial_SetFloatData( Serial_Typedef *pSerial , char *KeyWord , char *cmd , 
 bool Serial_SetIntData( Serial_Typedef *pSerial , char *KeyWord , char *cmd , int *Data) ;
 
 // 打印数据,记得加减乘除都要在后方进行而不是""里面进行
-void Serial_printf(Serial_Typedef *pSerial, const char *fmt, ...) ;
+void Serial_printf(Serial_Typedef *pSerial, const char *fmt, ...) ;	// 972us -> 约等于1ms
 
 #endif

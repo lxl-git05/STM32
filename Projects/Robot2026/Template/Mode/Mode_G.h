@@ -9,7 +9,7 @@ typedef enum
     // 加模式在下面加即可
     Mode_PID ,      // 模式1:调试电机的PID
     Mode_Angle ,    // 模式2:角度环控制小车
-    Mode_Track ,    // 模式3:寻迹环控制小车
+    Mode_Check ,    // 模式3:测试硬件连接
 
     Mode_End ,      // 注册模式不能在这个下面!!!
 }Mode_Typedef;

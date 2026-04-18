@@ -4,6 +4,7 @@
 #include "string.h"
 #include <stdarg.h>
 #include <stdio.h>
+#include "AllHeader.h"
 
 #ifdef Serial1_Enable
 Serial_Typedef 	Serial1 ; // 串口1
@@ -44,6 +45,10 @@ void Serial_Agreement_ABC_Init(Serial_Agreement_ABC_TypeDef *pSerial_Agreement)
 	pSerial_Agreement->end2  =  '#' ;
 }
 
+// DMA串口接收变量
+#define RX_USART1_LEN 50
+uint8_t RX_USART1[RX_USART1_LEN] ;	// 接收数组
+
 // 串口初始化:深层
 void Serial_Initial(Serial_Typedef *pSerial , USART_TypeDef* USART , UART_HandleTypeDef* huart)
 {
@@ -55,8 +60,10 @@ void Serial_Initial(Serial_Typedef *pSerial , USART_TypeDef* USART , UART_Handle
 	pSerial->rx_temp = 0 ;
 	memset(pSerial->rxBuf, 0, RX_Serial_LEN);	// 数据缓存区清零
 	
-	// 打开DMA接收函数
-	HAL_UART_Receive_DMA(huart, &(pSerial->rx_temp) , 1);  
+	// 打开DMA接收函数,这里是空闲DMA中断,不再是原本的激发中断
+	HAL_UARTEx_ReceiveToIdle_IT(huart, pSerial->rxBuf, RX_Serial_LEN);
+//	HAL_UARTEx_ReceiveToIdle_DMA(huart, pSerial->rxBuf , RX_Serial_LEN);  
+//	HAL_UARTEx_ReceiveToIdle_DMA(&huart1 , RX_USART1 , RX_USART1_LEN ) ;
   
 	// 初始化串口协议
 	Serial_Agreement_HEX_Init(&Serial_Agreement_HEX) ;
@@ -83,87 +90,6 @@ uint16_t Merge_2Bytes(uint8_t high, uint8_t low)
 {
     return ((uint16_t)high << 8) | low;
 }
-
-// 串口接收数据函数---将数据收集后触发Serial_Rx_Flag的OK
-Serial_RX_FLAG_Typedef Serial_Rx_State_Check(Serial_Typedef* pSerial)
-{
-	// 将暂存数据计入缓冲区,防止丢失
-	int rxData = pSerial->rx_temp ;
-
-	// 状态机
-	// 状态1:空闲状态,等待帧头
-	if (pSerial->Status == 0)
-	{
-		// 操作:数据记录回到原点
-		pSerial->rxCnt = 0 ;
-		
-		// 任务:等待帧头-HEX模式
-		if ( rxData == Serial_Agreement_HEX.head1 )
-		{
-			pSerial->rxBuf[pSerial->rxCnt++] = rxData ;
-			pSerial->Status = 1 ;	// 判断HEX帧尾
-			return RX_BUSY	;			// 开始处理数据
-		}
-		else if ( rxData == Serial_Agreement_ABC.head )
-		{
-			pSerial->rxBuf[pSerial->rxCnt++] = rxData ;
-			pSerial->Status = 2 ;	// 判断ABC帧尾
-			return RX_BUSY	;			// 开始处理数据
-		}
-		else
-		{
-			return RX_WAIT ;	// 继续等待
-		}
-	}
-	// 开始接收HEX原始数据包
-	else if (pSerial->Status == 1)
-	{
-		// 操作:暂存数据转移到缓冲区
-		pSerial->rxBuf[pSerial->rxCnt++] = rxData ;
-		
-		// 任务:检测帧尾
-		// 检测到帧尾,接收完毕
-		if (rxData == Serial_Agreement_HEX.end2)
-		{
-			pSerial->Status = 0 ;	// 状态转移
-			return RX_OK_HEX ;
-		}
-		// 没能检测到帧尾,数据溢出
-		else if (pSerial->rxCnt >= Serial_Wait_Tail_MAX)
-		{
-			pSerial->Status = 0 ;	// 状态转移
-			memset(pSerial->rxBuf, 0, RX_Serial_LEN);	// 清空
-			pSerial->Hex_Data.error_Serial = Serial_Error_Tail ;
-			return RX_Error_Tail_HEX ;
-		}
-	}
-	// 开始接收ABC原始数据包
-	else if (pSerial->Status == 2)
-	{
-		// 操作:暂存数据转移到缓冲区
-		pSerial->rxBuf[pSerial->rxCnt++] = rxData ;
-		
-		// 任务:检测帧尾
-		// 检测到帧尾,接收完毕
-		if (rxData == Serial_Agreement_ABC.end2)
-		{
-			pSerial->Status = 0 ;	// 状态转移
-			return RX_OK_ABC ;
-		}
-		// 没能检测到帧尾,数据溢出
-		else if (pSerial->rxCnt >= Serial_Wait_Tail_MAX)
-		{
-			pSerial->Status = 0 ;	// 状态转移
-			memset(pSerial->rxBuf, 0, RX_Serial_LEN);	// 清空
-			pSerial->ABC_Data.error_Serial = Serial_Error_Tail ;
-			return RX_Error_Tail_ABC ;
-		}
-	}
-	return RX_BUSY  ;
-}
-
-
-
 
 // ====================HEX:初步处理数据包(仅合并数据)====================
 void Serial_Data_Deal_HEX(Serial_Typedef* pSerial)
@@ -212,7 +138,7 @@ void Serial_Data_Check_HEX(Serial_Typedef* pSerial)
 		pSerial->Hex_Data.Serial_New_Package_Flag = 1 ;
 	}
 }
-// *HEX:得到串口接收标志位*
+// HEX:得到串口接收标志位
 uint8_t Serial_GetNewPackageFlag_HEX(Serial_Typedef *pSerial)
 {
 	if (pSerial->Hex_Data.Serial_New_Package_Flag == 1)			//如果标志位为1
@@ -283,7 +209,7 @@ void Serial_Data_Check_ABC(Serial_Typedef *pSerial)
 	}
 }
 
-// *文本:得到串口接收标志位*
+// 文本:得到串口接收标志位
 uint8_t Serial_GetNewPackageFlag_ABC(Serial_Typedef *pSerial)
 {
 	if (pSerial->ABC_Data.Serial_New_Package_Flag == 1)			//如果标志位为1
@@ -294,13 +220,13 @@ uint8_t Serial_GetNewPackageFlag_ABC(Serial_Typedef *pSerial)
 	return 0;						//如果标志位为0，则返回0
 }
 
-// *文本:得到错误原因*
+// 文本:得到错误原因
 int Serial_GetError_ABC(Serial_Typedef *pSerial)
 {
 	return pSerial->ABC_Data.error_Serial ;
 }
 
-// *文本:1. 封装一个函数,实现简易浮点数变量调试*
+// 文本:1. 封装一个函数,实现简易浮点数变量调试
 bool Serial_SetFloatData( Serial_Typedef *pSerial , char *KeyWord , char *cmd , float *Data)
 {
 	// KeyWord为关键词,有别与别的指令 cmd为整句话,包含%f等,VOFA怎么写这里也怎么写 Data为接收改变量的变量
@@ -317,7 +243,7 @@ bool Serial_SetFloatData( Serial_Typedef *pSerial , char *KeyWord , char *cmd , 
 	}
 }
 
-// *文本:2. 封装一个函数,实现简易整数变量调试*
+// 文本:2. 封装一个函数,实现简易整数变量调试
 bool Serial_SetIntData( Serial_Typedef *pSerial , char *KeyWord , char *cmd , int *Data)
 {
 	// KeyWord为关键词,有别与别的指令 cmd为整句话,包含%d等,VOFA没有%d,所以VOFA写%.0f即可代表%d Data为接收改变量的变量
@@ -334,197 +260,105 @@ bool Serial_SetIntData( Serial_Typedef *pSerial , char *KeyWord , char *cmd , in
 	}
 }
 
-
-
 // ============== 串口空闲中断回调函数 ==============
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
-	#ifdef Serial1_Enable
-	if(huart->Instance == Serial1.USART)
-	{
-		#ifdef Serial_Debug
-		Serial_check[Serial_Count++] = Serial1.rx_temp ;	// 得到所有接收到的数据
-		#endif 
-		
-		static Serial_RX_FLAG_Typedef Serial1_Rx_State;		// 数据接收情况标志位-枚举
-		
-		// 获得串口数据传输状态(更新)
-		Serial1_Rx_State = Serial_Rx_State_Check(&Serial1);
-		
-		// HEX数据包
-		if (Serial1_Rx_State == RX_OK_HEX)
-		{
-			// 开始处理原始数据包:HEX
-			Serial_Data_Check_HEX(&Serial1) ;
-		}
-		// ABC数据包
-		else if (Serial1_Rx_State == RX_OK_ABC)
-		{
-			// 开始处理原始数据包:ABC
-			Serial_Data_Check_ABC(&Serial1) ;
-		} 
-		// 重新打开串口DMA接收，DMA配置为不连续模式
-		HAL_UART_Receive_DMA(Serial1.huart, &(Serial1.rx_temp) , 1);    		
-	}
-	#endif
-	#ifdef Serial2_Enable
-	if(huart->Instance == Serial2.USART)
-	{
-		#ifdef Serial_Debug
-		Serial_check[Serial_Count++] = Serial2.rx_temp ;	// 得到所有接收到的数据
-		#endif 
-		
-		static Serial_RX_FLAG_Typedef Serial2_Rx_State;		// 数据接收情况标志位-枚举
-		
-		// 获得串口数据传输状态(更新)
-		Serial2_Rx_State = Serial_Rx_State_Check(&Serial2);
-		
-		// HEX数据包
-		if (Serial2_Rx_State == RX_OK_HEX)
-		{
-			// 开始处理原始数据包:HEX
-			Serial_Data_Check_HEX(&Serial2) ;
-		}
-		// ABC数据包
-		else if (Serial2_Rx_State == RX_OK_ABC)
-		{
-			// 开始处理原始数据包:ABC
-			Serial_Data_Check_ABC(&Serial2) ;
-		} 
-		// 重新打开串口DMA接收，DMA配置为不连续模式
-		HAL_UART_Receive_DMA(Serial2.huart, &(Serial2.rx_temp) , 1);    		
-	}
-	#endif
-	#ifdef Serial3_Enable
-		#ifdef Serial_Debug
-		Serial_check[Serial_Count++] = Serial3.rx_temp ;	// 得到所有接收到的数据
-		#endif 
-		
-		static Serial_RX_FLAG_Typedef Serial3_Rx_State;		// 数据接收情况标志位-枚举
-		
-		// 获得串口数据传输状态(更新)
-		Serial3_Rx_State = Serial_Rx_State_Check(&Serial3);
-		
-		// HEX数据包
-		if (Serial3_Rx_State == RX_OK_HEX)
-		{
-			// 开始处理原始数据包:HEX
-			Serial_Data_Check_HEX(&Serial3) ;
-		}
-		// ABC数据包
-		else if (Serial3_Rx_State == RX_OK_ABC)
-		{
-			// 开始处理原始数据包:ABC
-			Serial_Data_Check_ABC(&Serial3) ;
-		} 
-		// 重新打开串口DMA接收，DMA配置为不连续模式
-		HAL_UART_Receive_DMA(Serial3.huart, &(Serial3.rx_temp) , 1);    		
-	}
-	#endif
+#ifdef Serial1_Enable
+    if (huart->Instance == Serial1.USART)
+    {
+        // Size 就是本次实际接收到的字节数（Idle 触发或缓冲区满）
+        if (Size > 0 && Size <= RX_Serial_LEN)
+        {
+            Serial1.rxBuf[Size] = '\0';                    // 加字符串结束符（对 ABC 协议有用）
+
+            // === 数据处理（你的原有逻辑基本不动）===
+            if (Serial1.rxBuf[0] == 0xFF && Serial1.rxBuf[1] == 0xAA)
+            {
+                Serial_Data_Check_HEX(&Serial1);
+            }
+            else if (Serial1.rxBuf[0] == '@')
+            {
+                Serial_Data_Check_ABC(&Serial1);
+            }
+
+            // 回显
+//            HAL_UART_Transmit(&huart1, (uint8_t *)Serial1.rxBuf, Size, 100);     // 阻塞发送测试
+        }
+
+        // === 必须重新启动接收 ===
+        HAL_UARTEx_ReceiveToIdle_IT(Serial1.huart, Serial1.rxBuf, RX_Serial_LEN);
+    }
+#endif
+#ifdef Serial2_Enable
+    if (huart->Instance == Serial2.USART)
+    {
+        // Size 就是本次实际接收到的字节数（Idle 触发或缓冲区满）
+        if (Size > 0 && Size <= RX_Serial_LEN)
+        {
+            Serial2.rxBuf[Size] = '\0';                    // 加字符串结束符（对 ABC 协议有用）
+
+            // === 数据处理（你的原有逻辑基本不动）===
+            if (Serial2.rxBuf[0] == 0xFF && Serial2.rxBuf[1] == 0xAA)
+            {
+                Serial_Data_Check_HEX(&Serial2);
+            }
+            else if (Serial2.rxBuf[0] == '@')
+            {
+                Serial_Data_Check_ABC(&Serial2);
+            }
+
+            // 回显
+//            HAL_UART_Transmit(&huart1, (uint8_t *)Serial2.rxBuf, Size, 100);     // 阻塞发送测试
+        }
+
+        // === 必须重新启动接收 ===
+        HAL_UARTEx_ReceiveToIdle_IT(Serial2.huart, Serial2.rxBuf, RX_Serial_LEN);
+    }
+#endif
+#ifdef Serial3_Enable
+    if (huart->Instance == Serial3.USART)
+    {
+        // Size 就是本次实际接收到的字节数（Idle 触发或缓冲区满）
+        if (Size > 0 && Size <= RX_Serial_LEN)
+        {
+            Serial3.rxBuf[Size] = '\0';                    // 加字符串结束符（对 ABC 协议有用）
+
+            // === 数据处理（你的原有逻辑基本不动）===
+            if (Serial3.rxBuf[0] == 0xFF && Serial3.rxBuf[1] == 0xAA)
+            {
+                Serial_Data_Check_HEX(&Serial3);
+            }
+            else if (Serial3.rxBuf[0] == '@')
+            {
+                Serial_Data_Check_ABC(&Serial3);
+            }
+
+            // 回显
+//            HAL_UART_Transmit(&huart1, (uint8_t *)Serial3.rxBuf, Size, 100);     // 阻塞发送测试
+        }
+
+        // === 必须重新启动接收 ===
+        HAL_UARTEx_ReceiveToIdle_IT(Serial3.huart, Serial3.rxBuf, RX_Serial_LEN);
+    }
+#endif
 }
 
-
-// ======================= UART_DMA_Send:替代printf方案,实现更快的速度和更小的消耗(7个%,100us) =====================
-// 整数转字符串
-static void int_to_str(int x, char *buf)
-{
-    char tmp[12];
-    int i = 0, j = 0;
-
-    if (x < 0) { buf[j++] = '-'; x = -x; }
-
-    do {
-        tmp[i++] = x % 10 + '0';
-        x /= 10;
-    } while (x);
-
-    while (i--) buf[j++] = tmp[i];
-
-    buf[j] = 0;
-}
-
-// 浮点数转字符串
-static void float_to_str(float f, char *buf)
-{
-    int int_part = (int)f;
-    float frac_part = f - int_part;
-    if (frac_part < 0) frac_part = -frac_part;
-
-    int_to_str(int_part, buf);
-    int len = strlen(buf);
-    buf[len++] = '.';
-
-    int frac = (int)(frac_part * 100); // 两位小数
-    if (frac < 10) buf[len++] = '0';   // 补0
-    int_to_str(frac, &buf[len]);
-}
-
-// DMA发送信息
-void UART_DMA_Send(Serial_Typedef *pSerial, char *str)
-{
-    HAL_UART_Transmit_DMA(pSerial->huart, (uint8_t*)str, strlen(str));
-}
-
-// Serial发送消息
+// ======================= Serial_printf 使用阻塞发送（最简单稳定） =====================
 void Serial_printf(Serial_Typedef *pSerial, const char *fmt, ...)
 {
-    char buffer[256];  // DMA发送缓冲区
-    int buf_index = 0;
-
+    char buffer[256];
     va_list args;
+    int len;
+
     va_start(args, fmt);
-
-    for (int i = 0; fmt[i] != '\0'; i++)
-    {
-        if (fmt[i] == '%' && fmt[i+1] != '\0')
-        {
-            char tmp[32];
-            tmp[0] = '\0';
-
-            switch (fmt[i+1])
-            {
-                case 'd':
-                {
-                    int val = va_arg(args, int);
-                    int_to_str(val, tmp);
-                    break;
-                }
-                case 'f':
-                {
-                    double val = va_arg(args, double); // float 被提升为 double
-                    float_to_str((float)val, tmp);
-                    break;
-                }
-                case 's':
-                {
-                    char *val = va_arg(args, char*);
-                    strcpy(tmp, val);
-                    break;
-                }
-                default:
-                    tmp[0] = fmt[i+1];
-                    tmp[1] = '\0';
-                    break;
-            }
-
-            int len = strlen(tmp);
-            if (buf_index + len < sizeof(buffer))
-            {
-                strcpy(&buffer[buf_index], tmp);
-                buf_index += len;
-            }
-
-            i++; // 跳过格式字符
-        }
-        else
-        {
-            if (buf_index + 1 < sizeof(buffer))
-                buffer[buf_index++] = fmt[i];
-        }
-    }
-
-    buffer[buf_index] = '\0';
+    len = vsnprintf(buffer, sizeof(buffer), fmt, args);
     va_end(args);
 
-    UART_DMA_Send(pSerial, buffer);
+    if (len > 0)
+    {
+        if (len >= (int)sizeof(buffer))
+            len = sizeof(buffer) - 1;
+
+        HAL_UART_Transmit(pSerial->huart, (uint8_t*)buffer, len, 100);  // 100ms 超时
+    }
 }

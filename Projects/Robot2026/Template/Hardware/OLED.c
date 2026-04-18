@@ -114,6 +114,7 @@ void OLED_W_SCL( uint8_t x )
 	{
 		HAL_GPIO_WritePin(GPIOB, OLED_SCL_Pin, GPIO_PIN_RESET ) ;
 	}
+	for (volatile int i = 0; i < 5; i++);
 }
 
 /**
@@ -144,6 +145,7 @@ void OLED_W_SDA( uint8_t x )
 	{
 		HAL_GPIO_WritePin(GPIOB, OLED_SDA_Pin, GPIO_PIN_RESET ) ;
 	}
+	for (volatile int i = 0; i < 5; i++);
 }
 
 /***************** 
