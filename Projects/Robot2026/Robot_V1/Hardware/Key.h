@@ -1,8 +1,7 @@
 #ifndef __KEY_H
 #define __KEY_H
 
-#include "main.h" // 内部也会包含 stdint.h
-#include "gpio.h"
+#include "MySystem.h"
 
 #define KEY_COUNT				4
 

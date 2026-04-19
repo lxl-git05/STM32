@@ -1,5 +1,4 @@
 #include "Mymain.h"
-#include "Initial.h"
 #include "AllHeader.h"
 // =================== 全局变量 ===================
 

@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Function;../Hardware;../Software;../System;../Tools;../Top;../Mode</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Function;../Hardware;../Software;../Tools;../Top;../Mode;../MySystem</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -542,37 +542,52 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>System</GroupName>
+          <GroupName>MySystem</GroupName>
           <Files>
             <File>
-              <FileName>Encoder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\System\Encoder.c</FilePath>
-            </File>
-            <File>
-              <FileName>Encoder.h</FileName>
+              <FileName>MySystem.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\System\Encoder.h</FilePath>
+              <FilePath>..\MySystem\MySystem.h</FilePath>
             </File>
             <File>
-              <FileName>PWM.c</FileName>
+              <FileName>MyGPIO.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\System\PWM.c</FilePath>
+              <FilePath>..\MySystem\MyGPIO.c</FilePath>
             </File>
             <File>
-              <FileName>PWM.h</FileName>
+              <FileName>MyGPIO.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\System\PWM.h</FilePath>
+              <FilePath>..\MySystem\MyGPIO.h</FilePath>
             </File>
             <File>
-              <FileName>Timer.c</FileName>
+              <FileName>MyPWM.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\System\Timer.c</FilePath>
+              <FilePath>..\MySystem\MyPWM.c</FilePath>
             </File>
             <File>
-              <FileName>Timer.h</FileName>
+              <FileName>MyPWM.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\System\Timer.h</FilePath>
+              <FilePath>..\MySystem\MyPWM.h</FilePath>
+            </File>
+            <File>
+              <FileName>MyEncoder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MySystem\MyEncoder.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyEncoder.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\MySystem\MyEncoder.h</FilePath>
+            </File>
+            <File>
+              <FileName>MyTimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MySystem\MyTimer.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyTimer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\MySystem\MyTimer.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -635,19 +650,31 @@
               <FilePath>..\Hardware\OLED_Data.h</FilePath>
             </File>
             <File>
-              <FileName>Serial.c</FileName>
+              <FileName>Serial_base.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Hardware\Serial.c</FilePath>
+              <FilePath>..\Hardware\Serial_base.c</FilePath>
             </File>
             <File>
-              <FileName>Serial.h</FileName>
+              <FileName>Serial_base.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Hardware\Serial.h</FilePath>
+              <FilePath>..\Hardware\Serial_base.h</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Function</GroupName>
+          <Files>
+            <File>
+              <FileName>Serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Function\Serial.c</FilePath>
+            </File>
+            <File>
+              <FileName>Serial.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Function\Serial.h</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Tools</GroupName>
@@ -681,6 +708,16 @@
               <FileName>LED_Flash.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Tools\LED_Flash.h</FilePath>
+            </File>
+            <File>
+              <FileName>Menu_Key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tools\Menu_Key.c</FilePath>
+            </File>
+            <File>
+              <FileName>Menu_Key.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tools\Menu_Key.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -733,26 +770,6 @@
           <GroupName>Top</GroupName>
           <Files>
             <File>
-              <FileName>Initial.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Top\Initial.c</FilePath>
-            </File>
-            <File>
-              <FileName>Initial.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Top\Initial.h</FilePath>
-            </File>
-            <File>
-              <FileName>Menu_Key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Top\Menu_Key.c</FilePath>
-            </File>
-            <File>
-              <FileName>Menu_Key.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Top\Menu_Key.h</FilePath>
-            </File>
-            <File>
               <FileName>Mymain.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Top\Mymain.c</FilePath>
@@ -761,6 +778,11 @@
               <FileName>Mymain.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Top\Mymain.h</FilePath>
+            </File>
+            <File>
+              <FileName>AllHeader.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Top\AllHeader.c</FilePath>
             </File>
             <File>
               <FileName>AllHeader.h</FileName>

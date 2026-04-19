@@ -1,7 +1,7 @@
 #ifndef __SERIAL_H
 #define __SERIAL_H
 
-#include "main.h"
+#include "Mysystem.h"
 #include <stdbool.h>
 
 // =============== define声明 ===============
@@ -16,48 +16,6 @@
 #define Serial_Wait_Tail_MAX 25				// DMA等待帧尾判断溢出阈值
 
 // =============== 结构体初始化 ===============
-// 数据接收过程标志位
-typedef enum
-{
-	// 数据初步存入数据缓冲区阶段
-	RX_OK_HEX 		= 0x00U,	// HEX数据包接收完成
-	RX_OK_ABC 		= 0x01U,	// ABC数据包接收完成
-	
-	RX_BUSY		= 0x02U,	// 数据包正在接收存储中,跳过此次解析过程
-	RX_WAIT		= 0x03U,	// 等待数据传入(如果头帧不通过就一直卡在这里)
-	
-	RX_Error_Tail_HEX = 0x6U,		// 数据尾帧出错,导致数据溢出
-	RX_Error_Tail_ABC = 0x7U,		// 数据尾帧出错,导致数据溢出
-
-	RX_Error,
-}Serial_RX_FLAG_Typedef;
- 
-// 数据包检测错误处理
-typedef enum
-{
-	Serial_Error_None = 0x00U,		// 数据无误
-	Serial_Error_Head = 0x01U,		// 数据头帧出错
-	Serial_Error_Tail = 0x02U,		// 数据尾帧出错
-	Serial_Error_Data = 0x03U,		
-	Serial_Error_Data_Len = 0x04U,
-}Serial_Data_Error_Typedef;
-// 串口协议:HEX
-typedef struct
-{
-	uint8_t head1;	// 头帧1
-	uint8_t head2;	// 头帧2
-	uint8_t end1;		// 尾帧1
-	uint8_t end2;		// 尾帧2
-}Serial_Agreement_HEX_TypeDef;
-
-// 串口协议:ABC
-typedef struct
-{
-	uint8_t head;	  // 头帧
-	uint8_t end1;		// 尾帧1
-	uint8_t end2;		// 尾帧2
-}Serial_Agreement_ABC_TypeDef;
-
 // HEX接收数据包
 typedef struct
 {
@@ -105,9 +63,6 @@ extern Serial_Typedef 		 Serial3 ; 		// 串口3
 // =============== 函数声明 ===============
 // 串口接收初始化
 void Serial_Init(void) ;
-
-// 串口发送数组
-void Serial_SendData_DMA(Serial_Typedef *pSerial , uint8_t *pData, uint16_t Size) ;
 
 // HEX:得到串口接收标志位
 uint8_t Serial_GetNewPackageFlag_HEX(Serial_Typedef *pSerial) ;

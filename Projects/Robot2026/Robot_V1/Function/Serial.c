@@ -1,10 +1,8 @@
 #include "Serial.h"
-#include "usart.h"
-
 #include "string.h"
 #include <stdarg.h>
 #include <stdio.h>
-#include "AllHeader.h"
+#include "Serial_base.h"
 
 #ifdef Serial1_Enable
 Serial_Typedef 	Serial1 ; // 串口1
@@ -22,30 +20,8 @@ int Serial_Count = 0 ;
 #endif
 
 // ============== 全局变量 ==============
-Serial_Agreement_HEX_TypeDef 	Serial_Agreement_HEX ;		// 串口数据通信协议:HEX
-Serial_Agreement_ABC_TypeDef 	Serial_Agreement_ABC ;		// 串口数据通信协议:ABC
 
-// ============== 函数:初始化 ==============
-// 串口协议初始化:HEX
-void Serial_Agreement_HEX_Init(Serial_Agreement_HEX_TypeDef *pSerial_Agreement)
-{
-	pSerial_Agreement->head1 = 0xFF ;
-	
-	pSerial_Agreement->head2 = 0xAA ;
-	pSerial_Agreement->end1	 = 0x55 ;
-	
-	pSerial_Agreement->end2  = 0xFE	;
-}
-
-// 串口协议初始化:ABC
-void Serial_Agreement_ABC_Init(Serial_Agreement_ABC_TypeDef *pSerial_Agreement)
-{
-	pSerial_Agreement->head  =  '@' ;
-	pSerial_Agreement->end1	 =  '$' ;
-	pSerial_Agreement->end2  =  '#' ;
-}
-
-// DMA串口接收变量
+// 串口接收变量
 #define RX_USART1_LEN 50
 uint8_t RX_USART1[RX_USART1_LEN] ;	// 接收数组
 
@@ -60,10 +36,8 @@ void Serial_Initial(Serial_Typedef *pSerial , USART_TypeDef* USART , UART_Handle
 	pSerial->rx_temp = 0 ;
 	memset(pSerial->rxBuf, 0, RX_Serial_LEN);	// 数据缓存区清零
 	
-	// 打开DMA接收函数,这里是空闲DMA中断,不再是原本的激发中断
+	// 打开空闲中断函数,不再是原本的激发中断
 	HAL_UARTEx_ReceiveToIdle_IT(huart, pSerial->rxBuf, RX_Serial_LEN);
-//	HAL_UARTEx_ReceiveToIdle_DMA(huart, pSerial->rxBuf , RX_Serial_LEN);  
-//	HAL_UARTEx_ReceiveToIdle_DMA(&huart1 , RX_USART1 , RX_USART1_LEN ) ;
   
 	// 初始化串口协议
 	Serial_Agreement_HEX_Init(&Serial_Agreement_HEX) ;
