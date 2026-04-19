@@ -12,7 +12,6 @@ void Mode_3_Setup(void)
 void Mode_3_Loop(void)
 {
 	// 本loop函数建议只执行一个check任务,防止未知Bug
-    
     // 2. 测试电机
     
 }
