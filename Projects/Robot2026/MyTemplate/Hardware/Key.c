@@ -1,4 +1,4 @@
-#include "stm32h7xx.h"                  // Device header
+#include "MySystem.h"
 #include "Key.h"
 
 #define KEY_PRESSED				1
@@ -16,32 +16,32 @@ uint8_t Key_GetState(uint8_t n)		// 得到按键状态
 {
 	if (n == KEY_0)
 	{
-		if (HAL_GPIO_ReadPin(KEY0_GPIO_Port, KEY0_Pin) == 0)
+		if (My_GPIO_ReadPin(&MyGPIO_Key0) == 0)
 		{
 			return KEY_PRESSED;
 		}
 	}
-//	else if (n == KEY_1)
-//	{
-//		if (HAL_GPIO_ReadPin(KEY1_GPIO_Port, KEY1_Pin) == 0)
-//		{
-//			return KEY_PRESSED;
-//		}
-//	}
-//	else if (n == KEY_2)
-//	{
-//		if (HAL_GPIO_ReadPin(KEY3_GPIO_Port, KEY3_Pin) == 0)
-//		{
-//			return KEY_PRESSED;
-//		}
-//	}
-//	else if (n == KEY_3)
-//	{
-//		if (HAL_GPIO_ReadPin(KEY4_GPIO_Port, KEY4_Pin) == 0)
-//		{
-//			return KEY_PRESSED;
-//		}
-//	}
+	else if (n == KEY_1)
+	{
+		if (My_GPIO_ReadPin(&MyGPIO_Key1) == 0)
+		{
+			return KEY_PRESSED;
+		}
+	}
+	else if (n == KEY_2)
+	{
+		if (My_GPIO_ReadPin(&MyGPIO_Key2) == 0)
+		{
+			return KEY_PRESSED;
+		}
+	}
+	// else if (n == KEY_3)
+	// {
+	// 	if (My_GPIO_ReadPin(&MyGPIO_Key3) == 0)
+	// 	{
+	// 		return KEY_PRESSED;
+	// 	}
+	// }
 	return KEY_UNPRESSED;
 }
 

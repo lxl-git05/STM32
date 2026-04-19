@@ -1,7 +1,7 @@
 #ifndef __LED_FLASH_H
 #define __LED_FLASH_H
 
-#include "main.h"
+#include "MySystem.h"
 
 // =========== 枚举类型 ===========
 // LED闪烁模式

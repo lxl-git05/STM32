@@ -1,15 +1,22 @@
 #ifndef __MYENCODER_H
 #define __MYENCODER_H
 
-//#include "main.h"
-//#include "tim.h"
+/*这里的编码器是编码器模式,而不是外部触发模式,外部触发需要另外写相应代码*/
 
-//// *****************函数*****************
+#include "Mysystem.h"
 
-//// 编码器初始化
-//void Encoder_Init(TIM_HandleTypeDef *htimx) ;
+typedef struct
+{
+	TIM_HandleTypeDef *htimx;
+}MyEncoder_Typedef;
 
-//// 得到编码器的脉冲数
-//int Encoder_Get_CNT(TIM_HandleTypeDef *htimx) ;
-	
+extern MyEncoder_Typedef Motor_A_Encoder ;
+extern MyEncoder_Typedef Motor_B_Encoder ;
+
+// 1. 编码器初始化
+void MyEncoder_Init(MyEncoder_Typedef* MyEncoder) ;
+
+// 2. 得到编码器的脉冲数
+int MyEncoder_Get_CNT(MyEncoder_Typedef* MyEncoder) ;
+
 #endif

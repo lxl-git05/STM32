@@ -6,12 +6,9 @@
 #include "stdio.h"
 #include "stdint.h"
 #include "stdbool.h"
-#include "main.h"
-#include "tim.h"
-#include "usart.h"
 
-// µ×²ã¿â(MySystem)
-#include "MyTimer.h"
+// µ×²ãÇý¶¯¿â(MySystem)
+#include "MySystem.h"
 
 // ¹¤¾ß¿â
 #include "Key_Check.h"

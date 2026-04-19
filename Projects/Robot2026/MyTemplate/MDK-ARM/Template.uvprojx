@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32H743xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Function;../Hardware;../Software;../Tools;../Top;../Mode;..\MySystem</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Function;../Hardware;../Software;../Tools;../Top;../Mode;../MySystem</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -545,6 +545,11 @@
           <GroupName>MySystem</GroupName>
           <Files>
             <File>
+              <FileName>MySystem.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\MySystem\MySystem.h</FilePath>
+            </File>
+            <File>
               <FileName>MyGPIO.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\MySystem\MyGPIO.c</FilePath>
@@ -555,16 +560,6 @@
               <FilePath>..\MySystem\MyGPIO.h</FilePath>
             </File>
             <File>
-              <FileName>MyEncoder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\MySystem\MyEncoder.c</FilePath>
-            </File>
-            <File>
-              <FileName>MyEncoder.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\MySystem\MyEncoder.h</FilePath>
-            </File>
-            <File>
               <FileName>MyPWM.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\MySystem\MyPWM.c</FilePath>
@@ -573,6 +568,16 @@
               <FileName>MyPWM.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\MySystem\MyPWM.h</FilePath>
+            </File>
+            <File>
+              <FileName>MyEncoder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MySystem\MyEncoder.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyEncoder.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\MySystem\MyEncoder.h</FilePath>
             </File>
             <File>
               <FileName>MyTimer.c</FileName>
@@ -645,19 +650,31 @@
               <FilePath>..\Hardware\OLED_Data.h</FilePath>
             </File>
             <File>
-              <FileName>Serial.c</FileName>
+              <FileName>Serial_base.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Hardware\Serial.c</FilePath>
+              <FilePath>..\Hardware\Serial_base.c</FilePath>
             </File>
             <File>
-              <FileName>Serial.h</FileName>
+              <FileName>Serial_base.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Hardware\Serial.h</FilePath>
+              <FilePath>..\Hardware\Serial_base.h</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Function</GroupName>
+          <Files>
+            <File>
+              <FileName>Serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Function\Serial.c</FilePath>
+            </File>
+            <File>
+              <FileName>Serial.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Function\Serial.h</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>Tools</GroupName>

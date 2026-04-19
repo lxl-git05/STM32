@@ -18,7 +18,8 @@
   ***************************************************************************************
   */
 
-#include "main.h"
+#include "MySystem.h"
+// #include "main.h"
 #include "OLED.h"
 #include <string.h>
 #include <math.h>
@@ -103,16 +104,22 @@ uint8_t OLED_DisplayBuf[8][128];
 //	//...
 //}
 
+// 对于高速控制器需要适当延时
+// void OLED_Delay(void)
+// {
+// 	for (volatile int i = 0; i < 5; i++);
+// }
+
 // STM32 F1 移植
 void OLED_W_SCL( uint8_t x )
 {
 	if ( x )
 	{
-		HAL_GPIO_WritePin(GPIOB, OLED_SCL_Pin, GPIO_PIN_SET ) ;
+		My_GPIO_WritePin(&MyGPIO_OLED_SCL , GPIO_PIN_SET);
 	}
 	else
 	{
-		HAL_GPIO_WritePin(GPIOB, OLED_SCL_Pin, GPIO_PIN_RESET ) ;
+		My_GPIO_WritePin(&MyGPIO_OLED_SCL , GPIO_PIN_RESET);
 	}
 	for (volatile int i = 0; i < 5; i++);
 }
@@ -139,11 +146,11 @@ void OLED_W_SDA( uint8_t x )
 {
 	if ( x )
 	{
-		HAL_GPIO_WritePin(GPIOB, OLED_SDA_Pin, GPIO_PIN_SET ) ;
+		My_GPIO_WritePin(&MyGPIO_OLED_SDA , GPIO_PIN_SET);
 	}
 	else
 	{
-		HAL_GPIO_WritePin(GPIOB, OLED_SDA_Pin, GPIO_PIN_RESET ) ;
+		My_GPIO_WritePin(&MyGPIO_OLED_SDA , GPIO_PIN_RESET);
 	}
 	for (volatile int i = 0; i < 5; i++);
 }
