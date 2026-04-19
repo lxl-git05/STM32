@@ -1,4 +1,4 @@
-#include "Encoder.h"
+#include "MyEncoder.h"
 
 //// ±àÂëÆ÷³õÊ¼»¯
 //void Encoder_Init(TIM_HandleTypeDef *htimx)

@@ -1,5 +1,5 @@
-#ifndef __ENCODER_H
-#define __ENCODER_H
+#ifndef __MYENCODER_H
+#define __MYENCODER_H
 
 //#include "main.h"
 //#include "tim.h"

@@ -542,6 +542,51 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>MySystem</GroupName>
+          <Files>
+            <File>
+              <FileName>MyGPIO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MySystem\MyGPIO.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyGPIO.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\MySystem\MyGPIO.h</FilePath>
+            </File>
+            <File>
+              <FileName>MyEncoder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MySystem\MyEncoder.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyEncoder.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\MySystem\MyEncoder.h</FilePath>
+            </File>
+            <File>
+              <FileName>MyPWM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MySystem\MyPWM.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyPWM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\MySystem\MyPWM.h</FilePath>
+            </File>
+            <File>
+              <FileName>MyTimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MySystem\MyTimer.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyTimer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\MySystem\MyTimer.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Software</GroupName>
           <Files>
             <File>
@@ -647,6 +692,16 @@
               <FileType>5</FileType>
               <FilePath>..\Tools\LED_Flash.h</FilePath>
             </File>
+            <File>
+              <FileName>Menu_Key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tools\Menu_Key.c</FilePath>
+            </File>
+            <File>
+              <FileName>Menu_Key.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tools\Menu_Key.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -698,26 +753,6 @@
           <GroupName>Top</GroupName>
           <Files>
             <File>
-              <FileName>Initial.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Top\Initial.c</FilePath>
-            </File>
-            <File>
-              <FileName>Initial.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Top\Initial.h</FilePath>
-            </File>
-            <File>
-              <FileName>Menu_Key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Top\Menu_Key.c</FilePath>
-            </File>
-            <File>
-              <FileName>Menu_Key.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Top\Menu_Key.h</FilePath>
-            </File>
-            <File>
               <FileName>Mymain.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Top\Mymain.c</FilePath>
@@ -728,44 +763,14 @@
               <FilePath>..\Top\Mymain.h</FilePath>
             </File>
             <File>
+              <FileName>AllHeader.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Top\AllHeader.c</FilePath>
+            </File>
+            <File>
               <FileName>AllHeader.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Top\AllHeader.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>MySystem</GroupName>
-          <Files>
-            <File>
-              <FileName>Encoder.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\MySystem\Encoder.c</FilePath>
-            </File>
-            <File>
-              <FileName>Encoder.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\MySystem\Encoder.h</FilePath>
-            </File>
-            <File>
-              <FileName>PWM.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\MySystem\PWM.c</FilePath>
-            </File>
-            <File>
-              <FileName>PWM.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\MySystem\PWM.h</FilePath>
-            </File>
-            <File>
-              <FileName>Timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\MySystem\Timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>Timer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\MySystem\Timer.h</FilePath>
             </File>
           </Files>
         </Group>

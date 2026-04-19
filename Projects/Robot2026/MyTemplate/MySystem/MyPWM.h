@@ -1,5 +1,5 @@
-#ifndef __PWM_H
-#define __PWM_H
+#ifndef __MyPWM_H
+#define __MyPWM_H
 
 //#include "main.h"
 //#include "tim.h"
