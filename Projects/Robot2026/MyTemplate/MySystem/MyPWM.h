@@ -7,6 +7,7 @@ typedef struct
 {
 	TIM_HandleTypeDef* htimx ;
 	uint32_t Channel ;
+	uint32_t PWM_MAX ;	// 最大PWM输出值
 }MyPWM_Typedef ;
 
 extern MyPWM_Typedef MyPWM_Servo1     ;	// PSC:2400(10us) ARR:2000, 舵机应该使用50-250的PWM值

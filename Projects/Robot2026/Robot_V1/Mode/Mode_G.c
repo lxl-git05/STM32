@@ -2,7 +2,7 @@
 #include "AllHeader.h"
 
 Mode_Typedef curr_mode = Mode_Null  ;     // 当前模式
-Mode_Typedef next_mode = Mode_Check ;      // 下一个模式
+Mode_Typedef next_mode = Mode_PID  ;     // 下一个模式
 
 // ========================== 系统setup loop ==========================
 
@@ -22,6 +22,7 @@ void Mode_G_Loop(void)
     if (Key_Check(KEY_0, KEY_SINGLE))// 单击
     {
         Flash_Mode_Set(Flash_Mode_Fast) ;   
+        Motor_SetPWM(&Motor_A, 200) ;
     }
     // 进入下一个模式
     if (Key_Check(KEY_0, KEY_DOUBLE))// 双击
@@ -48,7 +49,9 @@ void Timer_1ms_Callback(void)
 // 20ms定时器
 void Timer_20ms_Callback(void)
 {
-	
+    // 电机持续运行
+//    Motor_Update_Tick() ;
+    if (curr_mode == Mode_PID) { Mode_1_Tick();}
 }
 
 

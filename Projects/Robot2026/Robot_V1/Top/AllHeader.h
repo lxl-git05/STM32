@@ -23,6 +23,7 @@
 // 软件算法库
 
 // 硬件实现库
+#include "Con_Motor.h"
 
 // Mode库
 #include "Mode_G.h"

@@ -7,14 +7,17 @@
 void Initial_ALL(void)
 {
 	// Hardware
-	OLED_Init() ;																	// OLED初始化
+	OLED_Init() ;					// OLED初始化
 	
 	// Software
-	Serial_Init() ;																// 串口初始化
+	Serial_Init() ;					// 串口初始化
+
+	// Function
+	Con_Motor_init() ;				// 电机初始化
 	
 	// Tools
-	Flash_Mode_Init() ;														// LED闪烁工具初始化
-	Timer_Counter_Init() ;												// 时间戳测定初始化
+	Flash_Mode_Init() ;				// LED闪烁工具初始化
+	Timer_Counter_Init() ;			// 时间戳测定初始化
 }
 
 // 定时器初始化

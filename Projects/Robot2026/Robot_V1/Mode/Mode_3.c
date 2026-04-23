@@ -1,6 +1,9 @@
 #include "Mode_3.h"
 #include "AllHeader.h"
 
+#define Check_Num 3
+int Check_Item = 0;
+
 // 测试全局变量
 float check ;
 
@@ -12,12 +15,40 @@ void Check_Encoder(void) ;  // 需要初始化
 void Mode_3_Setup(void)
 {
    OLED_Clear() ;
-   OLED_Printf(0, 0, OLED_6X8, "=====Mode_3=====") ;
+   OLED_Printf(0, 0, OLED_6X8, "=====Mode_Test=====") ;
+   // 测试涉及的初始化
+   MyPWM_Init(&MyPWM_Servo1) ;
+   MyEncoder_Init(&Motor_A_Encoder) ;
 }
 
 void Mode_3_Loop(void)
 {
-	// 本loop函数建议只执行一个check任务,防止未知Bug
+	// 长按切换测试项目:本loop函数只执行一个check任务,防止未知Bug
+    if (Key_Check(KEY_0 , KEY_LONG))
+    {
+        Check_Item ++ ;
+        if (Check_Item > Check_Num)
+        {
+            Check_Item = 0 ;
+        }
+    }
+    switch (Check_Item)
+    {
+        case 0:
+            OLED_Printf(0, 10, OLED_6X8, "check1") ;
+            Check_Serial(&Serial1) ;
+            break;
+        case 1:
+        	OLED_Printf(0, 10, OLED_6X8, "check2") ;
+            Check_PWM() ;
+            break;
+        case 2:
+            OLED_Printf(0, 10, OLED_6X8, "check3") ;
+            Check_Encoder() ;
+            break;
+        default:
+            break;
+    }
 }
 
 void Mode_3_Exit(void)

@@ -614,6 +614,16 @@
               <FileType>5</FileType>
               <FilePath>..\Software\Task.h</FilePath>
             </File>
+            <File>
+              <FileName>MyPID.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Software\MyPID.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyPID.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Software\MyPID.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -659,6 +669,16 @@
               <FileType>5</FileType>
               <FilePath>..\Hardware\Serial_base.h</FilePath>
             </File>
+            <File>
+              <FileName>Motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\Motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>Motor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\Motor.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -673,6 +693,16 @@
               <FileName>Serial.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Function\Serial.h</FilePath>
+            </File>
+            <File>
+              <FileName>Con_Motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Function\Con_Motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>Con_Motor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Function\Con_Motor.h</FilePath>
             </File>
           </Files>
         </Group>
