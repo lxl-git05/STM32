@@ -24,18 +24,32 @@ void Con_Servo_GoalAngle_Tick(void)
 	Servox_GoalAngle_Tick(&Servo_4) ;
 }
 
-// 夹爪张开 小 60一般 75加紧 大,越大越张开 左
+// 夹爪张开
 void Servo_Claw_Open(void)
 {
-	Servo_SetDirectAngle(&Servo_3 , 75) ;
-	Servo_SetDirectAngle(&Servo_4 , 75) ;
+	Servo_SetDirectAngle(&Servo_1 , 175) ;	// 135 加紧, 175 张开
+	Servo_SetDirectAngle(&Servo_2 , 48)  ;	//  73 加紧,  48 张开 
 }
 
 // 夹爪闭合
 void Servo_Claw_Close(void)
 {
-	Servo_SetDirectAngle(&Servo_3 , 90) ;
-	Servo_SetDirectAngle(&Servo_4 , 90) ;
+	Servo_SetDirectAngle(&Servo_1 , 135) ;
+	Servo_SetDirectAngle(&Servo_2 , 73 ) ;
 }
+
+// 衣架 闭合 95 °
+void Servo_Hanger_Close(void)
+{
+	Servo_SetDirectAngle(&Servo_3 , 95) ;
+}
+
+// 衣架 张开 0 °
+void Servo_Hanger_Open(void)
+{
+	Servo_SetDirectAngle(&Servo_3 , 0) ;
+}
+
+// 90 竖直 , 110 碰壁
 
 

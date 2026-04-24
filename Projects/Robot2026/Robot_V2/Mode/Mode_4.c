@@ -1,5 +1,16 @@
-#include "Mode_2.h"
+#include "Mode_4.h"
 #include "AllHeader.h"
+
+typedef enum
+{
+	Robot_Init ,
+	Robot_Up ,
+	
+}Robot_Status_Typedef ;
+
+Robot_Status_Typedef Robot_Status ;
+
+// 定义各项参数
 
 void Mode_4_Setup(void)
 {
@@ -9,6 +20,10 @@ void Mode_4_Setup(void)
 
 void Mode_4_Loop(void)
 {
+	if (Key_Check(KEY_1 , KEY_SINGLE))
+	{
+		
+	}
 	
 }
 
