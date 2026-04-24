@@ -13,7 +13,7 @@ void Con_Servo_Init(void)
 	Servo_Init(&Servo_2, &MyPWM_Servo2, SERVO_TYPE_180 ,50, 250 ,0 , 180 , 0 , 3);
 	
 	Servo_Init(&Servo_3, &MyPWM_Servo3, SERVO_TYPE_180 ,50, 250 ,0 , 180 , 0 , 3);
-	Servo_Init(&Servo_4, &MyPWM_Servo4, SERVO_TYPE_180 ,50, 250 ,0 , 180 , 0 , 3);
+	Servo_Init(&Servo_4, &MyPWM_Servo4, SERVO_TYPE_180 ,50, 250 ,0 , 180 , 0 , 1);
 }
 
 void Con_Servo_GoalAngle_Tick(void)
@@ -28,28 +28,49 @@ void Con_Servo_GoalAngle_Tick(void)
 void Servo_Claw_Open(void)
 {
 	Servo_SetDirectAngle(&Servo_1 , 175) ;	// 135 加紧, 175 张开
-	Servo_SetDirectAngle(&Servo_2 , 48)  ;	//  73 加紧,  48 张开 
+	Servo_SetDirectAngle(&Servo_2 , 70)  ;	//  73 加紧,  48 张开 
 }
 
 // 夹爪闭合
 void Servo_Claw_Close(void)
 {
-	Servo_SetDirectAngle(&Servo_1 , 135) ;
-	Servo_SetDirectAngle(&Servo_2 , 73 ) ;
+	Servo_SetDirectAngle(&Servo_1 , 145) ;
+	Servo_SetDirectAngle(&Servo_2 , 84) ;	// 112
 }
 
 // 衣架 闭合 95 °
-void Servo_Hanger_Close(void)
+int Servo_Hanger_Close(void)
 {
-	Servo_SetDirectAngle(&Servo_3 , 95) ;
+	int target = 46 ;
+	Servo_SetDirectAngle(&Servo_3 , target) ;
+	return target ;
 }
 
 // 衣架 张开 0 °
-void Servo_Hanger_Open(void)
+int Servo_Hanger_Open(void)
 {
-	Servo_SetDirectAngle(&Servo_3 , 0) ;
+	int target = 158 ;
+	Servo_SetDirectAngle(&Servo_3 , target) ;
+	return target ;
 }
 
-// 90 竖直 , 110 碰壁
+// 机械臂ARM 94 竖直 , 73 碰壁
+// 机械臂 竖直
+int Servo_Arm_Come(void)
+{
+//	Servo_SetDirectAngle(&Servo_4 , 99) ;
+	int target = 99 ;
+	Servo_SetGoalAngle(&Servo_4 , target) ;
+	return target ;
+}
+
+// 机械臂 碰壁(back)
+int Servo_Arm_Back(void)
+{
+//	Servo_SetDirectAngle(&Servo_4 , 72) ;
+	int target = 72 ;
+	Servo_SetGoalAngle(&Servo_4 , target) ;
+	return target ;
+}
 
 

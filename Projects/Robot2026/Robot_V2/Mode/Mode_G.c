@@ -2,7 +2,7 @@
 #include "AllHeader.h"
 
 Mode_Typedef curr_mode = Mode_Null   ;     // 当前模式
-Mode_Typedef next_mode = Mode_Check  ;     // 下一个模式
+Mode_Typedef next_mode = Mode_Main  ;     // 下一个模式
 
 // ========================== 系统setup loop ==========================
 
@@ -50,7 +50,7 @@ void Timer_1ms_Callback(void)
 void Timer_20ms_Callback(void)
 {
 	// 1. 电机速度更新与PID控制
-	if (curr_mode != Mode_Check) {Motor_Speed_Update_Tick(20) ;}
+	Motor_Speed_Update_Tick(20) ;
 	// 2. 展示电机参数
 	if (curr_mode == Mode_PID  ) {Mode_1_Tick() ;}
 	if (curr_mode == Mode_Angle) {Mode_2_Tick() ;}

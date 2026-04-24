@@ -44,4 +44,7 @@ void Servo_SetGoalAngle(Servo_Typedef* Servo, int16_t target_pos);
 // 4. 舵机步进控制台,放入1ms中断,自身存在10分频
 void Servox_GoalAngle_Tick(Servo_Typedef* Servo) ;
 
+// 5. 得到舵机当前角度
+int Servo_Get_Angle(Servo_Typedef* Servo) ;
+
 #endif

@@ -83,6 +83,9 @@ bool Serial_SetFloatData( Serial_Typedef *pSerial , char *KeyWord , char *cmd , 
 // 文本:2. 封装一个函数,实现简易整数变量调试
 bool Serial_SetIntData( Serial_Typedef *pSerial , char *KeyWord , char *cmd , int *Data) ;
 
+// 文本:3. 判断指令
+bool Serial_Check_Str(Serial_Typedef *pSerial , char *KeyWord) ;
+
 // 打印数据,记得加减乘除都要在后方进行而不是""里面进行
 void Serial_printf(Serial_Typedef *pSerial, const char *fmt, ...) ;	// 972us -> 约等于1ms
 

@@ -234,6 +234,23 @@ bool Serial_SetIntData( Serial_Typedef *pSerial , char *KeyWord , char *cmd , in
 	}
 }
 
+// 文本:3. 判断指令
+bool Serial_Check_Str(Serial_Typedef *pSerial , char *KeyWord)
+{
+    // 只检测是否包含指定关键词，不做数据解析
+    // KeyWord：要匹配的指令关键字
+    // 返回 true 表示检测到该指令
+
+    if (strstr(pSerial->ABC_Data.Serial_New_Package_ABC, KeyWord) != NULL)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 // ============== 串口空闲中断回调函数 ==============
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
