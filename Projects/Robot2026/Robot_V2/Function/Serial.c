@@ -288,7 +288,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
         {
             Serial2.rxBuf[Size] = '\0';                    // 加字符串结束符（对 ABC 协议有用）
 
-            // === 数据处理（你的原有逻辑基本不动）===
+            // === 数据处理（原有逻辑基本不动）===
             if (Serial2.rxBuf[0] == 0xFF && Serial2.rxBuf[1] == 0xAA)
             {
                 Serial_Data_Check_HEX(&Serial2);

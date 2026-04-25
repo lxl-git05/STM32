@@ -60,16 +60,18 @@ int Servo_Arm_Come(void)
 {
 //	Servo_SetDirectAngle(&Servo_4 , 99) ;
 	int target = 99 ;
-	Servo_SetGoalAngle(&Servo_4 , target) ;
+//	Servo_SetGoalAngle(&Servo_4 , target) ;
+	Servo_SetDirectAngle(&Servo_4 , target) ;
 	return target ;
-}
+} 
 
 // »úÐµ±Û Åö±Ú(back)
 int Servo_Arm_Back(void)
 {
 //	Servo_SetDirectAngle(&Servo_4 , 72) ;
 	int target = 72 ;
-	Servo_SetGoalAngle(&Servo_4 , target) ;
+//	Servo_SetGoalAngle(&Servo_4 , target) ;
+	Servo_SetDirectAngle(&Servo_4 , target) ;
 	return target ;
 }
 

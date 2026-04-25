@@ -1,32 +1,22 @@
 #include "Mode_4.h"
 #include "AllHeader.h"
 
-/*
-	初始:
-	初始电机到顶
-	舵机竖直不动
-
-	向下，夹，起，晾衣杆移动到衣服
-	衣架张开，夹子松开，电机向下，晾衣杆回位
-*/
-
 typedef enum
 {
-	Robot_Init ,	// 电机在顶端, 夹子张开,晾衣杆在另一侧(Back),衣架闭合
-	Robot_Down ,		// 电机向下够衣服,两次
-	Robot_Claw_Close , // 夹衣服
-	Robot_Arm_Come,					// 晾衣杆到同侧
-	Robot_Up ,		// 电机上升,
-	Robot_Hanger_Open ,	// 衣架张开
-	Robot_Claw_Open  , 	// 夹爪松开(张开)
-	Robot_OK,						// 电机重新回到顶
+	Robot_Init ,					// 电机在顶端, 夹子张开,晾衣杆在另一侧(Back),衣架闭合
+	Robot_Down ,					// 电机向下够衣服,两次
+	Robot_Claw_Close , 		// 夹衣服
+	Robot_Arm_Come,				// 晾衣杆到同侧
+	Robot_Up ,						// 电机上升,
+	Robot_Hanger_Open ,		// 衣架张开
+	Robot_Claw_Open  , 		// 夹爪松开(张开)
+	Robot_OK,							// 电机重新回到顶
 }Robot_Status_Typedef ;
 
 Robot_Status_Typedef Robot_Status = Robot_Init;
 bool Robot_Wait_Cmd = false ;
 
 // 定义各项参数
-
 void Mode_4_Setup(void)
 {
    OLED_Clear() ;
@@ -36,9 +26,23 @@ void Mode_4_Setup(void)
 // 预备控制
 void Mode_4_Loop(void)
 {
+	Robot_Wait_Cmd = true ;
 	if (Key_Check(KEY_1 , KEY_SINGLE))
 	{
 		Robot_Wait_Cmd = true ;
+	}
+	if (Key_Check(KEY_2 , KEY_SINGLE))
+	{
+		Robot_Status = Robot_Init ;
+		Motor_B.Motor_Encoder->total_cnt = 0 ;
+	}
+	if (Serial_GetNewPackageFlag_ABC(&Serial2))
+	{
+		 // 1. 晾衣架开始 晾衣服
+		 if (Serial_Check_Str(&Serial2 , "Hanger_Up"))
+		 {
+				Robot_Wait_Cmd = true	;
+		 }
 	}
 	// 1. 初始化
 	if (Robot_Status == Robot_Init)
@@ -53,6 +57,7 @@ void Mode_4_Loop(void)
 		// 4. 衣架闭合
 		Servo_Hanger_Close() ;
 		// 进入下一个状态
+		HAL_Delay(5000) ;
 		Robot_Status = Robot_Down ;
 	}
 	else if (Robot_Status == Robot_Down && Robot_Wait_Cmd == true)
@@ -96,7 +101,7 @@ void Mode_4_Loop(void)
 		// 1. 衣架张开
 		int goal = Servo_Hanger_Open() ;
 		// 进入下一个状态 
-		HAL_Delay(1000) ;
+		HAL_Delay(700) ;
 		Robot_Status = Robot_Claw_Open ;
 	}
 	else if (Robot_Status == Robot_Claw_Open)
@@ -121,7 +126,6 @@ void Mode_4_Loop(void)
 	OLED_ClearArea(0,20,128,10) ;
 	OLED_Printf(0,20,OLED_6X8 , "Angle= %f" , Motor_B.PID_Angle.realPoint_Now) ;
 }
-
 
 void Mode_4_Tick(void)
 {
