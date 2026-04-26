@@ -5,7 +5,7 @@
 float check ;
 int PWM_Servo_Check = 50;    // 50-250
 int Servo_Pos_Check = 0 ;
-int Servo_Pos_Check_Single[4] ;
+int Servo_Pos_Check_Single[4] = {175,80,0,0} ;
  
 // 测试函数声明
 // 1. 测试串口功能
@@ -26,13 +26,33 @@ void Mode_3_Setup(void)
    OLED_Printf(0, 0, OLED_6X8, "=====Mode_3=====") ;
 	 MyEncoder_Init(&Motor_A_Encoder) ;
 	 MyEncoder_Init(&Motor_B_Encoder) ;
+	
+	 Servo_Claw_Open() ;
+	Servo_Arm_Come() ;
 }
+
+// 1. @Hanger_Up$#
+// 2. @Hanger_Down$#
 
 void Mode_3_Loop(void)
 {
 	// 本loop函数建议只执行一个check任务,防止未知Bug
 //	Check_Serial(&Serial2) ;
 	Check_Servo() ;
+	// Serial2 串口2
+		if (Serial_GetNewPackageFlag_ABC(&Serial2))
+    {
+			 // 1. 晾衣架开始 晾衣服
+       if (Serial_Check_Str(&Serial2 , "Hanger_Up"))
+			 {
+					Flash_Mode_Set(Flash_Mode_Fast) ;
+			 }
+			 // 2. 晾衣架开始 收衣服
+			 if (Serial_Check_Str(&Serial2 , "Hanger_Down"))
+			 {
+					Flash_Mode_Set(Flash_Mode_OFF) ;
+			 }
+    }
 }
 
 // 1. 测试串口功能
@@ -87,8 +107,11 @@ void Check_Servo(void)
 //    Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check) ;	// 146加紧 164张开
 //		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check) ;	// 73加紧，48张开 
 //		Servo_SetDirectAngle(&Servo_3 , Servo_Pos_Check) ;
-		Servo_SetDirectAngle(&Servo_4 , Servo_Pos_Check) ;
-//		
+//		Servo_SetDirectAngle(&Servo_4 , Servo_Pos_Check) ;
+		
+//		Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check_Single[0]) ;
+//		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check_Single[1]) ;
+	
 		// 舵机控制:夹爪
 		static bool Claw_Status = true	;
 		if (Key_Check(KEY_2 , KEY_SINGLE))
@@ -117,6 +140,36 @@ void Check_Servo(void)
 		{
 			Servo_Hanger_Open() ;
 		}
+		// 舵机控制:机械臂
+		static bool Arm_Status = true	;
+		if (Key_Check(KEY_2 , KEY_DOUBLE))
+		{
+			Arm_Status = !Arm_Status ;
+		}
+		if (Arm_Status)
+		{
+			Servo_Arm_Back() ;
+		}
+		else
+		{
+			Servo_Arm_Come() ;
+		}
+		// 电机测试
+		if (Key_Check(KEY_1 , KEY_SINGLE))
+		{
+			Motor_SetAngle(&Motor_B , 0) ;
+		}
+		else if (Key_Check(KEY_1 , KEY_DOUBLE))
+		{
+			Motor_SetAngle(&Motor_B , 400) ;
+		}
+		else if (Key_Check(KEY_1 , KEY_LONG))
+		{
+			Motor_SetAngle(&Motor_B , 135) ;
+		}
+//		
+		// OLED展示
+		
 		OLED_ClearArea(0,20,128,10) ;OLED_ClearArea(0,30,128,10) ;
 		OLED_ClearArea(0,40,128,10) ;OLED_ClearArea(0,50,128,10) ;
 		
@@ -124,11 +177,6 @@ void Check_Servo(void)
 		OLED_Printf(0,30,OLED_6X8 , "Servo2_Pos  =  %d" ,Servo_2.current_pos ) ;
 		OLED_Printf(0,40,OLED_6X8 , "Servo3_Pos  =  %d" ,Servo_3.current_pos ) ;
 		OLED_Printf(0,50,OLED_6X8 , "Servo4_Pos  =  %d" ,Servo_4.current_pos ) ;
-		
-//		Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check_Single[0]) ;
-//		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check_Single[1]) ;
-//		Servo_SetDirectAngle(&Servo_3 , Servo_Pos_Check_Single[2]) ;
-//		Servo_SetDirectAngle(&Servo_4 , Servo_Pos_Check_Single[3]) ;
 }
 
 void Mode_3_Exit(void)

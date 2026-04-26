@@ -18,8 +18,8 @@ void Con_Motor_Init(void)
 	PID_Init(&Motor_B.PID_s , 8.0f,0.8f,0.0f,1000 , -1000 , 1000) ;
 	
 	// PD
-	PID_Init(&Motor_A.PID_Angle , 0.9f,0.0f,1.0f,350 , -350 , 350) ;
-	PID_Init(&Motor_B.PID_Angle , 0.9f,0.0f,1.0f,350 , -350 , 350) ;
+	PID_Init(&Motor_A.PID_Angle , 0.9f,0.0f,1.0f,30 , -30 , 350) ;
+	PID_Init(&Motor_B.PID_Angle , 0.9f,0.0f,1.0f,30 , -30 , 350) ;
 	
 	Motor_Init
 	(
@@ -131,4 +131,21 @@ void Motor_Speed_Update_Tick(uint32_t Gap_Time_ms)
 void Motor_SetAngle(Motor_Typedef *Motor , int Angle)
 {
 	Motor->PID_Angle.goalPoint = Angle ;
+}
+
+// 9. 得到电机当前位置
+float Motor_Get_Angle(Motor_Typedef *Motor)
+{
+	return Motor->PID_Angle.realPoint_Now ;
+}
+
+// 10. 检查电机位置
+bool Motor_Is_Angle(Motor_Typedef *Motor , int Angle , int Tolerance)
+{
+	float curr = Motor_Get_Angle(Motor) ;
+	if (curr - Angle > -Tolerance && curr - Angle < Tolerance)
+	{
+		return true ;
+	}
+	return false ;
 }

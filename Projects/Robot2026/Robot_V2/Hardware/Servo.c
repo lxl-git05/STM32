@@ -132,3 +132,9 @@ void Servox_GoalAngle_Tick(Servo_Typedef* Servo)  // 建议改名为 Servo_GoalAngle_
         }
     }
 }
+
+// 5. 得到舵机当前角度
+int Servo_Get_Angle(Servo_Typedef* Servo)
+{
+	return Servo->current_pos ;
+}
