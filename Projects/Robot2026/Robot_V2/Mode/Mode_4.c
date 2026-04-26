@@ -20,7 +20,9 @@ bool Robot_Wait_Cmd = false ;
 void Mode_4_Setup(void)
 {
    OLED_Clear() ;
-   OLED_Printf(0, 0, OLED_6X8, "=====Mode_Main=====") ;
+   OLED_Printf(0,5,OLED_8X16,"================") ;
+	 OLED_ShowChinese(0,25,"欢迎使用有衣有靠") ;
+	 OLED_Printf(0,45,OLED_8X16,"================") ;
 }
 
 // 预备控制
@@ -123,8 +125,8 @@ void Mode_4_Loop(void)
 		}
 		// 4. 衣架不闭合
 	}
-	OLED_ClearArea(0,20,128,10) ;
-	OLED_Printf(0,20,OLED_6X8 , "Angle= %f" , Motor_B.PID_Angle.realPoint_Now) ;
+//	OLED_ClearArea(0,20,128,10) ;
+//	OLED_Printf(0,20,OLED_6X8 , "Angle= %f" , Motor_B.PID_Angle.realPoint_Now) ;
 }
 
 void Mode_4_Tick(void)
