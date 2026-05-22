@@ -7,7 +7,7 @@ typedef struct
 {
 	TIM_HandleTypeDef* htimx ;
 	uint32_t Channel ;
-	uint32_t PWM_MAX ;	// 最大PWM输出值
+	float PWM_MAX ;
 }MyPWM_Typedef ;
 
 extern MyPWM_Typedef MyPWM_Servo1     ;	// PSC:2400(10us) ARR:2000, 舵机应该使用50-250的PWM值
@@ -21,5 +21,6 @@ extern MyPWM_Typedef MyPWM_Motor_B_IN1;
 void MyPWM_Init(MyPWM_Typedef* MyPWM) ;
 // 设置PWM值
 void MyPWM_SetCompare(MyPWM_Typedef* MyPWM, uint16_t Compare) ;
-
+// 得到PWM的频率
+int MyPWM_GetFre(MyPWM_Typedef* MyPWM) ;
 #endif

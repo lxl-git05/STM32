@@ -1,6 +1,3 @@
-#ifndef __ALLHEADER_H
-#define __ALLHEADER_H
-
 #include "AllHeader.h"
 
 // Mymain初始化集合,使主函数更简洁
@@ -22,5 +19,3 @@ void Initial_Timer(void)
 {
 	Timer_Initial() ;
 }
-
-#endif

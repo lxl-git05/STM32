@@ -20,7 +20,9 @@ extern MyGPIO_Typedef MyGPIO_Key2          ;
 extern MyGPIO_Typedef MyGPIO_OLED_SCL      ;
 extern MyGPIO_Typedef MyGPIO_OLED_SDA      ;
 
+extern MyGPIO_Typedef MyGPIO_Motor_A_IN1   ;
 extern MyGPIO_Typedef MyGPIO_Motor_A_IN2   ;
+extern MyGPIO_Typedef MyGPIO_Motor_B_IN1   ;
 extern MyGPIO_Typedef MyGPIO_Motor_B_IN2   ;
 
 // GPIOº¯ÊýÉùÃ÷

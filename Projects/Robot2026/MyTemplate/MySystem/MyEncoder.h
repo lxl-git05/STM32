@@ -8,6 +8,8 @@
 typedef struct
 {
 	TIM_HandleTypeDef *htimx;
+	uint32_t time_Fre ;		// 倍频数(2倍频,4倍频等等)
+	int total_cnt ;
 }MyEncoder_Typedef;
 
 extern MyEncoder_Typedef Motor_A_Encoder ;
@@ -18,5 +20,8 @@ void MyEncoder_Init(MyEncoder_Typedef* MyEncoder) ;
 
 // 2. 得到编码器的脉冲数
 int MyEncoder_Get_CNT(MyEncoder_Typedef* MyEncoder) ;
+
+// 3. 得到累计脉冲数
+int MyEncoder_Get_Total_CNT(MyEncoder_Typedef* MyEncoder) ;
 
 #endif

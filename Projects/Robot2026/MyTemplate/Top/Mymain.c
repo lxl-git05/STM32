@@ -41,5 +41,6 @@ void Mymain(void)
 					}
 			}
 			curr_mode = next_mode ; // ×´Ì¬¸üÐÂ
+			OLED_Update() ;
 	}
 }

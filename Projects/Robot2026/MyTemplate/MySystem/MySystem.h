@@ -19,4 +19,7 @@
 #include "MyEncoder.h"
 #include "MyTimer.h"
 
+// 3. Ð¾Æ¬²ÎÊý
+#define MySystem_Fre 240000000
+
 #endif // !__MYSYSTEM_H
