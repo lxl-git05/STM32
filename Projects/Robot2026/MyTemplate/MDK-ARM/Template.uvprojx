@@ -709,16 +709,6 @@
               <FileType>5</FileType>
               <FilePath>..\Tools\LED_Flash.h</FilePath>
             </File>
-            <File>
-              <FileName>Menu_Key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Tools\Menu_Key.c</FilePath>
-            </File>
-            <File>
-              <FileName>Menu_Key.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Tools\Menu_Key.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

@@ -1,25 +1,25 @@
 #ifndef __MYSYSTEM_H
 #define __MYSYSTEM_H
 
-/* ÏµÍ³Ïà¹ØÍ·ÎÄ¼ş,ºóĞøÒÆÖ²µ½±ğµÄĞ¾Æ¬Ö»ĞèÒªĞŞ¸Ä±¾²¿·Ö */
+/* ç³»ç»Ÿç›¸å…³å¤´æ–‡ä»¶,åç»­ç§»æ¤åˆ°åˆ«çš„èŠ¯ç‰‡åªéœ€è¦ä¿®æ”¹æœ¬éƒ¨åˆ† */
 
-// 1. Ğ¾Æ¬µ×²ãÇı¶¯
-#include "main.h"   // Ö÷º¯Êı
-#include "stdint.h" // ÕûĞÎÊı¾İÊ¹ÓÃ
+// 1. èŠ¯ç‰‡åº•å±‚é©±åŠ¨
+#include "main.h"   // ä¸»å‡½æ•°
+#include "stdint.h" // æ•´å½¢æ•°æ®ä½¿ç”¨
 #include "gpio.h"   // GPIO
-#include "tim.h"    // ¶¨Ê±Æ÷
-#include "usart.h"  // ´®¿Ú
+#include "tim.h"    // å®šæ—¶å™¨
+#include "usart.h"  // ä¸²å£
 // #include "i2c.h"    // I2C
 // #include "adc.h"    // ADC
 // #include "dma.h"    // dma
 
-// 2. ±¾µØµ×²ãÍ¨ÓÃ
+// 2. æœ¬åœ°åº•å±‚é€šç”¨
 #include "MyGPIO.h"
 #include "MyPWM.h"
 #include "MyEncoder.h"
 #include "MyTimer.h"
 
-// 3. Ğ¾Æ¬²ÎÊı
+// 3. èŠ¯ç‰‡å‚æ•°
 #define MySystem_Fre 240000000
 
 #endif // !__MYSYSTEM_H

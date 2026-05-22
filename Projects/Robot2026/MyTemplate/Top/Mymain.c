@@ -1,10 +1,10 @@
 #include "Mymain.h"
 #include "AllHeader.h"
-// =================== È«¾Ö±äÁ¿ ===================
+// =================== å…¨å±€å˜é‡ ===================
 
 void Mymain(void)
 {
-	Mode_G_Setup() ;    // È«¾Ö³õÊ¼»¯
+	Mode_G_Setup() ;    // å…¨å±€åˆå§‹åŒ–
 
 	while (1) 
 	{
@@ -14,14 +14,14 @@ void Mymain(void)
 			{
 					switch (curr_mode) 
 					{
-							case Mode_Null : break; // É¶Ò²²»¸É,Ò²¾ÍÊÇÖ»ÓĞGlobalÄ£Ê½ÔÚ¸É»î
+							case Mode_Null : break; // å•¥ä¹Ÿä¸å¹²,ä¹Ÿå°±æ˜¯åªæœ‰Globalæ¨¡å¼åœ¨å¹²æ´»
 							case 1 : Mode_1_Loop() ; break;
 							case 2 : Mode_2_Loop() ; break;
 							case 3 : Mode_3_Loop() ; break;
-							case Mode_End  : break; // µ½Í·ÁË,²»Òªµ½ÕâÀïÀ´,Ğ´caseÊÇÒòÎª²»È»±¨³ö¾¯¸æ
+							case Mode_End  : break; // åˆ°å¤´äº†,ä¸è¦åˆ°è¿™é‡Œæ¥,å†™caseæ˜¯å› ä¸ºä¸ç„¶æŠ¥å‡ºè­¦å‘Š
 					}
 			}
-			else // Ä£Ê½½»½Ó,½öÔÚÄ£Ê½×ª»»²Å´¥·¢Ò»´Î 
+			else // æ¨¡å¼äº¤æ¥,ä»…åœ¨æ¨¡å¼è½¬æ¢æ‰è§¦å‘ä¸€æ¬¡ 
 			{
 					switch (curr_mode) 
 					{
@@ -29,7 +29,7 @@ void Mymain(void)
 							case 1 : Mode_1_Exit() ; break;
 							case 2 : Mode_2_Exit() ; break;
 							case 3 : Mode_3_Exit() ; break;
-							case Mode_End  : break; // µ½Í·ÁË,²»Òªµ½ÕâÀïÀ´,Ğ´caseÊÇÒòÎª²»È»±¨³ö¾¯¸æ
+							case Mode_End  : break; // åˆ°å¤´äº†,ä¸è¦åˆ°è¿™é‡Œæ¥,å†™caseæ˜¯å› ä¸ºä¸ç„¶æŠ¥å‡ºè­¦å‘Š
 					}
 					switch (next_mode) 
 					{
@@ -37,10 +37,10 @@ void Mymain(void)
 							case 1 : Mode_1_Setup() ; break;
 							case 2 : Mode_2_Setup() ; break;
 							case 3 : Mode_3_Setup() ; break;
-							case Mode_End  : break; // µ½Í·ÁË,²»Òªµ½ÕâÀïÀ´,Ğ´caseÊÇÒòÎª²»È»±¨³ö¾¯¸æ
+							case Mode_End  : break; // åˆ°å¤´äº†,ä¸è¦åˆ°è¿™é‡Œæ¥,å†™caseæ˜¯å› ä¸ºä¸ç„¶æŠ¥å‡ºè­¦å‘Š
 					}
 			}
-			curr_mode = next_mode ; // ×´Ì¬¸üĞÂ
+			curr_mode = next_mode ; // çŠ¶æ€æ›´æ–°
 			OLED_Update() ;
 	}
 }

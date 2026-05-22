@@ -5,7 +5,7 @@
 #include "string.h"
 #include "Key.h"
 
-#define MAX_PARAM  30			// !!!最多可调节参数数目!!!
+#define MAX_PARAM  30			// !!!鏈�澶氬彲璋冭妭鍙傛暟鏁扮洰!!!
 
 typedef enum 
 {
@@ -13,12 +13,12 @@ typedef enum
     PARAM_INT   = 1u,
 } ParamType;
 
-// ================ 按键调参系统函数 ================
+// ================ 鎸夐敭璋冨弬绯荤粺鍑芥暟 ================
 
-// 添加参数
+// 娣诲姞鍙傛暟
 void Key_AddParam(const char *name, void *var, float step, ParamType type) ;
 
-// 核心程序
+// 鏍稿績绋嬪簭
 void Key_Param_Check(void); 
 
 #endif

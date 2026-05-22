@@ -1,91 +1,90 @@
-#include "Menu_Key.h"
-// ******************²Ëµ¥½á¹¹Ìå******************
-typedef struct
-{
-    int id;													// ²Ëµ¥µÄIDºÅ(ĞòÁĞ)
-    void (*MenuCallback)(void);			// ²Ëµ¥µÄ»Øµ÷º¯Êı(¹¦ÄÜÕ¹Ê¾)
-} OLED_MenuItem;
-// ******************È«¾Ö±äÁ¿ÉùÃ÷******************
-// ³õÊ¼»¯²ÎÊı
-DList Menu_list;						// ²Ëµ¥ÏµÍ³Í·½áµãË«ÏòÁ´±í¶¨Òå
-int Menu_Total_Num = 0 ;		// ²Ëµ¥×ÜÊıÁ¿
-// ½»»¥½çÃæ²ÎÊı
-int Menu_Confirm_index ;		// ²Ëµ¥È·ÈÏ¸¡±ê
-static int Menu_Open_Mode = 1;
-// ******************Íâ²¿±äÁ¿ÉùÃ÷******************
+#include "Mode_3.h"
+#include "AllHeader.h"
 
-// ******************²Ëµ¥»Øµ÷º¯ÊıÉùÃ÷******************
-void Menu_Main_Callback (void);
-void Menu_Check_Callback(void);
-void Menu_Task1_Callback(void);
-void Menu_Task2_Callback(void);
-void Menu_Task3_Callback(void);
-void Menu_Task4_Callback(void);
-void Menu_Task5_Callback(void);
-// ******************ºËĞÄº¯Êı¶¨Òå****************** 
+// æµ‹è¯•å…¨å±€å˜é‡
+float check ;
 
-// ĞÂ½¨ĞÂµÄ²Ëµ¥Êı¾İÒ³Ãæ
-void Menu_New_Init( void (*Menu_Callback)(void) )
+// æµ‹è¯•å‡½æ•°å£°æ˜
+void Check_Serial(Serial_Typedef* pSerial);
+void Check_PWM(void) ;  // éœ€è¦åˆå§‹åŒ–
+void Check_Encoder(void) ;  // éœ€è¦åˆå§‹åŒ–
+
+void Mode_3_Setup(void)
 {
-	// ²Ëµ¥¿Õ¼äÍØÕ¹
-	OLED_MenuItem *item = malloc(sizeof(OLED_MenuItem));
-	// IDºÅºÍ»Øµ÷º¯Êı(²Ëµ¥+°´¼üÂß¼­)¶¨Òå
-	item->id = Menu_Total_Num ++ ;
-	item->MenuCallback = Menu_Callback;
-	
-	// Î²²å·ÅÈë²Ëµ¥
-	DList_PushBack(&Menu_list, item);
+   OLED_Clear() ;
+   OLED_Printf(0, 0, OLED_6X8, "=====Mode_3=====") ;
 }
 
-// ²Ëµ¥ÏµÍ³³õÊ¼»¯
-void Menu_Init(void)
+void Mode_3_Loop(void)
 {
-	// ²Ëµ¥ÏµÍ³Í·½áµãË«ÏòÁ´±í³õÊ¼»¯
-	DList_Init(&Menu_list) ;
-	// OLEDµÄÖ÷²Ëµ¥(ID:0)
-	Menu_New_Init(Menu_Main_Callback)  ;
-	// ºóĞøĞÂ½¨½çÃæ,Ë³ĞòºÜÖØÒª:
-	Menu_New_Init(Menu_Task1_Callback) ;
-	Menu_New_Init(Menu_Task2_Callback) ;
-	Menu_New_Init(Menu_Task3_Callback) ;
-	Menu_New_Init(Menu_Task4_Callback) ;
-	Menu_New_Init(Menu_Task5_Callback) ;
-	
-	Menu_New_Init(Menu_Check_Callback) ;
+	// æœ¬loopå‡½æ•°å»ºè®®åªæ‰§è¡Œä¸€ä¸ªcheckä»»åŠ¡,é˜²æ­¢æœªçŸ¥Bug
 }
 
-// »ñÈ¡²Ëµ¥Ïî¶ÔÓ¦ĞòºÅµÄÖ¸Õë
-OLED_MenuItem* Menu_Get_Item(int MenuIndex)
+void Mode_3_Exit(void)
 {
-    // ¸ù¾İ MenuIndex »ñÈ¡Á´±íÖĞµÄ½Úµã
-    DListNode* node = DList_GetNode(&Menu_list, MenuIndex);
-    
-    // ´íÎó¼ì²é£¨·ÀÖ¹Ô½½ç£©
-    if(node == NULL)
+    OLED_Clear() ;
+}
+
+void Mode_3_Tick(void)
+{
+	
+}
+
+// 1. æµ‹è¯•ä¸²å£åŠŸèƒ½
+void Check_Serial(Serial_Typedef* pSerial)
+{
+    if (Serial_GetNewPackageFlag_ABC(pSerial))
+    {
+        Serial_SetFloatData(pSerial, "Kp", "Kp=%f", &check) ;
+        Serial_printf(pSerial , "%f\n", &check) ;
+    }
+    OLED_Printf(0, 40, OLED_6X8, "%.2f" , check) ;  // æµ‹è¯•OLED
+}
+
+// 2. æµ‹è¯•PWMåŠŸèƒ½, è®°å¾—å…ˆåˆå§‹åŒ–å“¦
+void Check_PWM(void)
+{
+    static int PWM_Servo_Check = 50;    // 50-250
+    if (Key_Check(KEY_0, KEY_LONG))
+    {
+        PWM_Servo_Check += 50 ;
+        if (PWM_Servo_Check > 250)
+        {
+            PWM_Servo_Check = 50 ;
+        }
+    }
+    MyPWM_SetCompare(&MyPWM_Servo1, PWM_Servo_Check) ;
+}
+
+// 3. æµ‹è¯•ç¼–ç å™¨åŠŸèƒ½, è®°å¾—å…ˆåˆå§‹åŒ–å“¦
+void Check_Encoder(void)
+{
+    OLED_Printf(0, 40, OLED_6X8, "%d" , MyEncoder_Get_CNT(&Motor_A_Encoder)) ;
+}
         return NULL;
 
-    // ×ª»ØÕæÕıµÄÊı¾İ½á¹¹ÀàĞÍ
+    // è½¬å›çœŸæ­£çš„æ•°æ®ç»“æ„ç±»å‹
     return (OLED_MenuItem*)node->data;
 }
 
-// ²Ëµ¥½çÃæ¿ª¹ØÂß¼­,trueÎª¿ª,falseÎª¹Ø
+// èœå•ç•Œé¢å¼€å…³é€»è¾‘,trueä¸ºå¼€,falseä¸ºå…³
 bool Menu_isOpen_Mode(void)
 {
-	// ²Ëµ¥½çÃæ¿ª¹ØÂß¼­
+	// èœå•ç•Œé¢å¼€å…³é€»è¾‘
 	if (Key_Check(KEY_1 , KEY_LONG))
 	{
-		// Èç¹ûÊÇ¹Ø±Õ×´Ì¬¾Í´ò¿ª
+		// å¦‚æœæ˜¯å…³é—­çŠ¶æ€å°±æ‰“å¼€
 		if (Menu_Open_Mode == 0)
 		{
-			Menu_Open_Mode = 1; 	// ´ò¿ª
+			Menu_Open_Mode = 1; 	// æ‰“å¼€
 		}
-		// Èç¹ûÊÇ´ò¿ª×´Ì¬¾ÍÔ¤±¸¹Ø±Õ
+		// å¦‚æœæ˜¯æ‰“å¼€çŠ¶æ€å°±é¢„å¤‡å…³é—­
 		else if (Menu_Open_Mode == 1)
 		{
-			Menu_Open_Mode = 2 ;	// Ô¤±¸¹Ø±Õ
+			Menu_Open_Mode = 2 ;	// é¢„å¤‡å…³é—­
 		}
 	}
-	// Ô¤±¸¹Ø±Õ
+	// é¢„å¤‡å…³é—­
 	if (Menu_Open_Mode == 2)
 	{
 		OLED_Clear()  ;
@@ -95,31 +94,31 @@ bool Menu_isOpen_Mode(void)
 	return Menu_Open_Mode ;
 }
 
-// ²Ëµ¥Õ¹Ê¾½çÃæ(·ÅÔÚÖ÷º¯Êı),ËùÓĞ²Ëµ¥µÄÍ¨ÓÃÂß¼­:³¤°´KEY1´ò¿ªOLED,ÔÙ´Î³¤°´KEY1¹Ø±ÕOLED,³¤°´KEY2»Øµ½Ö÷½çÃæ
+// èœå•å±•ç¤ºç•Œé¢(æ”¾åœ¨ä¸»å‡½æ•°),æ‰€æœ‰èœå•çš„é€šç”¨é€»è¾‘:é•¿æŒ‰KEY1æ‰“å¼€OLED,å†æ¬¡é•¿æŒ‰KEY1å…³é—­OLED,é•¿æŒ‰KEY2å›åˆ°ä¸»ç•Œé¢
 void Menu_Func(void)
 {
-	// ²Ëµ¥½çÃæ¿ª¹ØÂß¼­,³¤°´°´¼ü1´ò¿ª²Ëµ¥,ÔÙ´Î³¤°´°´¼ü1¹Ø±Õ²Ëµ¥,Èç¹û²Ëµ¥´ò¿ª¾ÍÖ´ĞĞ¶ÔÓ¦Âß¼­
+	// èœå•ç•Œé¢å¼€å…³é€»è¾‘,é•¿æŒ‰æŒ‰é”®1æ‰“å¼€èœå•,å†æ¬¡é•¿æŒ‰æŒ‰é”®1å…³é—­èœå•,å¦‚æœèœå•æ‰“å¼€å°±æ‰§è¡Œå¯¹åº”é€»è¾‘
 	if (Menu_isOpen_Mode() == true)
 	{
-		// Í¨ÓÃÂß¼­:³¤°´KEY2»Øµ½Ö÷½çÃæ
+		// é€šç”¨é€»è¾‘:é•¿æŒ‰KEY2å›åˆ°ä¸»ç•Œé¢
 		if (Key_Check(KEY_2 , KEY_LONG))
 		{
 			Menu_Confirm_index = 0 ;
 		}
 		OLED_Clear() ;
-		// OLED²Ëµ¥Õ¹Ê¾½çÃæ
+		// OLEDèœå•å±•ç¤ºç•Œé¢
 		OLED_MenuItem* Menu_Now_Item = Menu_Get_Item(Menu_Confirm_index) ;
 		Menu_Now_Item->MenuCallback() ;
-		// ÅÂ×Ô¼ºÍü¼Ç¸üĞÂOLED,Ö±½ÓÔÚÕâÀï¸üĞÂµÃÁË
+		// æ€•è‡ªå·±å¿˜è®°æ›´æ–°OLED,ç›´æ¥åœ¨è¿™é‡Œæ›´æ–°å¾—äº†
 		OLED_Update() ;	
 	}
 }
 
-// ******************²Ëµ¥»Øµ÷º¯Êı¶¨Òå****************** 
+// ******************èœå•å›è°ƒå‡½æ•°å®šä¹‰****************** 
 
 void Menu_Main_Callback(void)
 {
-	// OLEDÕ¹Ê¾½çÃæ
+	// OLEDå±•ç¤ºç•Œé¢
 	OLED_Printf(0 , 0 , OLED_8X16 , "======Menu======") ;
 	
 	OLED_Printf(0 , 20  , OLED_6X8 , "Task1") ;
@@ -130,7 +129,7 @@ void Menu_Main_Callback(void)
 	OLED_Printf(60 , 35 , OLED_6X8 , "Task5") ;
 	OLED_Printf(60 , 50 , OLED_6X8 , "Check") ;
 	
-	// °´¼üÂß¼­:µ¥»÷½øÈëÏÂÒ»¸ö²Ëµ¥
+	// æŒ‰é”®é€»è¾‘:å•å‡»è¿›å…¥ä¸‹ä¸€ä¸ªèœå•
 	if (Key_Check(KEY_1 , KEY_SINGLE))
 	{
 		++Menu_Confirm_index  ;
@@ -145,7 +144,7 @@ void Menu_Main_Callback(void)
 
 void Menu_Check_Callback(void)
 {
-	// µ÷²ÎÄ£Ê½
+	// è°ƒå‚æ¨¡å¼
 	Key_Param_Check() ;
 }
 
@@ -156,13 +155,13 @@ void Menu_Task1_Callback(void)
 //	OLED_Printf(0 , 30 , OLED_6X8 , "KEY2_L -> Back Main");
 //	OLED_Printf(0 , 45 , OLED_6X8 , "KEY2_S -> Task1_GO");
 //		
-	// °´¼üÂß¼­:µ¥»÷½øÈëÏÂÒ»¸ö²Ëµ¥
+	// æŒ‰é”®é€»è¾‘:å•å‡»è¿›å…¥ä¸‹ä¸€ä¸ªèœå•
 	if (Key_Check(KEY_1 , KEY_SINGLE))
 	{
 		Menu_Confirm_index ++ ;
 		Menu_Confirm_index = Menu_Confirm_index % Menu_Total_Num ;
 	}
-	// KEY2µ¥»÷:
+	// KEY2å•å‡»:
 	if (Key_Check(KEY_2 , KEY_SINGLE))
 	{
 		
@@ -176,13 +175,13 @@ void Menu_Task2_Callback(void)
 //	OLED_Printf(0 , 30 , OLED_6X8 , "KEY2_L -> Back Main");
 //	OLED_Printf(0 , 45 , OLED_6X8 , "KEY2_S -> Task2_GO!");
 		
-	// °´¼üÂß¼­:µ¥»÷½øÈëÏÂÒ»¸ö²Ëµ¥
+	// æŒ‰é”®é€»è¾‘:å•å‡»è¿›å…¥ä¸‹ä¸€ä¸ªèœå•
 	if (Key_Check(KEY_1 , KEY_SINGLE))
 	{
 		Menu_Confirm_index ++ ;
 		Menu_Confirm_index = Menu_Confirm_index % Menu_Total_Num ;
 	}
-	// KEY2µ¥»÷:
+	// KEY2å•å‡»:
 	if (Key_Check(KEY_2 , KEY_SINGLE))
 	{
 		
@@ -197,13 +196,13 @@ void Menu_Task3_Callback(void)
 //	OLED_Printf(0 , 30 , OLED_6X8 , "KEY2_L -> Back Main");
 //	OLED_Printf(0 , 45 , OLED_6X8 , "KEY2_S -> Car_Just_Go");
 		
-	// °´¼üÂß¼­:µ¥»÷½øÈëÏÂÒ»¸ö²Ëµ¥
+	// æŒ‰é”®é€»è¾‘:å•å‡»è¿›å…¥ä¸‹ä¸€ä¸ªèœå•
 	if (Key_Check(KEY_1 , KEY_SINGLE))
 	{
 		Menu_Confirm_index ++ ;
 		Menu_Confirm_index = Menu_Confirm_index % Menu_Total_Num ;
 	}
-	// KEY2µ¥»÷:
+	// KEY2å•å‡»:
 	if (Key_Check(KEY_2 , KEY_SINGLE))
 	{
 		
@@ -219,13 +218,13 @@ void Menu_Task4_Callback(void)
 //	OLED_Printf(0 , 30 , OLED_6X8 , "KEY2_L -> Back Main");
 //	OLED_Printf(0 , 45 , OLED_6X8 , "KEY2_S -> Car_Go");
 		
-	// °´¼üÂß¼­:µ¥»÷½øÈëÏÂÒ»¸ö²Ëµ¥
+	// æŒ‰é”®é€»è¾‘:å•å‡»è¿›å…¥ä¸‹ä¸€ä¸ªèœå•
 	if (Key_Check(KEY_1 , KEY_SINGLE))
 	{
 		Menu_Confirm_index ++ ;
 		Menu_Confirm_index = Menu_Confirm_index % Menu_Total_Num ;
 	}
-	// KEY2µ¥»÷:
+	// KEY2å•å‡»:
 	if (Key_Check(KEY_2 , KEY_SINGLE))
 	{
 		
@@ -241,13 +240,13 @@ void Menu_Task5_Callback(void)
 //	OLED_Printf(0 , 30 , OLED_6X8 , "KEY2_L -> Back Main");
 //	OLED_Printf(0 , 45 , OLED_6X8 , "KEY2_S -> Car_Go");
 		
-	// °´¼üÂß¼­:µ¥»÷½øÈëÏÂÒ»¸ö²Ëµ¥
+	// æŒ‰é”®é€»è¾‘:å•å‡»è¿›å…¥ä¸‹ä¸€ä¸ªèœå•
 	if (Key_Check(KEY_1 , KEY_SINGLE))
 	{
 		Menu_Confirm_index ++ ;
 		Menu_Confirm_index = Menu_Confirm_index % Menu_Total_Num ;
 	}
-	// KEY2µ¥»÷:
+	// KEY2å•å‡»:
 	if (Key_Check(KEY_2 , KEY_SINGLE))
 	{
 		

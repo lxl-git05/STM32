@@ -1,45 +1,45 @@
 #include "Key_Check.h"
-// ²ÎÊı½á¹¹Ìå
+// å‚æ•°ç»“æ„ä½“
 typedef struct 
 {
-    const char *name;   // Ãû³Æ
-    void *var;          // ²ÎÊıÖ¸Õë
-    float step;         // µ÷½Ú²½½ø
-    ParamType type;     // ÀàĞÍ
+    const char *name;   // åç§°
+    void *var;          // å‚æ•°æŒ‡é’ˆ
+    float step;         // è°ƒèŠ‚æ­¥è¿›
+    ParamType type;     // ç±»å‹
 } ParamItem;
 
-// ============= °´¼üµ÷²ÎÏà¹Ø²ÎÊı =============
-#define OLED_MAX_SHOW 5		// OLED×î¶à¿ÉÏÔÊ¾µÄÊıÄ¿
-int cursor = 0;						// OLED¹â±ê
-int OLED_Start = 0;				// OLEDÆğÊ¼Î»ÖÃ
+// ============= æŒ‰é”®è°ƒå‚ç›¸å…³å‚æ•° =============
+#define OLED_MAX_SHOW 5		// OLEDæœ€å¤šå¯æ˜¾ç¤ºçš„æ•°ç›®
+int cursor = 0;						// OLEDå…‰æ ‡
+int OLED_Start = 0;				// OLEDèµ·å§‹ä½ç½®
 
-// Ö÷ÏµÍ³Á´±í
+// ä¸»ç³»ç»Ÿé“¾è¡¨
 ParamItem ParamList[MAX_PARAM];
-int ParamCount = 0;				// ²ÎÊıÊıÁ¿
+int ParamCount = 0;				// å‚æ•°æ•°é‡
 
-// ============= Ïà¹Øº¯Êı =============
+// ============= ç›¸å…³å‡½æ•° =============
 
-// Ìí¼Ó²ÎÊı
+// æ·»åŠ å‚æ•°
 void Key_AddParam(const char *name, void *var, float step, ParamType type)
 {
 	if (ParamCount >= MAX_PARAM) return;
-	// Ìî³ä²ÎÊı
+	// å¡«å……å‚æ•°
 	ParamList[ParamCount].name = name;
 	ParamList[ParamCount].var  = var;
 	ParamList[ParamCount].step = step;
 	ParamList[ParamCount].type = type;
-	// ²ÎÊıÊıÄ¿¼à¿Ø
+	// å‚æ•°æ•°ç›®ç›‘æ§
 	ParamCount++;
 }
-// OLEDÕ¹Ê¾²ÎÊı
+// OLEDå±•ç¤ºå‚æ•°
 void Key_ShowParams(void)
 {
-	// ÏÈÇåÆÁ
+	// å…ˆæ¸…å±
 	OLED_Clear();
-	// ÆğÊ¼Î»ºÍ½áÊøÎ»
+	// èµ·å§‹ä½å’Œç»“æŸä½
 	int end = OLED_Start + OLED_MAX_SHOW;
 	if (end > ParamCount) end = ParamCount;
-	// OLEDÕ¹Ê¾
+	// OLEDå±•ç¤º
 	for(int i = OLED_Start, line = 0; i < end; i++, line++)
 	{
 		ParamItem *item = &ParamList[i];
@@ -57,7 +57,7 @@ void Key_ShowParams(void)
 	OLED_Update();
 }
 
-// ²ÎÊı×ÔÔö
+// å‚æ•°è‡ªå¢
 void Key_ParamUp(void)
 {
     ParamItem *item = &ParamList[cursor];
@@ -68,7 +68,7 @@ void Key_ParamUp(void)
         *(int*)item->var += (int)item->step;
 }
 
-// ²ÎÊı×Ô¼õ
+// å‚æ•°è‡ªå‡
 void Key_ParamDown(void)
 {
     ParamItem *item = &ParamList[cursor];
@@ -79,7 +79,7 @@ void Key_ParamDown(void)
         *(int*)item->var -= (int)item->step;
 }
 
-// ¹â±êÉÏ»®
+// å…‰æ ‡ä¸Šåˆ’
 void Key_CursorUp(void)
 {
     if (cursor > 0) cursor--;
@@ -88,7 +88,7 @@ void Key_CursorUp(void)
         OLED_Start = cursor;
 }
 
-// ¹â±êÏÂ»®
+// å…‰æ ‡ä¸‹åˆ’
 void Key_CursorDown(void)
 {
     if (cursor < ParamCount - 1) cursor++;
@@ -97,10 +97,10 @@ void Key_CursorDown(void)
         OLED_Start = cursor - OLED_MAX_SHOW + 1;
 }
 
-// ºËĞÄ³ÌĞò
+// æ ¸å¿ƒç¨‹åº
 void Key_Param_Check(void)
 {
-	// °´¼ü²Ù×÷
+	// æŒ‰é”®æ“ä½œ
 	if(Key_Check(KEY_1, KEY_SINGLE))
 	{
 		Key_CursorDown();
@@ -116,11 +116,11 @@ void Key_Param_Check(void)
 	}		
 	else if (Key_Check(KEY_2, KEY_DOUBLE))
 	{
-		// Õı²½½ø±äÎª¸º²½½ø
+		// æ­£æ­¥è¿›å˜ä¸ºè´Ÿæ­¥è¿›
 		ParamItem *item = &ParamList[cursor];
 		item->step = - item->step; 
 	}
-	// OLEDÕ¹Ê¾²ÎÊı
+	// OLEDå±•ç¤ºå‚æ•°
   Key_ShowParams();
 }
 

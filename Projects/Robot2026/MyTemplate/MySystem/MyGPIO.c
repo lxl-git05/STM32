@@ -1,6 +1,6 @@
 #include "MySystem.h"
 
-// 0. È«¾ÖGPIOÉùÃ÷(ÐèÒª½øÐÐ²Ù×÷µÄ²ÅÉùÃ÷)
+// 0. å…¨å±€GPIOå£°æ˜Ž(éœ€è¦è¿›è¡Œæ“ä½œçš„æ‰å£°æ˜Ž)
 MyGPIO_Typedef MyGPIO_LED0          = {LED0_GPIO_Port , LED0_Pin};
 
 MyGPIO_Typedef MyGPIO_Key0          = {KEY0_GPIO_Port , KEY0_Pin};
@@ -15,7 +15,7 @@ MyGPIO_Typedef MyGPIO_Motor_A_IN2   = {Motor_A_IN2_GPIO_Port , Motor_A_IN2_Pin};
 MyGPIO_Typedef MyGPIO_Motor_B_IN1   = {Motor_B_IN1_GPIO_Port , Motor_B_IN1_Pin};
 MyGPIO_Typedef MyGPIO_Motor_B_IN2   = {Motor_B_IN2_GPIO_Port , Motor_B_IN2_Pin};
 
-// 1. GPIOÐ´
+// 1. GPIOå†™
 void My_GPIO_WritePin(MyGPIO_Typedef* MyGPIO , int isHigh)
 {
 	if (isHigh != 0)
@@ -28,7 +28,7 @@ void My_GPIO_WritePin(MyGPIO_Typedef* MyGPIO , int isHigh)
     }
 }
 
-// 2. GPIO¶Á
+// 2. GPIOè¯»
 int My_GPIO_ReadPin(MyGPIO_Typedef* MyGPIO)
 {
 	return HAL_GPIO_ReadPin(MyGPIO->GPIO_Port , MyGPIO->GPIO_Pin) ;

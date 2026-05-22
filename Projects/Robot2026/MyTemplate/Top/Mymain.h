@@ -1,10 +1,10 @@
 #ifndef __MYMAIN_H
 #define __MYMAIN_H
 
-// ÏµÍ³¿â
+// ç³»ç»Ÿåº“
 #include "Allheader.h"
 
-// ½ØºúÖ÷º¯Êý
+// æˆªèƒ¡ä¸»å‡½æ•°
 void Mymain(void) ;
 
 #endif

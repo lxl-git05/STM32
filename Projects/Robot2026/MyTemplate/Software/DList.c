@@ -1,56 +1,56 @@
 #include "DList.h"
 
-// ³õÊ¼»¯*ÏµÍ³*Í·½áµãÁ´±í
+// åˆå§‹åŒ–*ç³»ç»Ÿ*å¤´ç»“ç‚¹é“¾è¡¨
 void DList_Init(DList *list)
 {
-    list->head = NULL ;	// ³õÊ¼»¯,Í·Î²Îª¿Õ
+    list->head = NULL ;	// åˆå§‹åŒ–,å¤´å°¾ä¸ºç©º
     list->tail = NULL ;
-    list->size = 0 ;		// ³õÊ¼»¯,Êı¾İÎªNULL
+    list->size = 0 ;		// åˆå§‹åŒ–,æ•°æ®ä¸ºNULL
 }
 
-// ´´½¨*Êı¾İ*ĞÂ½Úµã
+// åˆ›å»º*æ•°æ®*æ–°èŠ‚ç‚¹
 DListNode* DList_NewNode(void *data)
 {
-    DListNode *node = (DListNode*)malloc(sizeof(DListNode));	// ·ÖÅäÄÚ´æ
-    node->data = data;	// ·ÖÅäÊı¾İ
-    node->prev = NULL;	// Í·½áµã³õÊ¼Îª¿Õ
-    node->next = NULL;	// Î²½Úµã³õÊ¼Îª¿Õ
+    DListNode *node = (DListNode*)malloc(sizeof(DListNode));	// åˆ†é…å†…å­˜
+    node->data = data;	// åˆ†é…æ•°æ®
+    node->prev = NULL;	// å¤´ç»“ç‚¹åˆå§‹ä¸ºç©º
+    node->next = NULL;	// å°¾èŠ‚ç‚¹åˆå§‹ä¸ºç©º
     return node;
 }
 
-// Í·²å·¨
+// å¤´æ’æ³•
 void DList_PushFront(DList *list , void *data)
 {
-    DListNode *node = DList_NewNode(data);	// ĞÂ½¨Êı¾İÁ´±í
+    DListNode *node = DList_NewNode(data);	// æ–°å»ºæ•°æ®é“¾è¡¨
 
-    node->next = list->head;								// ĞÂ½áµãµÄÎ²°ÍÖ¸ÏòÏµÍ³½ÚµãµÄÍ·Ò»¸ö,Ò²¾ÍÊÇµÚÒ»¸ö½Úµã(Í·²å)
+    node->next = list->head;								// æ–°ç»“ç‚¹çš„å°¾å·´æŒ‡å‘ç³»ç»ŸèŠ‚ç‚¹çš„å¤´ä¸€ä¸ª,ä¹Ÿå°±æ˜¯ç¬¬ä¸€ä¸ªèŠ‚ç‚¹(å¤´æ’)
 
     if(list->head != NULL)
-        list->head->prev = node;						// µÚÒ»¸ö½ÚµãµÄÍ·Ö¸ÏòĞÂ½Úµã(ÓëÉÏÒ»¾ä½¨Á¢Ë«Ïò»¥Áª)
+        list->head->prev = node;						// ç¬¬ä¸€ä¸ªèŠ‚ç‚¹çš„å¤´æŒ‡å‘æ–°èŠ‚ç‚¹(ä¸ä¸Šä¸€å¥å»ºç«‹åŒå‘äº’è”)
     else
-        list->tail = node;  	// Èç¹ûÔ­À´ÊÇ¿ÕÁ´±í
+        list->tail = node;  	// å¦‚æœåŸæ¥æ˜¯ç©ºé“¾è¡¨
 
-    list->head = node;				// ÏµÍ³µÄÍ·Ö¸ÏòĞÂ½Úµã
-    list->size++;							// Êı¾İ³¤¶È+1
+    list->head = node;				// ç³»ç»Ÿçš„å¤´æŒ‡å‘æ–°èŠ‚ç‚¹
+    list->size++;							// æ•°æ®é•¿åº¦+1
 }
 
-// Î²²å·¨
+// å°¾æ’æ³•
 void DList_PushBack(DList *list , void *data)
 {
-    DListNode *node = DList_NewNode(data);	// ĞÂ½¨Êı¾İ½Úµã
+    DListNode *node = DList_NewNode(data);	// æ–°å»ºæ•°æ®èŠ‚ç‚¹
 
-    node->prev = list->tail;								// ĞÂ½ÚµãµÄÍ·Ö¸ÏòÏµÍ³µÄÎ²°Í,Ò²¾ÍÊÇ×îºóÒ»¸ö½Úµã
+    node->prev = list->tail;								// æ–°èŠ‚ç‚¹çš„å¤´æŒ‡å‘ç³»ç»Ÿçš„å°¾å·´,ä¹Ÿå°±æ˜¯æœ€åä¸€ä¸ªèŠ‚ç‚¹
 
-    if(list->tail != NULL)									// ×îºóÒ»¸ö½ÚµãµÄÎ²°ÍÖ¸ÏòĞÂ½Úµã
+    if(list->tail != NULL)									// æœ€åä¸€ä¸ªèŠ‚ç‚¹çš„å°¾å·´æŒ‡å‘æ–°èŠ‚ç‚¹
         list->tail->next = node;
     else
-        list->head = node;  // ¿ÕÁ´±í
+        list->head = node;  // ç©ºé“¾è¡¨
 
-    list->tail = node;			// ÏµÍ³µÄÎ²°ÍÖ¸ÏòĞÂ½Úµã
-    list->size++;						// Êı¾İ³¤¶È+1
+    list->tail = node;			// ç³»ç»Ÿçš„å°¾å·´æŒ‡å‘æ–°èŠ‚ç‚¹
+    list->size++;						// æ•°æ®é•¿åº¦+1
 }
 
-// É¾³ı½Úµã(¸ù¾İ½ÚµãÖ¸Õë)
+// åˆ é™¤èŠ‚ç‚¹(æ ¹æ®èŠ‚ç‚¹æŒ‡é’ˆ)
 void DList_RemoveNode(DList *list, DListNode *node)
 {
     if(node == NULL) return;
@@ -69,7 +69,7 @@ void DList_RemoveNode(DList *list, DListNode *node)
     list->size--;
 }
 
-// É¾³ı½Úµã(¸ù¾İË÷Òı,´Ó0¿ªÊ¼)
+// åˆ é™¤èŠ‚ç‚¹(æ ¹æ®ç´¢å¼•,ä»0å¼€å§‹)
 void DList_RemoveAt(DList *list , int index)
 {
     if(index < 0 || index >= list->size) return;
@@ -81,7 +81,7 @@ void DList_RemoveAt(DList *list , int index)
     DList_RemoveNode(list , p);
 }
 
-// ²éÕÒ½Úµã(¸ù¾İË÷Òı,´Ó0¿ªÊ¼)
+// æŸ¥æ‰¾èŠ‚ç‚¹(æ ¹æ®ç´¢å¼•,ä»0å¼€å§‹)
 DListNode* DList_GetNode(DList *list , int index)
 {
     if(index < 0 || index >= list->size) return NULL;
@@ -89,32 +89,32 @@ DListNode* DList_GetNode(DList *list , int index)
     DListNode *p;
     if(index < list->size / 2)
     {
-        p = list->head;  // Ç°°ë¶Î´ÓÇ°ÕÒ
+        p = list->head;  // å‰åŠæ®µä»å‰æ‰¾
         for(int i=0 ; i<index ; i++) p = p->next;
     }
     else
     {
-        p = list->tail;  // ºó°ë¶Î´ÓºóÕÒ
+        p = list->tail;  // ååŠæ®µä»åæ‰¾
         for(int i=list->size-1 ; i>index ; i--) p = p->prev;
     }
     return p;
 }
 
-// ±éÀú(ÕıÏò)
+// éå†(æ­£å‘)
 void DList_Traverse(DList *list , void (*func)(void*))
 {
     for(DListNode *p = list->head ; p != NULL ; p = p->next)
         func(p->data);
 }
 
-// ±éÀú(·´Ïò)
+// éå†(åå‘)
 void DList_TraverseReverse(DList *list , void (*func)(void*))
 {
     for(DListNode *p = list->tail ; p != NULL ; p = p->prev)
         func(p->data);
 }
 
-// Çå¿ÕÁ´±í
+// æ¸…ç©ºé“¾è¡¨
 void DList_Clear(DList *list)
 {
     DListNode *p = list->head;

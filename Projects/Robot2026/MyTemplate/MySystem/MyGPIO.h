@@ -3,14 +3,14 @@
 
 #include "MySystem.h"
 
-// GPIO½á¹¹Ìå¶¨Òå
+// GPIOç»“æž„ä½“å®šä¹‰
 typedef struct 
 {
     GPIO_TypeDef *GPIO_Port;
     uint16_t GPIO_Pin;
 } MyGPIO_Typedef;
 
-// GPIOÍâ²¿ÉùÃ÷
+// GPIOå¤–éƒ¨å£°æ˜Ž
 extern MyGPIO_Typedef MyGPIO_LED0          ;
 
 extern MyGPIO_Typedef MyGPIO_Key0          ;
@@ -25,8 +25,8 @@ extern MyGPIO_Typedef MyGPIO_Motor_A_IN2   ;
 extern MyGPIO_Typedef MyGPIO_Motor_B_IN1   ;
 extern MyGPIO_Typedef MyGPIO_Motor_B_IN2   ;
 
-// GPIOº¯ÊýÉùÃ÷
-void My_GPIO_WritePin(MyGPIO_Typedef* MyGPIO , int isHigh) ;    // 1. GPIOÐ´
-int My_GPIO_ReadPin(MyGPIO_Typedef* MyGPIO) ;                   // 2. GPIO¶Á
+// GPIOå‡½æ•°å£°æ˜Ž
+void My_GPIO_WritePin(MyGPIO_Typedef* MyGPIO , int isHigh) ;    // 1. GPIOå†™
+int My_GPIO_ReadPin(MyGPIO_Typedef* MyGPIO) ;                   // 2. GPIOè¯»
 
 #endif // !__MYGPIO_H
