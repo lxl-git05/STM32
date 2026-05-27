@@ -23,13 +23,13 @@ void Check_ESP32_Serial(void);
 void Mode_3_Setup(void)
 {
    OLED_Clear() ;
-   OLED_Printf(0, 0, OLED_6X8, "=====Mode_3=====") ;
 	 MyEncoder_Init(&Motor_A_Encoder) ;
 	 MyEncoder_Init(&Motor_B_Encoder) ;
 }
 
 void Mode_3_Loop(void)
 {
+	OLED_Printf(0, 0, OLED_6X8, "=====Mode_3=====") ;
 	// 本loop函数建议只执行一个check任务,防止未知Bug
 	
 }

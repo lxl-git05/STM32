@@ -26,6 +26,7 @@
 // Ó²¼þÊµÏÖ¿â
 #include "Con_Motor.h"
 #include "MPU6050_Angle.h"
+#include "Con_Wheel_Control.h"
 
 // Mode¿â
 #include "Mode_G.h"

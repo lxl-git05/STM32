@@ -12,6 +12,7 @@ void Initial_ALL(void)
 	// Control
 	Con_Motor_Init() ;														// 电机初始化
 	MPU6050_Angle_Init() ;												// MPU6050初始化
+	PID_Angle_Init() ;														// 小车转向环初始化
 	
 	// Tools
 	Flash_Mode_Init() ;														// LED闪烁工具初始化

@@ -1,46 +1,41 @@
 #include "Mode_3.h"
 #include "AllHeader.h"
 
-// ²âÊÔÈ«¾Ö±äÁ¿
+// æµ‹è¯•å…¨å±€å˜é‡
 float check ;
 int PWM_Servo_Check = 50;    // 50-250
-int Servo_Pos_Check = 0 ;
+int Servo_Pos_Check = 90 ;
 int Servo_Pos_Check_Single[4] = {175,80,0,0} ;
  
-// ²âÊÔº¯ÊıÉùÃ÷
-// 1. ²âÊÔ´®¿Ú¹¦ÄÜ
+// æµ‹è¯•å‡½æ•°å£°æ˜
+// 1. æµ‹è¯•ä¸²å£åŠŸèƒ½
 void Check_Serial(Serial_Typedef* pSerial) ;
 
-// 2. ²âÊÔ±àÂëÆ÷ B ¹¦ÄÜ, ¼ÇµÃÏÈ³õÊ¼»¯Å¶
+// 2. æµ‹è¯•ç¼–ç å™¨ B åŠŸèƒ½, è®°å¾—å…ˆåˆå§‹åŒ–å“¦
 void Check_Encoder(void) ;
 
-// 3. ²âÊÔµç»úPWM(PID²»×¼¹¤×÷)
+// 3. æµ‹è¯•ç”µæœºPWM(PIDä¸å‡†å·¥ä½œ)
 void Check_Motor_PWM(void) ;
 
-// 4. Í¬Ê±²âÊÔËùÓĞServoµÄPWM¹¦ÄÜ, ¼ÇµÃÏÈ³õÊ¼»¯Å¶
+// 4. åŒæ—¶æµ‹è¯•æ‰€æœ‰Servoçš„PWMåŠŸèƒ½, è®°å¾—å…ˆåˆå§‹åŒ–å“¦
 void Check_Servo(void) ;
 
-// 5. ²âÊÔESP32·¢ËÍµÄÖ¸Áî
+// 5. æµ‹è¯•ESP32å‘é€çš„æŒ‡ä»¤
 void Check_ESP32_Serial(void);
 
 void Mode_3_Setup(void)
 {
    OLED_Clear() ;
    OLED_Printf(0, 0, OLED_6X8, "=====Mode_3=====") ;
-	 MyEncoder_Init(&Motor_A_Encoder) ;
-	 MyEncoder_Init(&Motor_B_Encoder) ;
-	
-	 Servo_Claw_Open() ;
-	Servo_Arm_Come() ;
 }
 
 void Mode_3_Loop(void)
 {
-	// ±¾loopº¯Êı½¨ÒéÖ»Ö´ĞĞÒ»¸öcheckÈÎÎñ,·ÀÖ¹Î´ÖªBug
-	
+	// æœ¬loopå‡½æ•°å»ºè®®åªæ‰§è¡Œä¸€ä¸ªcheckä»»åŠ¡,é˜²æ­¢æœªçŸ¥Bug
+	Check_Servo() ;
 }
 
-// 1. ²âÊÔ´®¿Ú¹¦ÄÜ
+// 1. æµ‹è¯•ä¸²å£åŠŸèƒ½
 void Check_Serial(Serial_Typedef* pSerial)
 {
     if (Serial_GetNewPackageFlag_ABC(pSerial))
@@ -50,16 +45,16 @@ void Check_Serial(Serial_Typedef* pSerial)
 				Serial_SetFloatData(pSerial, "Kd", "Kd=%f", &check) ;
         Serial_printf(pSerial , "%f\n", check) ;
     }
-    OLED_Printf(0, 40, OLED_6X8, "%.2f" , check) ;  // ²âÊÔOLED
+    OLED_Printf(0, 40, OLED_6X8, "%.2f" , check) ;  // æµ‹è¯•OLED
 }
 
-// 2. ²âÊÔ±àÂëÆ÷¹¦ÄÜ, ¼ÇµÃÏÈ³õÊ¼»¯Å¶
+// 2. æµ‹è¯•ç¼–ç å™¨åŠŸèƒ½, è®°å¾—å…ˆåˆå§‹åŒ–å“¦
 void Check_Encoder(void)
 {
     OLED_Printf( 0, 40, OLED_6X8, "%d" , MyEncoder_Get_CNT(&Motor_A_Encoder)) ;
 		OLED_Printf(20, 40, OLED_6X8, "%d" , MyEncoder_Get_CNT(&Motor_B_Encoder)) ;
 }
-// 3. ²âÊÔµç»úPWM(PID²»×¼¹¤×÷)
+// 3. æµ‹è¯•ç”µæœºPWM(PIDä¸å‡†å·¥ä½œ)
 void Check_Motor_PWM(void)
 {
 		static int Motor_PWM_Check = 0;
@@ -80,7 +75,7 @@ void Check_Motor_PWM(void)
 }
 
 
-// 4. Í¬Ê±²âÊÔËùÓĞServoµÄPWM¹¦ÄÜ, ¼ÇµÃÏÈ³õÊ¼»¯Å¶
+// 4. åŒæ—¶æµ‹è¯•æ‰€æœ‰Servoçš„PWMåŠŸèƒ½, è®°å¾—å…ˆåˆå§‹åŒ–å“¦
 void Check_Servo(void)
 {
 		if (Serial_GetNewPackageFlag_ABC(&Serial1))
@@ -88,70 +83,70 @@ void Check_Servo(void)
         Serial_SetIntData(&Serial1, "Angle", "Angle=%d", &Servo_Pos_Check) ;
     }
 		
-//    Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check) ;	// 146¼Ó½ô 164ÕÅ¿ª
-//		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check) ;	// 73¼Ó½ô£¬48ÕÅ¿ª 
+    Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check) ;	// 146åŠ ç´§ 164å¼ å¼€
+//		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check) ;	// 73åŠ ç´§ï¼Œ48å¼ å¼€ 
 //		Servo_SetDirectAngle(&Servo_3 , Servo_Pos_Check) ;
 //		Servo_SetDirectAngle(&Servo_4 , Servo_Pos_Check) ;
 		
 //		Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check_Single[0]) ;
 //		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check_Single[1]) ;
 	
-		// ¶æ»ú¿ØÖÆ:¼Ğ×¦
-		static bool Claw_Status = true	;
-		if (Key_Check(KEY_2 , KEY_SINGLE))
-		{
-			Claw_Status = !Claw_Status ;
-		}
-		if (Claw_Status)
-		{
-			Servo_Claw_Open() ;
-		}
-		else 
-		{
-			Servo_Claw_Close() ;
-		}
-		// ¶æ»ú¿ØÖÆ£ºÒÂ¼Ü
-		static bool Hanger_Status = true	;
-		if (Key_Check(KEY_2 , KEY_LONG))
-		{
-			Hanger_Status = !Hanger_Status ;
-		}
-		if (Hanger_Status)
-		{
-			Servo_Hanger_Close() ;
-		}
-		else
-		{
-			Servo_Hanger_Open() ;
-		}
-		// ¶æ»ú¿ØÖÆ:»úĞµ±Û
-		static bool Arm_Status = true	;
-		if (Key_Check(KEY_2 , KEY_DOUBLE))
-		{
-			Arm_Status = !Arm_Status ;
-		}
-		if (Arm_Status)
-		{
-			Servo_Arm_Back() ;
-		}
-		else
-		{
-			Servo_Arm_Come() ;
-		}
-		// µç»ú²âÊÔ
-		if (Key_Check(KEY_1 , KEY_SINGLE))
-		{
-			Motor_SetAngle(&Motor_B , 0) ;
-		}
-		else if (Key_Check(KEY_1 , KEY_DOUBLE))
-		{
-			Motor_SetAngle(&Motor_B , 400) ;
-		}
-		else if (Key_Check(KEY_1 , KEY_LONG))
-		{
-			Motor_SetAngle(&Motor_B , 135) ;
-		}
-		// OLEDÕ¹Ê¾
+		// èˆµæœºæ§åˆ¶:å¤¹çˆª
+//		static bool Claw_Status = true	;
+//		if (Key_Check(KEY_2 , KEY_SINGLE))
+//		{
+//			Claw_Status = !Claw_Status ;
+//		}
+//		if (Claw_Status)
+//		{
+//			Servo_Claw_Open() ;
+//		}
+//		else 
+//		{
+//			Servo_Claw_Close() ;
+//		}
+//		// èˆµæœºæ§åˆ¶ï¼šè¡£æ¶
+//		static bool Hanger_Status = true	;
+//		if (Key_Check(KEY_2 , KEY_LONG))
+//		{
+//			Hanger_Status = !Hanger_Status ;
+//		}
+//		if (Hanger_Status)
+//		{
+//			Servo_Hanger_Close() ;
+//		}
+//		else
+//		{
+//			Servo_Hanger_Open() ;
+//		}
+//		// èˆµæœºæ§åˆ¶:æœºæ¢°è‡‚
+//		static bool Arm_Status = true	;
+//		if (Key_Check(KEY_2 , KEY_DOUBLE))
+//		{
+//			Arm_Status = !Arm_Status ;
+//		}
+//		if (Arm_Status)
+//		{
+//			Servo_Arm_Back() ;
+//		}
+//		else
+//		{
+//			Servo_Arm_Come() ;
+//		}
+//		// ç”µæœºæµ‹è¯•
+//		if (Key_Check(KEY_1 , KEY_SINGLE))
+//		{
+//			Motor_SetAngle(&Motor_B , 0) ;
+//		}
+//		else if (Key_Check(KEY_1 , KEY_DOUBLE))
+//		{
+//			Motor_SetAngle(&Motor_B , 400) ;
+//		}
+//		else if (Key_Check(KEY_1 , KEY_LONG))
+//		{
+//			Motor_SetAngle(&Motor_B , 135) ;
+//		}
+		// OLEDå±•ç¤º
 		
 		OLED_ClearArea(0,20,128,10) ;OLED_ClearArea(0,30,128,10) ;
 		OLED_ClearArea(0,40,128,10) ;OLED_ClearArea(0,50,128,10) ;
@@ -162,18 +157,18 @@ void Check_Servo(void)
 		OLED_Printf(0,50,OLED_6X8 , "Servo4_Pos  =  %d" ,Servo_4.current_pos ) ;
 }
 
-// 5. ²âÊÔESP32·¢ËÍµÄÖ¸Áî
+// 5. æµ‹è¯•ESP32å‘é€çš„æŒ‡ä»¤
 void Check_ESP32_Serial(void)
 {
-	// Serial2 ´®¿Ú2
+	// Serial2 ä¸²å£2
 	if (Serial_GetNewPackageFlag_ABC(&Serial2))
 	{
-		 // 1. ÁÀÒÂ¼Ü¿ªÊ¼ ÁÀÒÂ·ş
+		 // 1. æ™¾è¡£æ¶å¼€å§‹ æ™¾è¡£æœ
 		 if (Serial_Check_Str(&Serial2 , "Hanger_Up"))
 		 {
 				Flash_Mode_Set(Flash_Mode_Fast) ;
 		 }
-		 // 2. ÁÀÒÂ¼Ü¿ªÊ¼ ÊÕÒÂ·ş
+		 // 2. æ™¾è¡£æ¶å¼€å§‹ æ”¶è¡£æœ
 		 if (Serial_Check_Str(&Serial2 , "Hanger_Down"))
 		 {
 				Flash_Mode_Set(Flash_Mode_OFF) ;

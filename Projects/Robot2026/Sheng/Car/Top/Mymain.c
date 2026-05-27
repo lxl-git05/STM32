@@ -8,6 +8,7 @@ void Mymain(void)
 
 	while (1) 
 	{
+			OLED_Clear() ;
 			Mode_G_Loop() ; 
 
 			if (curr_mode == next_mode)
@@ -44,5 +45,6 @@ void Mymain(void)
 					}
 			}
 			curr_mode = next_mode ; // ×´Ì¬¸üÐÂ
+			OLED_Update(); 
 	}
 }

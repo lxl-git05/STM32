@@ -23,8 +23,8 @@
 // 软件算法库
 
 // 硬件实现库(Function)
-#include "Con_motor.h"
-#include "Con_Servo.h"
+//#include "Con_motor.h"
+//#include "Con_Servo.h"
 
 // Mode库
 #include "Mode_G.h"

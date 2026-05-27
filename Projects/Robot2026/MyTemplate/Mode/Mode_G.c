@@ -47,7 +47,7 @@ void Timer_1ms_Callback(void)
 void Timer_20ms_Callback(void)
 {
 	// 1. 电机速度更新与PID控制
-	Motor_Speed_Update_Tick(20) ;
+//	Motor_Speed_Update_Tick(20) ;
 }
 
 

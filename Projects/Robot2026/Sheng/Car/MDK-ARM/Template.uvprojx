@@ -780,6 +780,16 @@
               <FileType>5</FileType>
               <FilePath>..\Function\MPU6050_Angle.h</FilePath>
             </File>
+            <File>
+              <FileName>Con_Wheel_Control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Function\Con_Wheel_Control.c</FilePath>
+            </File>
+            <File>
+              <FileName>Con_Wheel_Control.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Function\Con_Wheel_Control.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

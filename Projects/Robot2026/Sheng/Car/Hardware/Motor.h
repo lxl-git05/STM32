@@ -4,6 +4,11 @@
 #include "MySystem.h"
 #include "MyPID.h"
 
+// 宏定义参数
+#define Motor_ZhouChang (26.70353755492f)	// cm
+#define CAR_WHEEL_DISTANCE   17.2f																							// 轮间距
+#define CAR_TURN_K           (3.1415926f * CAR_WHEEL_DISTANCE / 360.0f)					// 轮子转1度走的cm距离
+
 // 电机正方向
 #define Motor_DIR_P ( 1)
 #define Motor_DIR_N (-1)

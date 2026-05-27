@@ -34,4 +34,31 @@ float Motor_Get_Angle(Motor_Typedef *Motor) ;
 // 10. 检查电机位置
 bool Motor_Is_Angle(Motor_Typedef *Motor , int Angle , int Tolerance) ;
 
+// Pos函数
+// 1. 设置电机目标位移
+void Motor_SetPos(Motor_Typedef *Motor , float Pos) ;
+
+// 2. 得到电机当前位移
+float Motor_Get_Pos(Motor_Typedef *Motor) ;
+
+// 3. 检查电机位置
+bool Motor_Is_Pos(Motor_Typedef *Motor , int Pos , int Tolerance) ;
+
+// 4. 清除累计位移
+void Motor_Pos_Clear(void) ;
+
+// PID
+extern Pid_Typedef PID_Angle ;	// 小车的角度环
+
+// 初始化角度环
+void PID_Angle_Init(void) ;
+
+// 角度环配置
+void PID_Angle_Tick(int Base_Speed) ;
+
+// 配置目标角度
+void PID_Goal_Angle_Set(float GoalAngle) ;
+
+// 设置当前角度为0
+void PID_Angle_Curr_Reset(void) ;
 #endif

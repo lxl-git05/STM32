@@ -37,3 +37,9 @@ int MyEncoder_Get_Total_CNT(MyEncoder_Typedef* MyEncoder)
 {
 	return MyEncoder->total_cnt ;
 }
+
+// 4. Çå³ýÀÛ¼ÆÂö³åÊý
+void MyEncoder_Total_Cnt_Clear(MyEncoder_Typedef* MyEncoder)
+{
+	MyEncoder->total_cnt = 0 ;
+}

@@ -3,8 +3,10 @@
 
 //#define MPU6050_Check
 
+int Base_Speed = 0 ;
+
 Mode_Typedef curr_mode = Mode_Null   ;     // 当前模式
-Mode_Typedef next_mode = Mode_Check  ;     // 下一个模式
+Mode_Typedef next_mode = Mode_Null  ;     // 下一个模式
 
 // ========================== 系统setup loop ==========================
 
@@ -34,8 +36,18 @@ void Mode_G_Loop(void)
         Mode_To_Next() ;
     }
     // OLED展示
+		OLED_Clear() ;
     if (curr_mode == Mode_Null) {OLED_Printf(0,0,OLED_6X8,"====Null====") ;}
-    OLED_Update() ;
+		
+		// 测试
+		if (Key_Check(KEY_1,KEY_SINGLE))
+		{
+			next_Status = Car_Turn_F ;
+		}
+		OLED_Printf(0,20,OLED_6X8 , "Pos: A: %.4f", Motor_A.PID_Pos.realPoint_Now) ;
+		OLED_Printf(0,30,OLED_6X8 , "Pos: B: %.4f", Motor_B.PID_Pos.realPoint_Now) ;
+		OLED_Printf(0,40,OLED_6X8 , "yaw:    %.4f", MPU_Real.yaw) ;
+		
 }
 
 // ========================== 系统定时器配置 ==========================
@@ -53,6 +65,10 @@ void Timer_1ms_Callback(void)
 void Timer_20ms_Callback(void)
 {
 	// 1. 电机速度更新与PID控制
+//	PID_Angle_Tick(Base_Speed) ;
+	Car_Control_Change() ;
+	Car_Control() ;
+	// 底层速度环
 	Motor_Speed_Update_Tick(20) ;
 	// 2. MPU6050更新参数
 	#ifndef MPU6050_Check 
@@ -61,7 +77,7 @@ void Timer_20ms_Callback(void)
 	// 3. 各个模式调试
 	if (curr_mode == Mode_PID  ) {Mode_1_Tick() ;}
 	if (curr_mode == Mode_Angle) {Mode_2_Tick() ;}
-	if (curr_mode == Mode_Main)  {Mode_4_Tick() ;}
+	if (curr_mode == Mode_Pos)   {Mode_4_Tick() ;}
 }
 
 // ========================== 系统状态配置 ==========================

@@ -10,7 +10,7 @@ typedef enum
     Mode_PID ,      // 模式1:调试电机的PID
 		Mode_Angle ,    // 模式2:控制电机的旋转角度(PID)
     Mode_Check ,    // 模式3:测试硬件连接
-		Mode_Main ,     // 模式4:控制主程序
+		Mode_Pos  ,     // 模式4:控制主程序
 
     Mode_End ,      // 注册模式不能在这个下面!!!
 }Mode_Typedef;

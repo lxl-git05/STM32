@@ -1,4 +1,5 @@
 #include "Con_Motor.h"
+#include "MPU6050_Angle.h"
 
 Motor_Typedef Motor_A ;
 Motor_Typedef Motor_B ;
@@ -14,22 +15,22 @@ Motor_Param_Typedef Motor_Param = {13.0f , 30.0f , 350} ;
 void Con_Motor_Init(void)
 {
 	// PI
-	PID_Init(&Motor_A.PID_s , 8.0f,0.8f,0.0f,1000 , -1000 , 1000) ;
-	PID_Init(&Motor_B.PID_s , 8.0f,0.8f,0.0f,1000 , -1000 , 1000) ;
+	PID_Init(&Motor_A.PID_s , 8.0f,1.0f,0.0f,1000 , -1000 , 1000) ;
+	PID_Init(&Motor_B.PID_s , 8.0f,1.0f,0.0f,1000 , -1000 , 1000) ;
 	
 	// PD
 	PID_Init(&Motor_A.PID_Angle , 0.9f,0.0f,1.0f,30 , -30 , 350) ;
 	PID_Init(&Motor_B.PID_Angle , 0.9f,0.0f,1.0f,30 , -30 , 350) ;
 	
 	// PD
-	PID_Init(&Motor_A.PID_Pos , 0.9f,0.0f,1.0f,30 , -30 , 350) ;
-	PID_Init(&Motor_B.PID_Pos , 0.9f,0.0f,1.0f,30 , -30 , 350) ;
+	PID_Init(&Motor_A.PID_Pos , 30.0f,0.0f,5.0f,50 , -300 , 350) ;
+	PID_Init(&Motor_B.PID_Pos , 30.0f,0.0f,5.0f,50 , -300 , 350) ;
 	
 	Motor_Init
 	(
 		&Motor_A , &MyPWM_Motor_A_IN1 , &Motor_A_Encoder ,
 		&MyGPIO_Motor_A_IN1 , &MyGPIO_Motor_A_IN2 , &Motor_Param , 
-		Motor_DIR_P , Motor_DIR_N , 
+		Motor_DIR_N , Motor_DIR_P , 
 		Motor_A.PID_s , Motor_A.PID_Angle , Motor_A.PID_Pos
 	);
 	
@@ -37,8 +38,8 @@ void Con_Motor_Init(void)
 	(
 		&Motor_B , &MyPWM_Motor_B_IN1 , &Motor_B_Encoder ,
 		&MyGPIO_Motor_B_IN1 , &MyGPIO_Motor_B_IN2 , &Motor_Param , 
-		Motor_DIR_N , Motor_DIR_P , 
-		Motor_B.PID_s , Motor_B.PID_Angle , Motor_A.PID_Pos
+		Motor_DIR_P , Motor_DIR_N , 
+		Motor_B.PID_s , Motor_B.PID_Angle , Motor_B.PID_Pos
 	);
 	
 	Motor_SetSpeed(&Motor_A , 0) ;
@@ -135,16 +136,17 @@ static void Motorx_Pos_Update_Tick(Motor_Typedef *Motor , int Dir , int Base_Spe
 // 7. 电机状态更新(外部接口)
 void Motor_Speed_Update_Tick(uint32_t Gap_Time_ms)
 {
-	// 速度环(内环)
-	Motorx_Speed_Update_Tick(&Motor_A ,Gap_Time_ms) ;
-	Motorx_Speed_Update_Tick(&Motor_B ,Gap_Time_ms) ;
 	// 角度环,暂时去掉
 //	Motorx_Angle_Update_Tick(&Motor_A , -1) ;	// 使能A的角度环,那么A就不再被允许被主动设置速度
 //	Motorx_Angle_Update_Tick(&Motor_B ,  1) ;
 	
 	// 位置环
-//	Motorx_Pos_Update_Tick(&Motor_A , -1 , 30) ;	
-//	Motorx_Pos_Update_Tick(&Motor_B ,  1 , 30) ;	
+//	Motorx_Pos_Update_Tick(&Motor_A ,  1 , 0) ;	
+//	Motorx_Pos_Update_Tick(&Motor_B ,  1 , 0) ;	
+
+	// 速度环(内环,需要放在最后)
+	Motorx_Speed_Update_Tick(&Motor_A ,Gap_Time_ms) ;
+	Motorx_Speed_Update_Tick(&Motor_B ,Gap_Time_ms) ;
 }	
 
 // ================= 电机角度环(其实也是编码器位置环) =================
@@ -196,3 +198,46 @@ bool Motor_Is_Pos(Motor_Typedef *Motor , int Pos , int Tolerance)
 	}
 	return false ;
 }
+
+// 4. 清除累计位移
+void Motor_Pos_Clear(void)
+{
+	MyEncoder_Total_Cnt_Clear(Motor_A.Motor_Encoder) ;
+	MyEncoder_Total_Cnt_Clear(Motor_B.Motor_Encoder) ;
+}
+
+// 电机角度环控制
+Pid_Typedef PID_Angle ;	// 小车的角度环
+
+// 初始化角度环
+void PID_Angle_Init(void)
+{
+	PID_Init(&PID_Angle , 5.0f, 0.0f, 2.0f, 30.0f, -30.0f, 1000 ) ;
+}
+
+// 角度环配置
+void PID_Angle_Tick(int Base_Speed)
+{
+	// 得到当前角度
+	PID_Angle.realPoint_Now = MPU_Real.yaw ;
+	// 计算PID
+	PID_Update(&PID_Angle ,PID_Angle.realPoint_Now) ;
+	// 输出结果(串级外环)
+	Motor_SetSpeed(&Motor_A , Base_Speed - PID_Angle.setPoint) ;
+	Motor_SetSpeed(&Motor_B , Base_Speed + PID_Angle.setPoint) ;
+}
+
+// 配置目标角度
+void PID_Goal_Angle_Set(float GoalAngle)
+{
+	PID_Angle.goalPoint = GoalAngle ;
+}
+
+// 设置当前角度为0
+void PID_Angle_Curr_Reset(void)
+{
+	MPU_Real.yaw = 0 ;
+}
+
+
+// 
