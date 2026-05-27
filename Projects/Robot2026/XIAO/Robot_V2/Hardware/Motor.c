@@ -70,7 +70,7 @@ void Motor_Speed_Update(Motor_Typedef *Motor , uint32_t Gap_Time_ms)
 void Motor_Angle_Update(Motor_Typedef *Motor)
 {
 	// 得到角度 = 圈数 * 360
-	float curr_Angle = (float)Motor->Motor_Encoder->total_cnt * 360.0f / 
+	float curr_Angle = (float)Motor->Motor_Encoder->total_cnt * 360.0f * Motor->Encoder_Dir/ 
 		(Motor->Motor_Encoder->time_Fre * Motor->Motor_Param->PPR * Motor->Motor_Param->ReductionRatio)   ;
 	
 	// 记录当前角度

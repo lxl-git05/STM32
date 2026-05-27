@@ -9,7 +9,7 @@ Pid_Typedef PID_S_B ;
 Pid_Typedef PID_Angle_A ;
 Pid_Typedef PID_Angle_B ;
 
-Motor_Param_Typedef Motor_Param = {13.0f , 30.0f , 350} ;
+Motor_Param_Typedef Motor_Param = {13.0f , 34.0f , 300} ;	// MG370 * 2
 
 // 1. 电机初始化
 void Con_Motor_Init(void)
@@ -136,10 +136,6 @@ static void Motorx_Pos_Update_Tick(Motor_Typedef *Motor , int Dir , int Base_Spe
 // 7. 电机状态更新(外部接口)
 void Motor_Speed_Update_Tick(uint32_t Gap_Time_ms)
 {
-	// 角度环,暂时去掉
-//	Motorx_Angle_Update_Tick(&Motor_A , -1) ;	// 使能A的角度环,那么A就不再被允许被主动设置速度
-//	Motorx_Angle_Update_Tick(&Motor_B ,  1) ;
-	
 	// 位置环
 //	Motorx_Pos_Update_Tick(&Motor_A ,  1 , 0) ;	
 //	Motorx_Pos_Update_Tick(&Motor_B ,  1 , 0) ;	

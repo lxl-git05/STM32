@@ -29,8 +29,6 @@ void Mode_G_Loop(void)
         Mode_To_Next() ;
     }
     // OLED展示
-    if (curr_mode == Mode_Null) {OLED_Printf(0,0,OLED_6X8,"====Null====") ;}
-    OLED_Update() ;
 }
 
 // ========================== 系统定时器配置 ==========================

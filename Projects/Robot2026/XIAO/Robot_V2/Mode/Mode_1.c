@@ -7,14 +7,13 @@ float Motor_PID_Goal_Check = 0 ;
 void Mode_1_Setup(void)
 {
    OLED_Clear() ;
-   OLED_Printf(0, 0, OLED_6X8, "=====Mode_1=====") ;
 }
 
 // 功能:检查电机A的PID
 void Mode_1_Loop(void)
 {
+		OLED_Printf(0, 0, OLED_6X8, "=====Mode_1=====") ;
     // OLED展示真实速度
-    OLED_ClearArea(0, 10, 120, 10) ;
     OLED_Printf(0 , 10, OLED_6X8, "A:%.0f" ,  Motor_A.PID_s.realPoint_Now) ;
     OLED_Printf(60, 10, OLED_6X8, "B:%.0f" ,  Motor_B.PID_s.realPoint_Now) ;
     // Serial参数更改

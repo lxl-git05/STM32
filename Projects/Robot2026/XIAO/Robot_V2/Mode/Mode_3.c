@@ -6,6 +6,7 @@ float check ;
 int PWM_Servo_Check = 50;    // 50-250
 int Servo_Pos_Check = 90 ;
 int Servo_Pos_Check_Single[4] = {175,80,0,0} ;
+int GoalAngle = 0 ;
  
 // 测试函数声明
 // 1. 测试串口功能
@@ -26,11 +27,11 @@ void Check_ESP32_Serial(void);
 void Mode_3_Setup(void)
 {
    OLED_Clear() ;
-   OLED_Printf(0, 0, OLED_6X8, "=====Mode_3=====") ;
 }
 
 void Mode_3_Loop(void)
 {
+  OLED_Printf(0, 0, OLED_6X8, "=====Mode_3=====") ;
 	// 本loop函数建议只执行一个check任务,防止未知Bug
 	Check_Servo() ;
 }
@@ -83,14 +84,49 @@ void Check_Servo(void)
         Serial_SetIntData(&Serial1, "Angle", "Angle=%d", &Servo_Pos_Check) ;
     }
 		
-    Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check) ;	// 146加紧 164张开
-//		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check) ;	// 73加紧，48张开 
-//		Servo_SetDirectAngle(&Servo_3 , Servo_Pos_Check) ;
-//		Servo_SetDirectAngle(&Servo_4 , Servo_Pos_Check) ;
+		// 舵机控制
+		if (Key_Check(KEY_1 , KEY_SINGLE))
+		{
+			Servo_Pos_Check += 30 ;
+		}
+		else if (Key_Check(KEY_1 , KEY_DOUBLE))
+		{
+			Servo_Pos_Check -= 30 ;
+		}
+    Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check) ;	
+		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check) ;	
+		Servo_SetDirectAngle(&Servo_3 , Servo_Pos_Check) ;
+		Servo_SetDirectAngle(&Servo_4 , Servo_Pos_Check) ;
 		
-//		Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check_Single[0]) ;
-//		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check_Single[1]) ;
-	
+		// 电机控制
+		if (Key_Check(KEY_2 , KEY_SINGLE))
+		{
+			GoalAngle += 400 ;
+		}
+		else if (Key_Check(KEY_2 , KEY_DOUBLE))
+		{
+			GoalAngle -= 400 ;
+		}
+		if (Key_Check(KEY_0 , KEY_SINGLE))
+		{
+			Servo_Pos_Check += 50 ;
+		}
+		else if (Key_Check(KEY_0 , KEY_DOUBLE))
+		{
+			Servo_Pos_Check -= 50 ;
+		}
+		Motor_SetAngle(&Motor_A	, GoalAngle) ;
+		Motor_SetAngle(&Motor_B	, GoalAngle) ;
+		
+		// OLED展示
+		// Servo
+		OLED_Printf(0,20,OLED_6X8 , "S1=%d S2=%d" ,Servo_1.current_pos , Servo_2.current_pos ) ;
+		OLED_Printf(0,30,OLED_6X8 , "S2=%d S4=%d" ,Servo_3.current_pos , Servo_4.current_pos ) ;
+		// Motor
+		OLED_Printf(0,40,OLED_6X8 , "M_A:G=%.2f,R=%.2f" ,Motor_A.PID_Angle.goalPoint , Motor_A.PID_Angle.realPoint_Now ) ;
+		OLED_Printf(0,50,OLED_6X8 , "M_B:G=%.2f,R=%.2f" ,Motor_B.PID_Angle.goalPoint , Motor_B.PID_Angle.realPoint_Now ) ;
+
+		
 		// 舵机控制:夹爪
 //		static bool Claw_Status = true	;
 //		if (Key_Check(KEY_2 , KEY_SINGLE))
@@ -146,15 +182,7 @@ void Check_Servo(void)
 //		{
 //			Motor_SetAngle(&Motor_B , 135) ;
 //		}
-		// OLED展示
 		
-		OLED_ClearArea(0,20,128,10) ;OLED_ClearArea(0,30,128,10) ;
-		OLED_ClearArea(0,40,128,10) ;OLED_ClearArea(0,50,128,10) ;
-		
-		OLED_Printf(0,20,OLED_6X8 , "Servo1_Pos  =  %d" ,Servo_1.current_pos ) ;
-		OLED_Printf(0,30,OLED_6X8 , "Servo2_Pos  =  %d" ,Servo_2.current_pos ) ;
-		OLED_Printf(0,40,OLED_6X8 , "Servo3_Pos  =  %d" ,Servo_3.current_pos ) ;
-		OLED_Printf(0,50,OLED_6X8 , "Servo4_Pos  =  %d" ,Servo_4.current_pos ) ;
 }
 
 // 5. 测试ESP32发送的指令

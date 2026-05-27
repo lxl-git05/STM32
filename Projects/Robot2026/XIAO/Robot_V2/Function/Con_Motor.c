@@ -3,13 +3,7 @@
 Motor_Typedef Motor_A ;
 Motor_Typedef Motor_B ;
 
-Pid_Typedef PID_S_A ;
-Pid_Typedef PID_S_B ;
-Pid_Typedef PID_Angle_A ;
-Pid_Typedef PID_Angle_B ;
-
-Motor_Param_Typedef Motor_Param = {13.0f , 30.0f , 350} ;
-
+Motor_Param_Typedef Motor_Param = {13.0f , 34.0f , 300} ;	// MG370 * 2
 // 1. 电机初始化
 void Con_Motor_Init(void)
 {
@@ -18,14 +12,14 @@ void Con_Motor_Init(void)
 	PID_Init(&Motor_B.PID_s , 8.0f,0.8f,0.0f,1000 , -1000 , 1000) ;
 	
 	// PD
-	PID_Init(&Motor_A.PID_Angle , 0.9f,0.0f,1.0f,30 , -30 , 350) ;
-	PID_Init(&Motor_B.PID_Angle , 0.9f,0.0f,1.0f,30 , -30 , 350) ;
+	PID_Init(&Motor_A.PID_Angle , 0.9f,0.0f,1.0f,300 , -300 , 350) ;
+	PID_Init(&Motor_B.PID_Angle , 0.9f,0.0f,1.0f,300 , -300 , 350) ;
 	
 	Motor_Init
 	(
 		&Motor_A , &MyPWM_Motor_A_IN1 , &Motor_A_Encoder ,
 		&MyGPIO_Motor_A_IN1 , &MyGPIO_Motor_A_IN2 , &Motor_Param , 
-		Motor_DIR_P , Motor_DIR_N , 
+		Motor_DIR_N , Motor_DIR_P , 
 		Motor_A.PID_s , Motor_A.PID_Angle
 	);
 	
@@ -33,7 +27,7 @@ void Con_Motor_Init(void)
 	(
 		&Motor_B , &MyPWM_Motor_B_IN1 , &Motor_B_Encoder ,
 		&MyGPIO_Motor_B_IN1 , &MyGPIO_Motor_B_IN2 , &Motor_Param , 
-		Motor_DIR_N , Motor_DIR_P , 
+		Motor_DIR_P , Motor_DIR_N , 
 		Motor_B.PID_s , Motor_B.PID_Angle
 	);
 	
@@ -123,8 +117,8 @@ void Motor_Speed_Update_Tick(uint32_t Gap_Time_ms)
 	Motorx_Speed_Update_Tick(&Motor_A ,Gap_Time_ms) ;
 	Motorx_Speed_Update_Tick(&Motor_B ,Gap_Time_ms) ;
 	// 角度环
-	Motorx_Angle_Update_Tick(&Motor_A , -1) ;	// 使能A的角度环,那么A就不再被允许倍主动设置速度
-	Motorx_Angle_Update_Tick(&Motor_B ,  1) ;
+	Motorx_Angle_Update_Tick(&Motor_A ,  1) ;	// 使能A的角度环,那么A就不再被允许倍主动设置速度
+	Motorx_Angle_Update_Tick(&Motor_B ,  1) ; 
 }	
 
 // 8. 设置电机旋转角度
