@@ -1,8 +1,8 @@
 #include "Mode_G.h"
 #include "AllHeader.h"
 
-Mode_Typedef curr_mode = Mode_Null  ;     // 当前模式
-Mode_Typedef next_mode = Mode_Check ;     // 下一个模式
+Mode_Typedef curr_mode = Mode_Null   ;     // 当前模式
+Mode_Typedef next_mode = Mode_Main  ;     // 下一个模式
 
 // ========================== 系统setup loop ==========================
 
@@ -30,6 +30,7 @@ void Mode_G_Loop(void)
     }
     // OLED展示
     if (curr_mode == Mode_Null) {OLED_Printf(0,0,OLED_6X8,"====Null====") ;}
+    OLED_Update() ;
 }
 
 // ========================== 系统定时器配置 ==========================
@@ -41,20 +42,20 @@ void Timer_1ms_Callback(void)
 	Key_Tick() ;
 	// 功能2: LED闪烁指示灯
 	Flash_Mode_Tick() ;
+	// 功能3: 舵机控制台
+	Con_Servo_GoalAngle_Tick() ;
 }
 
 // 20ms定时器
 void Timer_20ms_Callback(void)
 {
-	
+	// 1. 电机速度更新与PID控制
+	Motor_Speed_Update_Tick(20) ;
+	// 2. 展示电机参数
+	if (curr_mode == Mode_PID  ) {Mode_1_Tick() ;}
+	if (curr_mode == Mode_Angle) {Mode_2_Tick() ;}
+	if (curr_mode == Mode_Main)  {Mode_4_Tick() ;}
 }
-
-
-
-
-
-
-
 
 // ========================== 系统状态配置 ==========================
 // 进入下一状态

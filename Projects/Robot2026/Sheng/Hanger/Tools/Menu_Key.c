@@ -1,66 +1,67 @@
-#include "Mode_3.h"
-#include "AllHeader.h"
-
-// 测试全局变量
-float check ;
-
-// 测试函数声明
-void Check_Serial(Serial_Typedef* pSerial);
-void Check_PWM(void) ;  // 需要初始化
-void Check_Encoder(void) ;  // 需要初始化
-
-void Mode_3_Setup(void)
+#include "Menu_Key.h"
+// ******************菜单结构体******************
+typedef struct
 {
-   OLED_Clear() ;
-   OLED_Printf(0, 0, OLED_6X8, "=====Mode_3=====") ;
-}
+    int id;													// 菜单的ID号(序列)
+    void (*MenuCallback)(void);			// 菜单的回调函数(功能展示)
+} OLED_MenuItem;
+// ******************全局变量声明******************
+// 初始化参数
+DList Menu_list;						// 菜单系统头结点双向链表定义
+int Menu_Total_Num = 0 ;		// 菜单总数量
+// 交互界面参数
+int Menu_Confirm_index ;		// 菜单确认浮标
+static int Menu_Open_Mode = 1;
+// ******************外部变量声明******************
 
-void Mode_3_Loop(void)
-{
-	// 本loop函数建议只执行一个check任务,防止未知Bug
-}
+// ******************菜单回调函数声明******************
+void Menu_Main_Callback (void);
+void Menu_Check_Callback(void);
+void Menu_Task1_Callback(void);
+void Menu_Task2_Callback(void);
+void Menu_Task3_Callback(void);
+void Menu_Task4_Callback(void);
+void Menu_Task5_Callback(void);
+// ******************核心函数定义****************** 
 
-void Mode_3_Exit(void)
+// 新建新的菜单数据页面
+void Menu_New_Init( void (*Menu_Callback)(void) )
 {
-    OLED_Clear() ;
-}
-
-void Mode_3_Tick(void)
-{
+	// 菜单空间拓展
+	OLED_MenuItem *item = malloc(sizeof(OLED_MenuItem));
+	// ID号和回调函数(菜单+按键逻辑)定义
+	item->id = Menu_Total_Num ++ ;
+	item->MenuCallback = Menu_Callback;
 	
+	// 尾插放入菜单
+	DList_PushBack(&Menu_list, item);
 }
 
-// 1. 测试串口功能
-void Check_Serial(Serial_Typedef* pSerial)
+// 菜单系统初始化
+void Menu_Init(void)
 {
-    if (Serial_GetNewPackageFlag_ABC(pSerial))
-    {
-        Serial_SetFloatData(pSerial, "Kp", "Kp=%f", &check) ;
-        Serial_printf(pSerial , "%f\n", &check) ;
-    }
-    OLED_Printf(0, 40, OLED_6X8, "%.2f" , check) ;  // 测试OLED
+	// 菜单系统头结点双向链表初始化
+	DList_Init(&Menu_list) ;
+	// OLED的主菜单(ID:0)
+	Menu_New_Init(Menu_Main_Callback)  ;
+	// 后续新建界面,顺序很重要:
+	Menu_New_Init(Menu_Task1_Callback) ;
+	Menu_New_Init(Menu_Task2_Callback) ;
+	Menu_New_Init(Menu_Task3_Callback) ;
+	Menu_New_Init(Menu_Task4_Callback) ;
+	Menu_New_Init(Menu_Task5_Callback) ;
+	
+	Menu_New_Init(Menu_Check_Callback) ;
 }
 
-// 2. 测试PWM功能, 记得先初始化哦
-void Check_PWM(void)
+// 获取菜单项对应序号的指针
+OLED_MenuItem* Menu_Get_Item(int MenuIndex)
 {
-    static int PWM_Servo_Check = 50;    // 50-250
-    if (Key_Check(KEY_0, KEY_LONG))
-    {
-        PWM_Servo_Check += 50 ;
-        if (PWM_Servo_Check > 250)
-        {
-            PWM_Servo_Check = 50 ;
-        }
-    }
-    MyPWM_SetCompare(&MyPWM_Servo1, PWM_Servo_Check) ;
-}
-
-// 3. 测试编码器功能, 记得先初始化哦
-void Check_Encoder(void)
-{
-    OLED_Printf(0, 40, OLED_6X8, "%d" , MyEncoder_Get_CNT(&Motor_A_Encoder)) ;
-}
+    // 根据 MenuIndex 获取链表中的节点
+    DListNode* node = DList_GetNode(&Menu_list, MenuIndex);
+    
+    // 错误检查（防止越界）
+    if(node == NULL)
         return NULL;
 
     // 转回真正的数据结构类型

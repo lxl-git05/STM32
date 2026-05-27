@@ -614,6 +614,16 @@
               <FileType>5</FileType>
               <FilePath>..\Software\Task.h</FilePath>
             </File>
+            <File>
+              <FileName>MyPID.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Software\MyPID.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyPID.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Software\MyPID.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

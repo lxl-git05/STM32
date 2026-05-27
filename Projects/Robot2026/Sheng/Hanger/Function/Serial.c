@@ -234,6 +234,23 @@ bool Serial_SetIntData( Serial_Typedef *pSerial , char *KeyWord , char *cmd , in
 	}
 }
 
+// 文本:3. 判断指令
+bool Serial_Check_Str(Serial_Typedef *pSerial , char *KeyWord)
+{
+    // 只检测是否包含指定关键词，不做数据解析
+    // KeyWord：要匹配的指令关键字
+    // 返回 true 表示检测到该指令
+
+    if (strstr(pSerial->ABC_Data.Serial_New_Package_ABC, KeyWord) != NULL)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 // ============== 串口空闲中断回调函数 ==============
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
@@ -271,7 +288,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
         {
             Serial2.rxBuf[Size] = '\0';                    // 加字符串结束符（对 ABC 协议有用）
 
-            // === 数据处理（你的原有逻辑基本不动）===
+            // === 数据处理（原有逻辑基本不动）===
             if (Serial2.rxBuf[0] == 0xFF && Serial2.rxBuf[1] == 0xAA)
             {
                 Serial_Data_Check_HEX(&Serial2);

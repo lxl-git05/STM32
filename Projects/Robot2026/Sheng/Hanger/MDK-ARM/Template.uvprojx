@@ -81,7 +81,7 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
-            <RunUserProg2>0</RunUserProg2>
+            <RunUserProg2>1</RunUserProg2>
             <UserProg1Name></UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
@@ -137,7 +137,7 @@
             <DriverSelection>4101</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>BIN\UL2V8M.DLL</Flash2>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -338,7 +338,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_HAL_DRIVER,STM32H743xx</Define>
+              <Define>USE_HAL_DRIVER,STM32H743xx,USE_PWR_LDO_SUPPLY</Define>
               <Undefine></Undefine>
               <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../Function;../Hardware;../Software;../Tools;../Top;../Mode;../MySystem</IncludePath>
             </VariousControls>
@@ -614,6 +614,16 @@
               <FileType>5</FileType>
               <FilePath>..\Software\Task.h</FilePath>
             </File>
+            <File>
+              <FileName>MyPID.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Software\MyPID.c</FilePath>
+            </File>
+            <File>
+              <FileName>MyPID.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Software\MyPID.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -659,6 +669,26 @@
               <FileType>5</FileType>
               <FilePath>..\Hardware\Serial_base.h</FilePath>
             </File>
+            <File>
+              <FileName>Motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\Motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>Motor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\Motor.h</FilePath>
+            </File>
+            <File>
+              <FileName>Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\Servo.c</FilePath>
+            </File>
+            <File>
+              <FileName>Servo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\Servo.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -673,6 +703,26 @@
               <FileName>Serial.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Function\Serial.h</FilePath>
+            </File>
+            <File>
+              <FileName>Con_Motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Function\Con_Motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>Con_Motor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Function\Con_Motor.h</FilePath>
+            </File>
+            <File>
+              <FileName>Con_Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Function\Con_Servo.c</FilePath>
+            </File>
+            <File>
+              <FileName>Con_Servo.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Function\Con_Servo.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -708,6 +758,16 @@
               <FileName>LED_Flash.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Tools\LED_Flash.h</FilePath>
+            </File>
+            <File>
+              <FileName>Menu_Key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Tools\Menu_Key.c</FilePath>
+            </File>
+            <File>
+              <FileName>Menu_Key.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Tools\Menu_Key.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -753,6 +813,16 @@
               <FileName>Mode_3.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Mode\Mode_3.h</FilePath>
+            </File>
+            <File>
+              <FileName>Mode_4.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Mode\Mode_4.c</FilePath>
+            </File>
+            <File>
+              <FileName>Mode_4.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Mode\Mode_4.h</FilePath>
             </File>
           </Files>
         </Group>

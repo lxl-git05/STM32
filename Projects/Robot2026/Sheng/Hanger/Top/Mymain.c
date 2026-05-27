@@ -1,46 +1,47 @@
-#include "Mymain.h"
-#include "AllHeader.h"
-// =================== 全局变量 ===================
+#ifndef __DLIST_H
+#define __DLIST_H
 
-void Mymain(void)
+#include <stdlib.h>
+
+/*
+	这里有两个链表的定义,第一个是普遍的,数据链表(存储数据),第二个是唯一的,是整个系统的控制节点,指向数据链的头和尾
+*/
+
+// ================== 双向链表定义 ==================
+typedef struct DListNode
 {
-	Mode_G_Setup() ;    // 全局初始化
+    struct DListNode *prev ;   // 前驱节点
+    struct DListNode *next ;   // 后继节点
 
-	while (1) 
-	{
-			Mode_G_Loop() ; 
+    void *data ;               // 数据指针，可存放任意类型
+}DListNode;
 
-			if (curr_mode == next_mode)
-			{
-					switch (curr_mode) 
-					{
-							case Mode_Null : break; // 啥也不干,也就是只有Global模式在干活
-							case 1 : Mode_1_Loop() ; break;
-							case 2 : Mode_2_Loop() ; break;
-							case 3 : Mode_3_Loop() ; break;
-							case Mode_End  : break; // 到头了,不要到这里来,写case是因为不然报出警告
-					}
-			}
-			else // 模式交接,仅在模式转换才触发一次 
-			{
-					switch (curr_mode) 
-					{
-							case Mode_Null : break;
-							case 1 : Mode_1_Exit() ; break;
-							case 2 : Mode_2_Exit() ; break;
-							case 3 : Mode_3_Exit() ; break;
-							case Mode_End  : break; // 到头了,不要到这里来,写case是因为不然报出警告
-					}
-					switch (next_mode) 
-					{
-							case Mode_Null : break;
-							case 1 : Mode_1_Setup() ; break;
-							case 2 : Mode_2_Setup() ; break;
-							case 3 : Mode_3_Setup() ; break;
+// ================== 系统头结点双向链表定义 ==================
+typedef struct
+{
+    DListNode *head ;          // 指向第一个节点
+    DListNode *tail ;          // 指向最后一个节点
+    int size ;                 // 节点数量
+}DList;
+
+// ================== 函数 ==================
+void DList_Init(DList *list);
+void DList_PushFront(DList *list , void *data);
+void DList_PushBack(DList *list , void *data);
+void DList_RemoveNode(DList *list, DListNode *node);
+void DList_RemoveAt(DList *list , int index);
+DListNode* DList_GetNode(DList *list , int index);
+void* DList_Get(DList *list , int index);
+void DList_Traverse(DList *list , void (*func)(void*));
+void DList_TraverseReverse(DList *list , void (*func)(void*));
+void DList_Clear(DList *list);
+
+#endif
+
+							case 4 : Mode_4_Setup()  ; break;
 							case Mode_End  : break; // 到头了,不要到这里来,写case是因为不然报出警告
 					}
 			}
 			curr_mode = next_mode ; // 状态更新
-			OLED_Update() ;
 	}
 }

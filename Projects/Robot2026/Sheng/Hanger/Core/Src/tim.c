@@ -635,27 +635,27 @@ void HAL_TIM_Encoder_MspDeInit(TIM_HandleTypeDef* tim_encoderHandle)
 
 /* USER CODE BEGIN 1 */
 /*
- 普�?�定时器实现us延时
+ 普�?�定时器实现us延时
 */
 void Delay_Us(uint32_t nus)
 {
  
  uint16_t  differ = 0xffff-nus-5;
- //设置定时器的�?术初始�??
+ //设置定时器的�?术初始�??
   __HAL_TIM_SetCounter(&htim7,differ);
-  //�?启定时器
+  //�?启定时器
   HAL_TIM_Base_Start(&htim7);
  
   while( differ<0xffff-5)
  {
   differ = __HAL_TIM_GetCounter(&htim7);
  };
- //关闭定时�?
+ //关闭定时�?
   HAL_TIM_Base_Stop(&htim7);
 }
 
 /*
- 普�?�定时器实现ms延时，可直接使用HAL库函数HAL_delay（）
+ 普�?�定时器实现ms延时，可直接使用HAL库函数HAL_delay（）
 */
 void Delay_Ms(uint16_t nms)
 {
@@ -663,3 +663,4 @@ void Delay_Ms(uint16_t nms)
  for(i=0;i<nms;i++) Delay_Us(1000);
 }
 /* USER CODE END 1 */
+
