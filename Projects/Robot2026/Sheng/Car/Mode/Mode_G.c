@@ -6,7 +6,7 @@
 int Base_Speed = 0 ;
 
 Mode_Typedef curr_mode = Mode_Null   ;     // 当前模式
-Mode_Typedef next_mode = Mode_Null  ;     // 下一个模式
+Mode_Typedef next_mode = Mode_Null  ;      // 下一个模式
 
 // ========================== 系统setup loop ==========================
 
@@ -47,7 +47,6 @@ void Mode_G_Loop(void)
 		OLED_Printf(0,20,OLED_6X8 , "Pos: A: %.4f", Motor_A.PID_Pos.realPoint_Now) ;
 		OLED_Printf(0,30,OLED_6X8 , "Pos: B: %.4f", Motor_B.PID_Pos.realPoint_Now) ;
 		OLED_Printf(0,40,OLED_6X8 , "yaw:    %.4f", MPU_Real.yaw) ;
-		
 }
 
 // ========================== 系统定时器配置 ==========================

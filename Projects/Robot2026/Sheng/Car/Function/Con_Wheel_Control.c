@@ -42,7 +42,16 @@ void Car_Turn_L_Tick(void)
 }
 bool Car_Turn_L_Is_Exit(void)
 {
-	return MPU_Real.yaw > 90 ;
+    float err = fabs(PID_Angle.goalPoint - MPU_Real.yaw);
+
+    float gyro = fabs(MPU_Cali.GZ);	// 角速度小,代表几乎暂停,说明转向完成
+
+    if (err < 2.0f && gyro < 5.0f)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 // 4. Car_Turn_R
@@ -57,7 +66,16 @@ void Car_Turn_R_Tick(void)
 } 
 bool Car_Turn_R_Is_Exit(void)
 {
-	return MPU_Real.yaw < -90 ;
+    float err = fabs(PID_Angle.goalPoint - MPU_Real.yaw);
+
+    float gyro = fabs(MPU_Cali.GZ);	// 角速度小,代表几乎暂停,说明转向完成
+
+    if (err < 2.0f && gyro < 5.0f)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 // 5. Car_Turn_H
