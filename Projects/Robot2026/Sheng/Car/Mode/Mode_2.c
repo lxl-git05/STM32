@@ -29,12 +29,12 @@ void Mode_2_Loop(void)
 		if (Key_Check(KEY_1 , KEY_SINGLE))
 		{
 			Base_Speed = 40 ;
-			PID_Angle_Curr_Reset()  ;
+			PID_Angle_Curr_Reset()  ;	// 40速度往前直行
 		}
 		if (Key_Check(KEY_2 , KEY_SINGLE))
 		{
 			PID_Angle_Curr_Reset()  ;
-			PID_Goal_Angle_Set(-90) ;
+			PID_Goal_Angle_Set(-90) ;	// 直角转向
 		}
 		
 }

@@ -5,7 +5,7 @@
 
 int Base_Speed = 0 ;
 
-Mode_Typedef curr_mode = Mode_Null   ;     // 当前模式
+Mode_Typedef curr_mode = Mode_Null   ;      // 当前模式
 Mode_Typedef next_mode = Mode_Null  ;      // 下一个模式
 
 // ========================== 系统setup loop ==========================
