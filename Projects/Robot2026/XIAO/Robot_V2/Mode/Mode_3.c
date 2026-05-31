@@ -24,6 +24,9 @@ void Check_Servo(void) ;
 // 5. 测试ESP32发送的指令
 void Check_ESP32_Serial(void);
 
+// 6. 联调测试:2个电机，4个舵机
+void Check_All(void) ;
+
 void Mode_3_Setup(void)
 {
    OLED_Clear() ;
@@ -33,7 +36,8 @@ void Mode_3_Loop(void)
 {
   OLED_Printf(0, 0, OLED_6X8, "=====Mode_3=====") ;
 	// 本loop函数建议只执行一个check任务,防止未知Bug
-	Check_Servo() ;
+//	Check_Servo() ;
+	Check_All() ;
 }
 
 // 1. 测试串口功能
@@ -82,6 +86,7 @@ void Check_Servo(void)
 		if (Serial_GetNewPackageFlag_ABC(&Serial1))
     {
         Serial_SetIntData(&Serial1, "Angle", "Angle=%d", &Servo_Pos_Check) ;
+				GoalAngle = Servo_Pos_Check ;
     }
 		
 		// 舵机控制
@@ -107,14 +112,6 @@ void Check_Servo(void)
 		{
 			GoalAngle -= 400 ;
 		}
-		if (Key_Check(KEY_0 , KEY_SINGLE))
-		{
-			Servo_Pos_Check += 50 ;
-		}
-		else if (Key_Check(KEY_0 , KEY_DOUBLE))
-		{
-			Servo_Pos_Check -= 50 ;
-		}
 		Motor_SetAngle(&Motor_A	, GoalAngle) ;
 		Motor_SetAngle(&Motor_B	, GoalAngle) ;
 		
@@ -126,62 +123,63 @@ void Check_Servo(void)
 		OLED_Printf(0,40,OLED_6X8 , "M_A:G=%.2f,R=%.2f" ,Motor_A.PID_Angle.goalPoint , Motor_A.PID_Angle.realPoint_Now ) ;
 		OLED_Printf(0,50,OLED_6X8 , "M_B:G=%.2f,R=%.2f" ,Motor_B.PID_Angle.goalPoint , Motor_B.PID_Angle.realPoint_Now ) ;
 
-		
+		/*
 		// 舵机控制:夹爪
-//		static bool Claw_Status = true	;
-//		if (Key_Check(KEY_2 , KEY_SINGLE))
-//		{
-//			Claw_Status = !Claw_Status ;
-//		}
-//		if (Claw_Status)
-//		{
-//			Servo_Claw_Open() ;
-//		}
-//		else 
-//		{
-//			Servo_Claw_Close() ;
-//		}
-//		// 舵机控制：衣架
-//		static bool Hanger_Status = true	;
-//		if (Key_Check(KEY_2 , KEY_LONG))
-//		{
-//			Hanger_Status = !Hanger_Status ;
-//		}
-//		if (Hanger_Status)
-//		{
-//			Servo_Hanger_Close() ;
-//		}
-//		else
-//		{
-//			Servo_Hanger_Open() ;
-//		}
-//		// 舵机控制:机械臂
-//		static bool Arm_Status = true	;
-//		if (Key_Check(KEY_2 , KEY_DOUBLE))
-//		{
-//			Arm_Status = !Arm_Status ;
-//		}
-//		if (Arm_Status)
-//		{
-//			Servo_Arm_Back() ;
-//		}
-//		else
-//		{
-//			Servo_Arm_Come() ;
-//		}
-//		// 电机测试
-//		if (Key_Check(KEY_1 , KEY_SINGLE))
-//		{
-//			Motor_SetAngle(&Motor_B , 0) ;
-//		}
-//		else if (Key_Check(KEY_1 , KEY_DOUBLE))
-//		{
-//			Motor_SetAngle(&Motor_B , 400) ;
-//		}
-//		else if (Key_Check(KEY_1 , KEY_LONG))
-//		{
-//			Motor_SetAngle(&Motor_B , 135) ;
-//		}
+		static bool Claw_Status = true	;
+		if (Key_Check(KEY_2 , KEY_SINGLE))
+		{
+			Claw_Status = !Claw_Status ;
+		}
+		if (Claw_Status)
+		{
+			Servo_Claw_Open() ;
+		}
+		else 
+		{
+			Servo_Claw_Close() ;
+		}
+		// 舵机控制：衣架
+		static bool Hanger_Status = true	;
+		if (Key_Check(KEY_2 , KEY_LONG))
+		{
+			Hanger_Status = !Hanger_Status ;
+		}
+		if (Hanger_Status)
+		{
+			Servo_Hanger_Close() ;
+		}
+		else
+		{
+			Servo_Hanger_Open() ;
+		}
+		// 舵机控制:机械臂
+		static bool Arm_Status = true	;
+		if (Key_Check(KEY_2 , KEY_DOUBLE))
+		{
+			Arm_Status = !Arm_Status ;
+		}
+		if (Arm_Status)
+		{
+			Servo_Arm_Back() ;
+		}
+		else
+		{
+			Servo_Arm_Come() ;
+		}
+		// 电机测试
+		if (Key_Check(KEY_1 , KEY_SINGLE))
+		{
+			Motor_SetAngle(&Motor_B , 0) ;
+		}
+		else if (Key_Check(KEY_1 , KEY_DOUBLE))
+		{
+			Motor_SetAngle(&Motor_B , 400) ;
+		}
+		else if (Key_Check(KEY_1 , KEY_LONG))
+		{
+			Motor_SetAngle(&Motor_B , 135) ;
+		}
+		*/
 		
 }
 
@@ -203,6 +201,13 @@ void Check_ESP32_Serial(void)
 		 }
 	}
 }
+
+// 6. 联调测试:2个电机，4个舵机
+void Check_All(void)
+{
+	
+}
+
 
 void Mode_3_Exit(void)
 {

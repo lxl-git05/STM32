@@ -34,4 +34,17 @@ float Motor_Get_Angle(Motor_Typedef *Motor) ;
 // 10. 检查电机位置
 bool Motor_Is_Angle(Motor_Typedef *Motor , int Angle , int Tolerance) ;
 
+// 电机驱动
+void Motor_Hang_Up(void)  ;
+void Motor_Hang_Mid(void) ;
+void Motor_Hang_Down(void);
+
+bool IS_Motor_Hang_Up(void) ;
+bool Is_Motor_Hang_Mid(void) ;
+bool Is_Motor_Hanger_Down(void) ;
+
+void Motor_Hua_Next(void) ;
+void Motor_Hua_Back(void) ;
+ 
+
 #endif

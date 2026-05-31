@@ -1,7 +1,7 @@
 #include "Con_Motor.h"
 
-Motor_Typedef Motor_A ;
-Motor_Typedef Motor_B ;
+Motor_Typedef Motor_A ;	// 水平传送带结构,正方向逆时针，也就是所需要的正方向
+Motor_Typedef Motor_B ;	// 丝杆升降结构,正方向向下
 
 Motor_Param_Typedef Motor_Param = {13.0f , 34.0f , 300} ;	// MG370 * 2
 // 1. 电机初始化
@@ -12,7 +12,7 @@ void Con_Motor_Init(void)
 	PID_Init(&Motor_B.PID_s , 8.0f,0.8f,0.0f,1000 , -1000 , 1000) ;
 	
 	// PD
-	PID_Init(&Motor_A.PID_Angle , 0.9f,0.0f,1.0f,300 , -300 , 350) ;
+	PID_Init(&Motor_A.PID_Angle , 0.9f,0.0f,1.0f,30  ,  -30 , 350) ;
 	PID_Init(&Motor_B.PID_Angle , 0.9f,0.0f,1.0f,300 , -300 , 350) ;
 	
 	Motor_Init
@@ -143,3 +143,60 @@ bool Motor_Is_Angle(Motor_Typedef *Motor , int Angle , int Tolerance)
 	}
 	return false ;
 }
+
+// ==================== 电机驱动 ====================
+#define Motor_Hang_Up_Cnt   0
+#define Motor_Hang_Mid_Cnt  1000
+#define Motor_Hang_Down_Cnt 6900
+
+
+void Motor_Hang_Up(void)
+{
+	Motor_SetAngle(&Motor_B , Motor_Hang_Up_Cnt) ;
+}
+
+void Motor_Hang_Mid(void)
+{
+	Motor_SetAngle(&Motor_B , Motor_Hang_Mid_Cnt) ;
+}
+
+
+void Motor_Hang_Down(void)
+{
+	Motor_SetAngle(&Motor_B , Motor_Hang_Down_Cnt) ;
+}
+
+bool IS_Motor_Hang_Up(void)
+{
+	return Motor_Is_Angle(&Motor_B , Motor_Hang_Up_Cnt , 20) ;
+}
+
+bool Is_Motor_Hang_Mid(void)
+{
+	return Motor_Is_Angle(&Motor_B , Motor_Hang_Mid_Cnt , 20) ;
+}
+
+bool Is_Motor_Hanger_Down(void)
+{
+	return Motor_Is_Angle(&Motor_B , Motor_Hang_Down_Cnt , 20) ;
+}
+
+
+
+
+
+
+int Motor_Hua_Pos = 0 ;
+
+void Motor_Hua_Next(void)
+{
+	Motor_Hua_Pos += 330 ;
+	Motor_SetAngle(&Motor_A , Motor_Hua_Pos) ;
+}
+
+void Motor_Hua_Back(void)
+{
+	Motor_Hua_Pos -= 330 ;
+	Motor_SetAngle(&Motor_A , Motor_Hua_Pos) ;
+}
+

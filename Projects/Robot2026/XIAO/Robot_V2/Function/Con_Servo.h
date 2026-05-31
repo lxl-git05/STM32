@@ -19,9 +19,9 @@ void Servo_Claw_Close(void) ;
 int Servo_Hanger_Close(void) ;
 // 衣架 张开 0 °
 int Servo_Hanger_Open(void) ;
-// 机械臂 竖直
-int Servo_Arm_Come(void) ;
-// 机械臂 碰壁
-int Servo_Arm_Back(void) ;
+// 衣架2 闭合
+int Servo_Hanger2_Close(void) ;
+// 衣架2 张开
+int Servo_Hanger2_Open(void) ;
 
 #endif

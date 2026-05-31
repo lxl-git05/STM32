@@ -1,8 +1,17 @@
 #include "Mode_G.h"
 #include "AllHeader.h"
 
+/*
+	参数
+	1. 丝杆顶端到底端差不多7200度
+	2. 水平传送带330度1个位置
+	3. 舵机：左夹爪()   右夹爪()
+	4. 舵机：水平衣架1()   水平衣架2()
+
+*/
+
 Mode_Typedef curr_mode = Mode_Null   ;     // 当前模式
-Mode_Typedef next_mode = Mode_Check  ;     // 下一个模式
+Mode_Typedef next_mode = Mode_Main  ;     // 下一个模式
 
 // ========================== 系统setup loop ==========================
 

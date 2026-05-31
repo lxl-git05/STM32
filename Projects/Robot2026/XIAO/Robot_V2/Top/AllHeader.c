@@ -17,6 +17,10 @@ void Initial_ALL(void)
 	Flash_Mode_Init() ;														// LED闪烁工具初始化
 	Timer_Counter_Init() ;												// 时间戳测定初始化
 	
+	// 驱动初始化
+	Servo_Claw_Open() ;
+	Servo_Hanger_Close();
+	
 }
 
 // 定时器初始化

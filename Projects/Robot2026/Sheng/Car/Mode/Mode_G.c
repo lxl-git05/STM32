@@ -6,7 +6,10 @@
 int Base_Speed = 0 ;
 
 Mode_Typedef curr_mode = Mode_Null   ;      // 当前模式
-Mode_Typedef next_mode = Mode_Null  ;      // 下一个模式
+Mode_Typedef next_mode = Mode_Angle  ;      // 下一个模式
+
+extern int Forward_Distance1 ;
+extern int Forward_Distance2 ;
 
 // ========================== 系统setup loop ==========================
 
@@ -44,9 +47,18 @@ void Mode_G_Loop(void)
 		{
 			next_Status = Car_Turn_F ;
 		}
+		if (Key_Check(KEY_2, KEY_SINGLE))// 双击
+    {   
+        Forward_Distance1 ++ ;
+    }
+		if (Key_Check(KEY_2, KEY_DOUBLE))// 双击
+    {   
+        Forward_Distance1 -- ;
+    }
 		OLED_Printf(0,20,OLED_6X8 , "Pos: A: %.4f", Motor_A.PID_Pos.realPoint_Now) ;
 		OLED_Printf(0,30,OLED_6X8 , "Pos: B: %.4f", Motor_B.PID_Pos.realPoint_Now) ;
 		OLED_Printf(0,40,OLED_6X8 , "yaw:    %.4f", MPU_Real.yaw) ;
+		OLED_Printf(0,50,OLED_6X8 , "D1:%d D2:%d", Forward_Distance1 , Forward_Distance2) ;
 }
 
 // ========================== 系统定时器配置 ==========================
