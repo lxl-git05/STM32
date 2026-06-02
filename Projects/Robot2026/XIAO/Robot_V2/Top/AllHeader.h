@@ -22,6 +22,7 @@
 
 
 // 软件算法库
+#include "Control.h"
 
 // 硬件实现库
 #include "Con_Motor.h"

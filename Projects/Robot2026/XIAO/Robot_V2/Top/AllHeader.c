@@ -12,6 +12,7 @@ void Initial_ALL(void)
 	// Control
 	Con_Motor_Init() ;														// 电机初始化
 	Con_Servo_Init() ;														// 舵机初始化
+	Control_Setup()	;															// 控制队列状态填充
 	
 	// Tools
 	Flash_Mode_Init() ;														// LED闪烁工具初始化

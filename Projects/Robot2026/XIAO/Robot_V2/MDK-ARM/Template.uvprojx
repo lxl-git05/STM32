@@ -624,6 +624,16 @@
               <FileType>5</FileType>
               <FilePath>..\Software\MyPID.h</FilePath>
             </File>
+            <File>
+              <FileName>Queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Software\Queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>Queue.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Software\Queue.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -848,6 +858,16 @@
               <FileName>AllHeader.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Top\AllHeader.h</FilePath>
+            </File>
+            <File>
+              <FileName>Control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Top\Control.c</FilePath>
+            </File>
+            <File>
+              <FileName>Control.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Top\Control.h</FilePath>
             </File>
           </Files>
         </Group>

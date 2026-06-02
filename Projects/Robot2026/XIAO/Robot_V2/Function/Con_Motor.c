@@ -145,10 +145,6 @@ bool Motor_Is_Angle(Motor_Typedef *Motor , int Angle , int Tolerance)
 }
 
 // ==================== µç»úÇý¶¯ ====================
-#define Motor_Hang_Up_Cnt   0
-#define Motor_Hang_Mid_Cnt  1000
-#define Motor_Hang_Down_Cnt 6900
-
 
 void Motor_Hang_Up(void)
 {
@@ -182,10 +178,6 @@ bool Is_Motor_Hanger_Down(void)
 }
 
 
-
-
-
-
 int Motor_Hua_Pos = 0 ;
 
 void Motor_Hua_Next(void)
@@ -198,5 +190,10 @@ void Motor_Hua_Back(void)
 {
 	Motor_Hua_Pos -= 330 ;
 	Motor_SetAngle(&Motor_A , Motor_Hua_Pos) ;
+}
+
+bool Motor_Hua_is_Ok(void)
+{
+	return Motor_Is_Angle(&Motor_A, Motor_Hua_Pos, 20) ;
 }
 

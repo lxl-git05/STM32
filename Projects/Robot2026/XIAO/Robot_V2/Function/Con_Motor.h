@@ -7,6 +7,12 @@
 extern Motor_Typedef Motor_A ;
 extern Motor_Typedef Motor_B ;
 
+// ==================== 电机驱动 ====================
+#define Motor_Hang_Up_Cnt    0
+#define Motor_Hang_Mid_Cnt   1000
+#define Motor_Hang_Down_Cnt  6900
+#define Motor_Sigan_Next_Cnt 330
+
 // 1. 电机初始化
 void Con_Motor_Init(void) ;
 
@@ -45,6 +51,7 @@ bool Is_Motor_Hanger_Down(void) ;
 
 void Motor_Hua_Next(void) ;
 void Motor_Hua_Back(void) ;
+bool Motor_Hua_is_Ok(void);
  
 
 #endif

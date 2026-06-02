@@ -1,5 +1,6 @@
 #include "Mode_3.h"
 #include "AllHeader.h"
+#include "Control.h"
 
 // 测试全局变量
 float check ;
@@ -7,6 +8,8 @@ int PWM_Servo_Check = 50;    // 50-250
 int Servo_Pos_Check = 90 ;
 int Servo_Pos_Check_Single[4] = {175,80,0,0} ;
 int GoalAngle = 0 ;
+
+extern int Robot_Wait_Cmd ; 
  
 // 测试函数声明
 // 1. 测试串口功能
