@@ -1,21 +1,44 @@
 #include "Mode_5.h"
 #include "AllHeader.h"
 
-// 定义各项参数
+extern int Base_Speed ;
+extern int Forward_Distance1 ;
+extern int Forward_Distance2 ;
+
+// setup
 void Mode_5_Setup(void)
 {
    OLED_Clear() ;
 }
 
-// 预备控制
+// loop
 void Mode_5_Loop(void)
 {
-	OLED_Printf(0,0,OLED_8X16,"========Mode_5========") ;
+	OLED_Printf(0,0,OLED_8X16,"====Mode_Main====") ;
+	// 测试
+	if (Key_Check(KEY_1,KEY_SINGLE))
+	{
+		next_Status = Car_Turn_F ;
+	}
+	if (Key_Check(KEY_2, KEY_SINGLE))// 双击
+	{   
+			Forward_Distance1 ++ ;
+	}
+	if (Key_Check(KEY_2, KEY_DOUBLE))// 双击
+	{   
+			Forward_Distance1 -- ;
+	}
+	// OLED展示
+	OLED_Printf(0,20,OLED_6X8 , "Pos: A: %.4f", Motor_A.PID_Pos.realPoint_Now) ;
+	OLED_Printf(0,30,OLED_6X8 , "Pos: B: %.4f", Motor_B.PID_Pos.realPoint_Now) ;
+	OLED_Printf(0,40,OLED_6X8 , "yaw:    %.4f", MPU_Real.yaw) ;
 }
 
+// 中断控制器
 void Mode_5_Tick(void)
 {
-
+	Car_Control_Change() ;
+	Car_Control() ;
 }
 
 void Mode_5_Exit(void)

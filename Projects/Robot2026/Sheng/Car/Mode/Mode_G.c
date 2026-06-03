@@ -6,10 +6,7 @@
 int Base_Speed = 0 ;
 
 Mode_Typedef curr_mode = Mode_Null   ;      // 当前模式
-Mode_Typedef next_mode = Mode_Angle  ;      // 下一个模式
-
-extern int Forward_Distance1 ;
-extern int Forward_Distance2 ;
+Mode_Typedef next_mode = Mode_Main ;      	// 下一个模式
 
 // ========================== 系统setup loop ==========================
 
@@ -38,27 +35,8 @@ void Mode_G_Loop(void)
     {   
         Mode_To_Next() ;
     }
-    // OLED展示
-		OLED_Clear() ;
-    if (curr_mode == Mode_Null) {OLED_Printf(0,0,OLED_6X8,"====Null====") ;}
-		
-		// 测试
-		if (Key_Check(KEY_1,KEY_SINGLE))
-		{
-			next_Status = Car_Turn_F ;
-		}
-		if (Key_Check(KEY_2, KEY_SINGLE))// 双击
-    {   
-        Forward_Distance1 ++ ;
-    }
-		if (Key_Check(KEY_2, KEY_DOUBLE))// 双击
-    {   
-        Forward_Distance1 -- ;
-    }
-		OLED_Printf(0,20,OLED_6X8 , "Pos: A: %.4f", Motor_A.PID_Pos.realPoint_Now) ;
-		OLED_Printf(0,30,OLED_6X8 , "Pos: B: %.4f", Motor_B.PID_Pos.realPoint_Now) ;
-		OLED_Printf(0,40,OLED_6X8 , "yaw:    %.4f", MPU_Real.yaw) ;
-		OLED_Printf(0,50,OLED_6X8 , "D1:%d D2:%d", Forward_Distance1 , Forward_Distance2) ;
+		// OLED展示
+		if (curr_mode == Mode_Null) {OLED_Printf(0,0,OLED_6X8,"====Null====") ;}
 }
 
 // ========================== 系统定时器配置 ==========================
@@ -75,20 +53,17 @@ void Timer_1ms_Callback(void)
 // 20ms定时器
 void Timer_20ms_Callback(void)
 {
-	// 1. 电机速度更新与PID控制
-//	PID_Angle_Tick(Base_Speed) ;
-	Car_Control_Change() ;
-	Car_Control() ;
-	// 底层速度环
+	// 1. 各个模式调试
+	if (curr_mode == Mode_PID  ) {Mode_1_Tick() ;}	// 速度内环调试
+	if (curr_mode == Mode_Angle) {Mode_2_Tick() ;}	// 角度外环
+	if (curr_mode == Mode_Pos)   {Mode_4_Tick() ;}	// 距离外环
+	if (curr_mode == Mode_Main)  {Mode_5_Tick() ;}	// 总控制,含角度和距离外环以及控制器
+	// 2. 底层速度环
 	Motor_Speed_Update_Tick(20) ;
-	// 2. MPU6050更新参数
+	// 3. MPU6050更新参数
 	#ifndef MPU6050_Check 
 	MPU6050_Angle_Update_Tick() ;   // 耗时1.45ms
 	#endif     
-	// 3. 各个模式调试
-	if (curr_mode == Mode_PID  ) {Mode_1_Tick() ;}
-	if (curr_mode == Mode_Angle) {Mode_2_Tick() ;}
-	if (curr_mode == Mode_Pos)   {Mode_4_Tick() ;}
 }
 
 // ========================== 系统状态配置 ==========================

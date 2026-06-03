@@ -122,50 +122,6 @@ void Car_Control(void)
     curr_Status = next_Status ;
 }
 
-//// 状态转换配置
-//void Car_Control_Change(void)
-//{
-//	// 当前状态和下次状态相同才能进入切换状态
-//	if (curr_Status != next_Status) {return;}
-//	
-//	// 开始控制状态转换
-//	Motor_Pos_Update(&Motor_A);	// 更新位移
-//	Motor_Pos_Update(&Motor_B);	// 更新位移
-//	
-//	if (curr_Status == Car_Stop)				// 1. 停止跳转
-//	{
-//		;	// 没啥事
-//	}
-//	else if(curr_Status == Car_Turn_F)	// 2. 直行跳转
-//	{
-//		if (Car_Turn_F_Is_Exit(50))
-//		{
-//			next_Status = Car_Turn_L ;
-//		}
-//	}
-//	else if(curr_Status == Car_Turn_L)	// 3. 左转跳转
-//	{
-//		if (Car_Turn_L_Is_Exit())
-//		{
-//			next_Status = Car_Turn_F ;
-//		}
-//	}
-//	else if(curr_Status == Car_Turn_R)	// 4. 右转跳转
-//	{
-//		if (Car_Turn_R_Is_Exit())
-//		{
-//			next_Status = Car_Stop ;
-//		}
-//	}
-//	else if(curr_Status == Car_Turn_H)	// 5. 平转跳转
-//	{
-//		if (Car_Turn_H_Is_Exit())
-//		{
-////			next_Status =  ;
-//		}
-//	}
-//}
-
 int status_tmp = 0 ;
 int Forward_Distance1 = 28 ;
 int Forward_Distance2 = 28 ;
@@ -219,6 +175,49 @@ void Car_Control_Change(void)
 	}
 }
 
+//// 状态转换配置
+//void Car_Control_Change(void)
+//{
+//	// 当前状态和下次状态相同才能进入切换状态
+//	if (curr_Status != next_Status) {return;}
+//	
+//	// 开始控制状态转换
+//	Motor_Pos_Update(&Motor_A);	// 更新位移
+//	Motor_Pos_Update(&Motor_B);	// 更新位移
+//	
+//	if (curr_Status == Car_Stop)				// 1. 停止跳转
+//	{
+//		;	// 没啥事
+//	}
+//	else if(curr_Status == Car_Turn_F)	// 2. 直行跳转
+//	{
+//		if (Car_Turn_F_Is_Exit(50))
+//		{
+//			next_Status = Car_Turn_L ;
+//		}
+//	}
+//	else if(curr_Status == Car_Turn_L)	// 3. 左转跳转
+//	{
+//		if (Car_Turn_L_Is_Exit())
+//		{
+//			next_Status = Car_Turn_F ;
+//		}
+//	}
+//	else if(curr_Status == Car_Turn_R)	// 4. 右转跳转
+//	{
+//		if (Car_Turn_R_Is_Exit())
+//		{
+//			next_Status = Car_Stop ;
+//		}
+//	}
+//	else if(curr_Status == Car_Turn_H)	// 5. 平转跳转
+//	{
+//		if (Car_Turn_H_Is_Exit())
+//		{
+////			next_Status =  ;
+//		}
+//	}
+//}
 
 
 
