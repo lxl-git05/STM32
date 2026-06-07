@@ -35,6 +35,7 @@
 #include "Mode_3.h"
 #include "Mode_4.h"
 #include "Mode_5.h"
+#include "Mode_6.h"
 
 // Mymain初始化集合,使主函数更简洁
 void Initial_ALL(void) ;

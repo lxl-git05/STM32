@@ -4,10 +4,7 @@
 Motor_Typedef Motor_A ;
 Motor_Typedef Motor_B ;
 
-Pid_Typedef PID_S_A ;
-Pid_Typedef PID_S_B ;
-Pid_Typedef PID_Angle_A ;
-Pid_Typedef PID_Angle_B ;
+Pid_Typedef PID_ALL_Pos ;
 
 Motor_Param_Typedef Motor_Param = {13.0f , 34.0f , 300} ;	// MG370 * 2
 
@@ -201,6 +198,40 @@ void Motor_Pos_Clear(void)
 	MyEncoder_Total_Cnt_Clear(Motor_A.Motor_Encoder) ;
 	MyEncoder_Total_Cnt_Clear(Motor_B.Motor_Encoder) ;
 }
+
+// ================= 电机编码器双轮外环 =================
+void PID_ALL_Pos_Init(void)
+{
+	PID_Init(&PID_ALL_Pos , 100.0f , 0.0f , 40.0f , 30.0f , -30.0f , 1000.0f ) ;
+}
+
+void PID_ALL_Pos_Set_Goal(int Goal_Pos)
+{
+	PID_ALL_Pos.goalPoint = Goal_Pos ;
+}
+
+// 角度环配置
+float PID_ALL_Pos_Tick(void)
+{
+	// 得到当前角度
+	Motor_Pos_Update(&Motor_A) ;
+	Motor_Pos_Update(&Motor_B) ;
+	PID_ALL_Pos.realPoint_Now = ( Motor_A.PID_Pos.realPoint_Now + Motor_B.PID_Pos.realPoint_Now) / 2 ;
+	// 计算PID
+	PID_Update(&PID_ALL_Pos ,PID_ALL_Pos.realPoint_Now) ;
+	// 输出结果(串级外环,也就是小车的直行基础速度)
+	return PID_ALL_Pos.setPoint ;
+}
+
+void PID_ALL_Pos_Reset(void)
+{
+    PID_ALL_Pos.realPoint_Now = 0;
+    PID_ALL_Pos.setPoint = 0;
+    PID_ALL_Pos.LastError = 0;
+    PID_ALL_Pos.iout = 0;
+}
+
+// ================= 电机编码器位置环 =================
 
 // 电机角度环控制
 Pid_Typedef PID_Angle ;	// 小车的角度环

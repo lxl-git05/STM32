@@ -21,6 +21,7 @@ void Mymain(void)
 							case 3 : Mode_3_Loop() ; break;
 							case 4 : Mode_4_Loop() ; break;
 							case 5 : Mode_5_Loop() ; break;
+							case 6 : Mode_6_Loop() ; break;
 							case Mode_End  : break; // 到头了,不要到这里来,写case是因为不然报出警告
 					}
 			}
@@ -34,6 +35,7 @@ void Mymain(void)
 							case 3 : Mode_3_Exit() ; break;
 							case 4 : Mode_4_Exit() ; break;
 							case 5 : Mode_5_Exit() ; break;
+							case 6 : Mode_6_Exit() ; break;
 							case Mode_End  : break; // 到头了,不要到这里来,写case是因为不然报出警告
 					}
 					switch (next_mode) 
@@ -44,6 +46,7 @@ void Mymain(void)
 							case 3 : Mode_3_Setup() ; break;
 							case 4 : Mode_4_Setup()  ; break;
 							case 5 : Mode_5_Setup()  ; break;
+							case 6 : Mode_6_Setup()  ; break;
 							case Mode_End  : break; // 到头了,不要到这里来,写case是因为不然报出警告
 					}
 			}

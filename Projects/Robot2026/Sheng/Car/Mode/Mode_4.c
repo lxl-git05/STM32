@@ -7,9 +7,6 @@
 void Mode_4_Setup(void)
 {
    OLED_Clear() ;
-   OLED_Printf(0,5,OLED_8X16,"================") ;
-	 OLED_ShowChinese(0,25,"欢迎使用有衣有靠") ;
-	 OLED_Printf(0,45,OLED_8X16,"================") ;
 }
 
 // 预备控制

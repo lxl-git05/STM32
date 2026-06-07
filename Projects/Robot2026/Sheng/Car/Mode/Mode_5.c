@@ -2,13 +2,13 @@
 #include "AllHeader.h"
 
 extern int Base_Speed ;
-extern int Forward_Distance1 ;
-extern int Forward_Distance2 ;
 
 // setup
 void Mode_5_Setup(void)
 {
-   OLED_Clear() ;
+	 OLED_Printf(0,5,OLED_8X16,"================") ;
+	 OLED_ShowChinese(0,25,"欢迎使用有衣有靠") ;
+	 OLED_Printf(0,45,OLED_8X16,"================") ;
 }
 
 // loop
@@ -18,15 +18,13 @@ void Mode_5_Loop(void)
 	// 测试
 	if (Key_Check(KEY_1,KEY_SINGLE))
 	{
+		HAL_Delay(5000) ;
 		next_Status = Car_Turn_F ;
 	}
-	if (Key_Check(KEY_2, KEY_SINGLE))// 双击
-	{   
-			Forward_Distance1 ++ ;
-	}
-	if (Key_Check(KEY_2, KEY_DOUBLE))// 双击
-	{   
-			Forward_Distance1 -- ;
+	if (Key_Check(KEY_2,KEY_SINGLE))
+	{
+		HAL_Delay(5000) ;
+		next_Status = Car_Turn_F ;
 	}
 	// OLED展示
 	OLED_Printf(0,20,OLED_6X8 , "Pos: A: %.4f", Motor_A.PID_Pos.realPoint_Now) ;

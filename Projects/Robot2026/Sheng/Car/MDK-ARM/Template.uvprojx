@@ -900,6 +900,16 @@
               <FileType>5</FileType>
               <FilePath>..\Mode\Mode_5.h</FilePath>
             </File>
+            <File>
+              <FileName>Mode_6.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Mode\Mode_6.c</FilePath>
+            </File>
+            <File>
+              <FileName>Mode_6.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Mode\Mode_6.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

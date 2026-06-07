@@ -3,7 +3,7 @@
 // 0. PWM定义
 MyPWM_Typedef MyPWM_Servo1      = {&htim1 , TIM_CHANNEL_1 , 2000.0f};
 
-MyPWM_Typedef MyPWM_Servo2      = {&htim8 , TIM_CHANNEL_3 , 2000.0f};	// 由于引脚损坏，所以改为TIM8_CH3: PC8
+MyPWM_Typedef MyPWM_Servo2      = {&htim1 , TIM_CHANNEL_2 , 2000.0f};	// 由于引脚损坏，所以改为TIM8_CH3: PC8
 
 MyPWM_Typedef MyPWM_Servo3      = {&htim1 , TIM_CHANNEL_3 , 2000.0f};
 MyPWM_Typedef MyPWM_Servo4      = {&htim1 , TIM_CHANNEL_4 , 2000.0f};

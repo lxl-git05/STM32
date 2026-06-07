@@ -27,21 +27,21 @@ void Con_Servo_GoalAngle_Tick(void)
 // ¼Ð×¦±ÕºÏ
 void Servo_Claw_Close(void)
 {
-	Servo_SetDirectAngle(&Servo_1 , 105) ;
-	Servo_SetDirectAngle(&Servo_2 , 68) ;	
+	Servo_SetDirectAngle(&Servo_1 , 85) ;
+	Servo_SetDirectAngle(&Servo_2 , 43) ;	
 }
 
 // ¼Ð×¦ÕÅ¿ª
 void Servo_Claw_Open(void)
 {
-	Servo_SetDirectAngle(&Servo_1 , 80) ;	
-	Servo_SetDirectAngle(&Servo_2 , 95)  ;	
+	Servo_SetDirectAngle(&Servo_1 , 50) ;	
+	Servo_SetDirectAngle(&Servo_2 , 84)  ;	
 }
 
 // ÒÂ¼Ü1 ±ÕºÏ
 int Servo_Hanger_Close(void)
 {
-	int target = 72 ;
+	int target = 70 ;
 	Servo_SetDirectAngle(&Servo_3 , target) ;
 	return target ;
 }
@@ -57,7 +57,7 @@ int Servo_Hanger_Open(void)
 // ÒÂ¼Ü2 ±ÕºÏ
 int Servo_Hanger2_Close(void)
 {
-	int target = 72 ;
+	int target = 70 ;
 	Servo_SetDirectAngle(&Servo_4 , target) ;
 	return target ;
 }

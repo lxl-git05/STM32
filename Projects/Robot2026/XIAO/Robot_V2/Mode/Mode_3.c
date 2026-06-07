@@ -39,8 +39,8 @@ void Mode_3_Loop(void)
 {
   OLED_Printf(0, 0, OLED_6X8, "=====Mode_3=====") ;
 	// 本loop函数建议只执行一个check任务,防止未知Bug
-//	Check_Servo() ;
-	Check_All() ;
+	Check_Servo() ;
+//	Check_All() ;
 }
 
 // 1. 测试串口功能
@@ -101,10 +101,26 @@ void Check_Servo(void)
 		{
 			Servo_Pos_Check -= 30 ;
 		}
-    Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check) ;	
-		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check) ;	
+//    Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check) ;	
+//		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check) ;	
 		Servo_SetDirectAngle(&Servo_3 , Servo_Pos_Check) ;
 		Servo_SetDirectAngle(&Servo_4 , Servo_Pos_Check) ;
+		
+		// 舵机控制:夹爪
+		static bool Claw_Status = true	;
+		if (Key_Check(KEY_2 , KEY_SINGLE))
+		{
+			Claw_Status = !Claw_Status ;
+			if (Claw_Status)
+			{
+				Servo_Claw_Open() ;
+			}
+			else 
+			{
+				Servo_Claw_Close() ;
+			}
+		}
+		
 		
 		// 电机控制
 		if (Key_Check(KEY_2 , KEY_SINGLE))
@@ -115,8 +131,10 @@ void Check_Servo(void)
 		{
 			GoalAngle -= 400 ;
 		}
-		Motor_SetAngle(&Motor_A	, GoalAngle) ;
+//		Motor_SetAngle(&Motor_A	, GoalAngle) ;
 		Motor_SetAngle(&Motor_B	, GoalAngle) ;
+		
+		
 		
 		// OLED展示
 		// Servo
@@ -125,22 +143,8 @@ void Check_Servo(void)
 		// Motor
 		OLED_Printf(0,40,OLED_6X8 , "M_A:G=%.2f,R=%.2f" ,Motor_A.PID_Angle.goalPoint , Motor_A.PID_Angle.realPoint_Now ) ;
 		OLED_Printf(0,50,OLED_6X8 , "M_B:G=%.2f,R=%.2f" ,Motor_B.PID_Angle.goalPoint , Motor_B.PID_Angle.realPoint_Now ) ;
-
+		
 		/*
-		// 舵机控制:夹爪
-		static bool Claw_Status = true	;
-		if (Key_Check(KEY_2 , KEY_SINGLE))
-		{
-			Claw_Status = !Claw_Status ;
-		}
-		if (Claw_Status)
-		{
-			Servo_Claw_Open() ;
-		}
-		else 
-		{
-			Servo_Claw_Close() ;
-		}
 		// 舵机控制：衣架
 		static bool Hanger_Status = true	;
 		if (Key_Check(KEY_2 , KEY_LONG))

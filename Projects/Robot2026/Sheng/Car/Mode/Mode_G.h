@@ -12,6 +12,7 @@ typedef enum
     Mode_Check ,    // 模式3:测试硬件连接
 		Mode_Pos  ,     // 模式4:没啥用，待定
 		Mode_Main,			// 模式5:主模式
+		Mode_Pos_MPU,		// 模式6：测试直线三PID
 	
 
     Mode_End ,      // 注册模式不能在这个下面!!!

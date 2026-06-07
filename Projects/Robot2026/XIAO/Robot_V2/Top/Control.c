@@ -336,7 +336,7 @@ void Hanger_Control_Change(int *Control_Cmd)
             break;
 
         case Robot_Claw_Open:
-            if (Robot_Claw_Open_Is_Exit(1000))
+            if (Robot_Claw_Open_Is_Exit(600))
             {
 									Queue_Status_Next() ;
             }

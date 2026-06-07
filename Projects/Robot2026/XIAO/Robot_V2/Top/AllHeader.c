@@ -14,13 +14,14 @@ void Initial_ALL(void)
 	Con_Servo_Init() ;														// 舵机初始化
 	Control_Setup()	;															// 控制队列状态填充
 	
+	// 舵机初始化
+	Servo_Claw_Open() ;
+	Servo_Hanger_Close() ;
+	Servo_Hanger2_Close() ;
+	
 	// Tools
 	Flash_Mode_Init() ;														// LED闪烁工具初始化
 	Timer_Counter_Init() ;												// 时间戳测定初始化
-	
-	// 驱动初始化
-	Servo_Claw_Open() ;
-	Servo_Hanger_Close();
 	
 }
 

@@ -3,6 +3,8 @@
 Car_Status_Typedef curr_Status = Car_Stop;
 Car_Status_Typedef next_Status = Car_Stop;
 
+int status_tmp = 0 ;
+
 // 1. Car_Stop
 void Car_Stop_Setup(void)
 {
@@ -20,21 +22,48 @@ void Car_Turn_F_Setup(void)
 	PID_Angle_Curr_Reset() ;	// 重置初始yaw角度
 	PID_Goal_Angle_Set(0) ;		// 目标角度为0
 	Motor_Pos_Clear() ;				// 清除累计位移
+	PID_ALL_Pos_Reset() ;
+	// 直行选择
+	if(status_tmp == 0)
+			PID_ALL_Pos_Set_Goal(50);
+	else if(status_tmp == 1)
+			PID_ALL_Pos_Set_Goal(20);
 }
 void Car_Turn_F_Tick(int BaseSpeed)
 {
-	PID_Angle_Tick(BaseSpeed) ;	// 外环:小车走直线，并且配置 BaseSpeed 基础速度
+	PID_Angle_Tick(PID_ALL_Pos_Tick()) ;	// 外环:小车走直线，并且配置 BaseSpeed 基础速度
+//	PID_Angle_Tick(30) ;	// 外环:小车走直线，并且配置 BaseSpeed 基础速度
 }
-bool Car_Turn_F_Is_Exit(int Position)	// 小车直行一段距离之后改状态
+
+int glo_time = 0 ;
+extern Pid_Typedef PID_ALL_Pos ;
+bool Car_Turn_F_Is_Exit(void)
 {
-	return Motor_A.PID_Pos.realPoint_Now > Position ;
+    bool pos_ok =
+        fabs(
+            PID_ALL_Pos.goalPoint -
+            PID_ALL_Pos.realPoint_Now
+        ) < 2;
+		if (pos_ok == false)
+		{
+			glo_time = HAL_GetTick() ;
+			return false;
+		}
+		else 
+		{
+			if (HAL_GetTick() - glo_time > 2000)
+			{
+				return true ;
+			}
+			return false ;
+		}
 }
 
 // 3. Car_Turn_L
 void Car_Turn_L_Setup(void)
 {
 	PID_Angle_Curr_Reset() ;		// 重置初始yaw角度
-	PID_Goal_Angle_Set(100) ;		// 目标角度配置
+	PID_Goal_Angle_Set(90) ;		// 目标角度配置
 }
 void Car_Turn_L_Tick(void)
 {
@@ -58,7 +87,7 @@ bool Car_Turn_L_Is_Exit(void)
 void Car_Turn_R_Setup(void)
 {
 	PID_Angle_Curr_Reset() ;		// 重置初始yaw角度
-	PID_Goal_Angle_Set(-100) ;	// 目标角度配置
+	PID_Goal_Angle_Set(-90) ;	// 目标角度配置
 }
 void Car_Turn_R_Tick(void)
 {
@@ -122,9 +151,6 @@ void Car_Control(void)
     curr_Status = next_Status ;
 }
 
-int status_tmp = 0 ;
-int Forward_Distance1 = 28 ;
-int Forward_Distance2 = 28 ;
 
 // 状态转换配置
 void Car_Control_Change(void)
@@ -142,12 +168,12 @@ void Car_Control_Change(void)
 	}
 	else if(curr_Status == Car_Turn_F)	// 2. 直行跳转
 	{
-		if (Car_Turn_F_Is_Exit(Forward_Distance1) && status_tmp == 0)
+		if (Car_Turn_F_Is_Exit() && status_tmp == 0)
 		{
-			next_Status = Car_Turn_R ;
+			next_Status = Car_Stop ;	// 直接停
 			status_tmp ++ ;
 		}
-		else if (Car_Turn_F_Is_Exit(Forward_Distance2) && status_tmp == 1)
+		else if (Car_Turn_F_Is_Exit() && status_tmp == 1)
 		{
 			next_Status = Car_Stop ;
 		}

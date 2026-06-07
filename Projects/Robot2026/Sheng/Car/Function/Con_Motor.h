@@ -61,4 +61,17 @@ void PID_Goal_Angle_Set(float GoalAngle) ;
 
 // 设置当前角度为0
 void PID_Angle_Curr_Reset(void) ;
+
+// 位置环
+// ================= 电机编码器双轮外环 =================
+
+// 初始化
+void PID_ALL_Pos_Init(void) ;
+// 配置目标位移
+void PID_ALL_Pos_Set_Goal(int Goal_Pos) ;
+// 角度环配置
+float PID_ALL_Pos_Tick(void) ;
+
+void PID_ALL_Pos_Reset(void) ;
+
 #endif

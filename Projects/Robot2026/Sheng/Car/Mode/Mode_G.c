@@ -5,8 +5,8 @@
 
 int Base_Speed = 0 ;
 
-Mode_Typedef curr_mode = Mode_Null   ;      // 当前模式
-Mode_Typedef next_mode = Mode_Main ;      	// 下一个模式
+Mode_Typedef curr_mode = Mode_Null   ;      	// 当前模式
+Mode_Typedef next_mode = Mode_Main ;      		// 下一个模式
 
 // ========================== 系统setup loop ==========================
 
@@ -54,10 +54,11 @@ void Timer_1ms_Callback(void)
 void Timer_20ms_Callback(void)
 {
 	// 1. 各个模式调试
-	if (curr_mode == Mode_PID  ) {Mode_1_Tick() ;}	// 速度内环调试
-	if (curr_mode == Mode_Angle) {Mode_2_Tick() ;}	// 角度外环
-	if (curr_mode == Mode_Pos)   {Mode_4_Tick() ;}	// 距离外环
-	if (curr_mode == Mode_Main)  {Mode_5_Tick() ;}	// 总控制,含角度和距离外环以及控制器
+	if (curr_mode == Mode_PID  ) 		{Mode_1_Tick() ;}	// 速度内环调试
+	if (curr_mode == Mode_Angle) 		{Mode_2_Tick() ;}	// 角度外环
+	if (curr_mode == Mode_Pos)   		{Mode_4_Tick() ;}	// 距离外环
+	if (curr_mode == Mode_Main)  		{Mode_5_Tick() ;}	// 总控制,含角度和距离外环以及控制器
+	if (curr_mode == Mode_Pos_MPU)  {Mode_6_Tick() ;}	// 位置环
 	// 2. 底层速度环
 	Motor_Speed_Update_Tick(20) ;
 	// 3. MPU6050更新参数
