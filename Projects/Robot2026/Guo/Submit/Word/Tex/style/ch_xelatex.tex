@@ -1,0 +1,54 @@
+% ============================================================
+%  补充宏包与自定义命令
+%  注意：页面、表格、代码、颜色等核心配置见 preamble.tex
+% ============================================================
+
+% --- 数学公式 ---
+\usepackage{amsmath}
+
+% --- 浮动体强制放置 [H] ---
+\usepackage{float}
+
+% --- 边距调整（\begin{addmargin}...\end{addmargin}）---
+\usepackage{scrextend}
+
+% --- 多栏排版 ---
+\usepackage{multicol}
+
+% --- 按名称引用（\nameref）---
+\usepackage{nameref}
+
+% --- 附录 ---
+\usepackage{appendix}
+
+% --- TODO 便签（撰写阶段使用，定稿后可注释）---
+\usepackage{xargs}
+\usepackage[colorinlistoftodos,prependcaption,textsize=footnotesize]{todonotes}
+\newcommandx{\commred}[2][1=]{\textcolor{Red}
+{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}}
+\newcommandx{\commblue}[2][1=]{\textcolor{Blue}
+{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}}
+\newcommandx{\commgreen}[2][1=]{\textcolor{OliveGreen}
+{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}}
+\newcommandx{\commpurp}[2][1=]{\textcolor{Plum}
+{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}}
+
+% --- 简单间距 ---
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+% --- 等宽字体快捷方式 ---
+\def\code#1{{\tt #1}}
+\def\note#1{\noindent{\bf [Note: #1]}}
+
+% --- 附录编号格式（附录 A、附录 B…）---
+\makeatletter
+\def\@seccntformat#1{\@ifundefined{#1@cntformat}%
+   {\csname the#1\endcsname\quad}%  默认
+   {\csname #1@cntformat\endcsname}% 单独控制
+}
+\let\oldappendix\appendix
+\renewcommand\appendix{%
+    \oldappendix
+    \newcommand{\section@cntformat}{\appendixname~\thesection\quad}
+}
+\makeatother

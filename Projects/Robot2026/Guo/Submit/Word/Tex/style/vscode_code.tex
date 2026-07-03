@@ -1,0 +1,291 @@
+% ============================================================
+%  VS Code Light+ 多语言代码高亮
+%  支持：C / C++ / Python / Java / Verilog / VHDL / ASM
+% ============================================================
+
+% --- 颜色定义（模拟 VS Code Light+ 主题）---
+\definecolor{vscBg}{RGB}{255,255,255}
+\definecolor{vscComment}{RGB}{0,128,0}
+\definecolor{vscKeyword}{RGB}{0,0,255}
+\definecolor{vscString}{RGB}{163,21,21}
+\definecolor{vscNumber}{RGB}{9,134,136}
+\definecolor{vscPreproc}{RGB}{0,0,255}
+\definecolor{vscType}{RGB}{38,127,153}
+\definecolor{vscFunc}{RGB}{121,94,38}
+\definecolor{vscLineNum}{RGB}{127,127,127}
+\definecolor{vscBorder}{RGB}{210,210,210}
+\definecolor{vscLeftBar}{RGB}{0,122,204}     % 左侧竖线色
+
+% ============================================================
+%  基础样式（带细线框）
+% ============================================================
+\lstdefinestyle{vscode-base}{
+    backgroundcolor=\color{vscBg},
+    basicstyle=\footnotesize\ttfamily,
+    columns=flexible,
+    keepspaces=true,
+    extendedchars=false,
+    breaklines=true,
+    breakatwhitespace=false,
+    tabsize=4,
+    showtabs=false,
+    showspaces=false,
+    commentstyle=\color{vscComment}\itshape,
+    keywordstyle=\color{vscKeyword}\bfseries,
+    stringstyle=\color{vscString},
+    numberstyle=\tiny\color{vscLineNum},
+    emphstyle=\color{vscType},
+    numbers=left,
+    numbersep=8pt,
+    frame=single,
+    rulecolor=\color{vscBorder},
+    frameround=tttt,
+    xleftmargin=1.5em,
+    framexleftmargin=1.5em,
+    aboveskip=1.0em,
+    belowskip=1.0em,
+    captionpos=b,
+    abovecaptionskip=0.5em,
+    belowcaptionskip=0.8em,
+    % 行号背景
+    numberblanklines=true,
+    escapeinside={@*}{*@},                   % 允许在代码块内插入 LaTeX：@*\LaTeX{}*@
+}
+
+% ============================================================
+%  简洁样式（仅左侧竖线，无框 — 适合短代码）
+% ============================================================
+\lstdefinestyle{vscode-simple}{
+    style=vscode-base,
+    frame=leftline,
+    framesep=8pt,
+    framerule=3pt,
+    rulecolor=\color{vscLeftBar},
+    xleftmargin=0pt,
+    framexleftmargin=0pt,
+    numbers=none,
+}
+
+% ============================================================
+%  C / Embedded C（含嵌入式关键字）
+% ============================================================
+\lstdefinelanguage{EmbeddedC}[]{C}{
+    morekeywords={uint8_t,uint16_t,uint32_t,uint64_t,
+        int8_t,int16_t,int32_t,int64_t,
+        size_t,ssize_t,bool,true,false,NULL,
+        volatile,inline,register,restrict,_Bool,
+        Xil_In8,Xil_Out8,Xil_In16,Xil_Out16,
+        Xil_In32,Xil_Out32,
+        XPAR_AXI_GPIO_0_BASEADDR,XPAR_AXI_GPIO_1_BASEADDR,
+        XPAR_AXI_TIMER_0_BASEADDR},
+    sensitive=true,
+}
+
+\lstdefinestyle{vscode-c}{
+    style=vscode-base,
+    language=EmbeddedC,
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    emph={int,void,char,short,long,float,double,
+        unsigned,signed,struct,union,enum,
+        typedef,const,static,extern,return,
+        if,else,for,while,do,switch,case,break,continue,
+        goto,sizeof},
+}
+
+\lstdefinestyle{vscode-c-pp}{
+    style=vscode-c,
+    directivestyle=\color{vscPreproc},
+}
+
+% ============================================================
+%  C++
+% ============================================================
+\lstdefinestyle{vscode-cpp}{
+    style=vscode-base,
+    language=C++,
+    morekeywords={nullptr,constexpr,noexcept,override,final,
+        typename,template,namespace,using,class,public,private,protected,
+        virtual,explicit,static_cast,dynamic_cast,unique_ptr,shared_ptr},
+}
+
+% ============================================================
+%  Python
+% ============================================================
+\lstdefinestyle{vscode-python}{
+    style=vscode-base,
+    language=Python,
+    emph={self,cls,True,False,None},
+    morekeywords={as,async,await,nonlocal,match,case,with,lambda,yield,raise,except,finally},
+}
+
+% ============================================================
+%  Java
+% ============================================================
+\lstdefinestyle{vscode-java}{
+    style=vscode-base,
+    language=Java,
+    morekeywords={extends,implements,interface,abstract,
+        synchronized,transient,volatile,instanceof,
+        package,import,super},
+}
+
+% ============================================================
+%  Verilog / SystemVerilog（FPGA 开发必备）
+% ============================================================
+\lstdefinelanguage{Verilog}{
+    morekeywords={
+        module,endmodule,
+        input,output,inout,
+        wire,reg,tri,wand,wor,
+        supply0,supply1,
+        assign,always,initial,
+        posedge,negedge,or,
+        begin,end,fork,join,
+        if,else,case,endcase,casex,casez,default,
+        for,while,repeat,forever,
+        parameter,localparam,defparam,
+        integer,real,time,realtime,
+        signed,unsigned,
+        function,endfunction,
+        task,endtask,
+        generate,endgenerate,genvar,
+        specify,endspecify,
+        `define,`ifdef,`else,`endif,`include,`timescale,
+    },
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    morestring=[b]",
+    sensitive=true,
+}
+
+\lstdefinestyle{vscode-verilog}{
+    style=vscode-base,
+    language=Verilog,
+    emph={input,output,inout,wire,reg,parameter,localparam,integer},
+}
+
+% SystemVerilog 扩展
+\lstdefinelanguage{SystemVerilog}[Verilog]{Verilog}{
+    morekeywords={
+        logic,bit,byte,shortint,int,longint,
+        always_comb,always_ff,always_latch,
+        enum,struct,union,typedef,
+        interface,endinterface,
+        modport,clocking,
+        package,endpackage,
+        rand,randc,constraint,
+        assert,assume,cover,
+        new,this,super,
+        virtual,extends,implements,
+    },
+}
+
+\lstdefinestyle{vscode-systemverilog}{
+    style=vscode-base,
+    language=SystemVerilog,
+}
+
+% ============================================================
+%  VHDL（FPGA 开发备选）
+% ============================================================
+\lstdefinelanguage{VHDL}{
+    morekeywords={
+        entity,end,architecture,of,is,begin,
+        port,in,out,inout,buffer,linkage,
+        signal,variable,constant,type,subtype,
+        process,component,generic,map,
+        if,then,elsif,else,end,case,when,
+        for,loop,while,next,exit,
+        wait,on,until,report,severity,
+        assert,after,others,
+        std_logic,std_logic_vector,
+        bit,bit_vector,boolean,integer,real,
+        unsigned,signed,std_ulogic,
+        rising_edge,falling_edge,
+        library,use,all,package,body,
+        function,procedure,return,
+        downto,to,range,
+        and,or,nand,nor,xor,xnor,not,
+        IEEE,STD_LOGIC_1164,NUMERIC_STD,
+    },
+    morecomment=[l]{--},
+    morestring=[b]",
+    sensitive=false,
+}
+
+\lstdefinestyle{vscode-vhdl}{
+    style=vscode-base,
+    language=VHDL,
+    emph={entity,architecture,process,component,port,generic,map,
+        signal,variable,constant,std_logic,std_logic_vector,
+        IEEE,STD_LOGIC_1164,NUMERIC_STD},
+}
+
+% ============================================================
+%  x86 / ARM 汇编
+% ============================================================
+\lstdefinelanguage{x86asm}{
+    morekeywords={
+        mov,push,pop,add,sub,mul,div,inc,dec,
+        and,or,xor,not,shl,shr,rol,ror,
+        cmp,test,jmp,je,jne,jz,jnz,jg,jl,jge,jle,
+        call,ret,int,iret,nop,hlt,
+        db,dw,dd,dq,equ,org,section,global,extern,
+        eax,ebx,ecx,edx,esi,edi,ebp,esp,
+        ax,bx,cx,dx,si,di,bp,sp,
+        al,ah,bl,bh,cl,ch,dl,dh,
+        rax,rbx,rcx,rdx,rsi,rdi,rbp,rsp,r8,r9,r10,r11,r12,r13,r14,r15,
+    },
+    morecomment=[l]{;},
+    morestring=[b]",
+    sensitive=false,
+}
+
+\lstdefinestyle{vscode-asm}{
+    style=vscode-base,
+    language=x86asm,
+    emph={eax,ebx,ecx,edx,esi,edi,ebp,esp,eip,rax,rbx,rcx,rdx},
+}
+
+% ============================================================
+%  默认样式
+% ============================================================
+\lstset{style=vscode-base}
+
+% ============================================================
+%  行内代码
+% ============================================================
+\lstdefinestyle{vscode-inline}{
+    basicstyle=\small\ttfamily,
+    commentstyle=\color{vscComment},
+    keywordstyle=\color{vscKeyword},
+    stringstyle=\color{vscString},
+    breaklines=false,
+    showstringspaces=false,
+    backgroundcolor=\color{vscBg},
+}
+
+% ============================================================
+%  引用外部源文件
+% ============================================================
+\newcommand{\includecode}[2][]{%
+    \lstinputlisting[style=vscode-base,#1]{#2}%
+}
+
+% 按语言语法糖
+\newcommand{\includeC}[2][]{%
+    \lstinputlisting[style=vscode-c-pp,#1]{#2}%
+}
+\newcommand{\includePython}[2][]{%
+    \lstinputlisting[style=vscode-python,#1]{#2}%
+}
+\newcommand{\includeVerilog}[2][]{%
+    \lstinputlisting[style=vscode-verilog,#1]{#2}%
+}
+\newcommand{\includeVHDL}[2][]{%
+    \lstinputlisting[style=vscode-vhdl,#1]{#2}%
+}
+\newcommand{\includeASM}[2][]{%
+    \lstinputlisting[style=vscode-asm,#1]{#2}%
+}

@@ -1,0 +1,159 @@
+% ============================================================
+%  实验报告 LaTeX 模版 — 导言区配置
+%  编译：xelatex main.tex（连续两次以更新目录与引用）
+%  风格：纯黑白印刷，用字号/粗细/间距区分层次，不用颜色
+% ============================================================
+
+\input{style/ch_xelatex.tex}
+
+% ============================================================
+%  1. 页面布局与中文支持
+% ============================================================
+\usepackage[top=2.54cm,bottom=2.54cm,left=3.17cm,right=3.17cm,headheight=24pt]{geometry}
+\usepackage{ctex}
+\usepackage{indentfirst}                     % 首段缩进
+\usepackage{setspace}
+
+% ============================================================
+%  2. 颜色（仅用于代码高亮，文档正文不用任何颜色）
+% ============================================================
+\usepackage{xcolor}
+\usepackage{ulem}                            % \uline 下划线（封面用）
+
+% ============================================================
+%  3. 表格相关
+% ============================================================
+\usepackage{booktabs}                        % 三线表
+\usepackage{array}                           % 列格式扩展（提供 >{} 和 p{}）
+\usepackage{tabularx}                        % 定宽表格（X 列自动铺满）
+\usepackage{multirow}                        % 多行合并
+\usepackage{caption}                         % 图表标题
+
+% ============================================================
+%  4. 图片
+% ============================================================
+\usepackage{graphicx}
+\graphicspath{{images/}}
+
+% ============================================================
+%  5. 代码高亮（VS Code Light+ 主题）
+% ============================================================
+\usepackage[procnames]{listings}
+\input{style/vscode_code.tex}
+\captionsetup[lstlisting]{font=small,labelfont=bf,skip=6pt}
+\renewcommand{\lstlistingname}{代码}
+\renewcommand{\lstlistlistingname}{代码清单}
+
+% ============================================================
+%  6. 页眉页脚（纯黑线，无彩色）
+% ============================================================
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\kaishu 华中科技大学实验报告}
+\fancyhead[R]{\footnotesize\kaishu\leftmark}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+% ============================================================
+%  7. 正文版式
+% ============================================================
+\setlength{\parindent}{2em}                  % 段首缩进 2 字符
+\setstretch{1.35}                            % 行距 1.35 倍
+\setlength{\parskip}{2pt plus 1pt minus 1pt} % 段间距微弹性
+\setlength{\tabcolsep}{10pt}                 % 表格列间距（比默认宽松）
+\setlength{\abovecaptionskip}{10pt}
+\setlength{\belowcaptionskip}{4pt}
+
+% ============================================================
+%  8. 章节标题格式（纯黑，用字号粗细和横线区分层次）
+% ============================================================
+\usepackage{titlesec}
+
+% section：三号黑体加粗，底部细线
+\titleformat{\section}
+  {\heiti\zihao{3}\bfseries}
+  {\thesection}
+  {0.8em}
+  {}
+  [\vspace{-0.4em}\noindent{\rule{\textwidth}{0.6pt}}\vspace{0.2em}]
+
+% subsection：四号黑体
+\titleformat{\subsection}
+  {\heiti\zihao{4}\bfseries}
+  {\thesubsection}
+  {0.6em}
+  {}
+  []
+
+% subsubsection：小四黑体
+\titleformat{\subsubsection}
+  {\heiti\zihao{-4}\bfseries}
+  {\thesubsubsection}
+  {0.4em}
+  {}
+  []
+
+\titlespacing{\section}{0pt}{1.5em}{0.8em}
+\titlespacing{\subsection}{0pt}{1.0em}{0.4em}
+\titlespacing{\subsubsection}{0pt}{0.6em}{0.2em}
+
+% ============================================================
+%  9. 图表编号：按章独立（如图1-1、表1-1）
+% ============================================================
+\captionsetup{font=small,labelfont=bf,skip=6pt}
+\makeatletter
+\@addtoreset{figure}{section}
+\@addtoreset{table}{section}
+\makeatother
+\renewcommand{\thefigure}{\thesection-\arabic{figure}}
+\renewcommand{\thetable}{\thesection-\arabic{table}}
+
+% ============================================================
+%  10. 列表间距
+% ============================================================
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=2em, itemsep=0.15em, topsep=0.3em, parsep=0pt}
+\setlist[enumerate]{leftmargin=2em, itemsep=0.15em, topsep=0.3em, parsep=0pt}
+
+% ============================================================
+%  11. 超链接（纯黑，不显色）
+% ============================================================
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=black,
+  citecolor=black,
+  bookmarksnumbered=true,
+  bookmarksopen=true,
+  pdfstartview=FitH,
+}
+
+% ============================================================
+%  12. 便捷命令
+% ============================================================
+% --- 交叉引用 ---
+\newcommand{\figref}[1]{图~\ref{#1}}
+\newcommand{\tabref}[1]{表~\ref{#1}}
+\newcommand{\coderef}[1]{代码~\ref{#1}}
+\newcommand{\secref}[1]{第~\ref{#1}~节}
+
+% --- 行内代码 ---
+\newcommand{\codeinline}[1]{\lstinline[style=vscode-inline]{#1}}
+
+% --- 块级小标题 ---
+\newcommand{\blocktitle}[1]{%
+  \par\vspace{0.8em}%
+  \noindent{\heiti\zihao{-4}\bfseries #1}%
+  \par\vspace{0.4em}%
+}
+
+% --- 表头命令（tabular 内用 \bfseries 即可）---
+\newcommand{\theadrow}[1]{\bfseries #1}

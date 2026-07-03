@@ -1,0 +1,356 @@
+% ============================================================
+%  华中科技大学实验报告 LaTeX 模版
+%  编译：xelatex main.tex（连续两次以更新目录与引用）
+%  风格：纯黑白，表格横向铺满版心
+% ============================================================
+
+\documentclass[a4paper,12pt]{article}
+
+\input{style/preamble.tex}
+
+% ---------- 中文名称 ----------
+\renewcommand{\contentsname}{目\ 录}
+\renewcommand{\appendixname}{附录}
+\renewcommand{\appendixpagename}{附录}
+\renewcommand{\refname}{参考文献}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+
+\begin{document}
+
+% ---------- 封面 ----------
+\input{style/cover.tex}
+
+% ---------- 目录 ----------
+\begin{center}
+    \tableofcontents
+\end{center}
+\newpage
+
+% ============================================================
+%  正文章节
+% ============================================================
+
+% >>>>>>>>>>>>>>>>>> 示例章节 BEGIN（正式报告完成后，注释掉本块）<<<<<<<<<<<<<<<<<<
+
+\section{写作规范示例}
+
+本节演示模版中常用的正文、表格、图片与代码写法。撰写正式报告时，可复制对应片段并替换内容。
+
+% ============================================================
+%  1. 正文与列表
+% ============================================================
+\subsection{正文与列表}
+\label{sec:demo-text}
+
+首段自动缩进两字符（\texttt{\textbackslash parindent = 2em}）。行距为 \texttt{1.35 倍}，兼顾阅读舒适性与版面利用率。
+
+\blocktitle{（1）有序列表 — 实验步骤}
+\begin{enumerate}
+    \item 使用 Vivado 创建 Block Design，添加 MicroBlaze 处理器与 AXI GPIO 外设。
+    \item 配置 GPIO 位宽为 8 bit，使能中断通道。
+    \item 编写 C 语言测试程序，调用 \codeinline{Xil_In8()} 读取拨码开关状态。
+    \item 将读取值经七段码译码后，通过 \codeinline{Xil_Out8()} 输出到数码管。
+    \item 下载比特流到开发板，验证功能：
+    \begin{enumerate}
+        \item 拨动开关，观察数码管变化；
+        \item 按下复位键，确认系统回到初始状态。
+    \end{enumerate}
+\end{enumerate}
+
+\blocktitle{（2）无序列表 — 实验环境}
+\begin{itemize}
+    \item 硬件平台：小梅哥 AC850 FPGA 开发板（Xilinx Artix-7）
+    \item 开发工具：Vivado 2023.2 / Vitis 2023.2
+    \item 调试工具：ILA 逻辑分析仪、串口终端
+    \item 辅助脚本：Python 3.10（数据处理与波形分析）
+\end{itemize}
+
+段落间正常换行。行内代码使用 \codeinline{\codeinline{...}} 命令，如 \codeinline{seg_table[val \& 0x0F]} 进行查表输出。
+
+% ============================================================
+%  2. 表格示例 —— 全部横向铺满版心
+% ============================================================
+\subsection{表格示例}
+
+所有表格使用 \texttt{booktabs} 三线表格式（无竖线、无着色），通过 \texttt{p\{\}} 列控制宽度，使表格铺满整个版心宽度，避免拥挤。
+
+% --- 表1：模块资源（4列，p{} 铺满）---
+\begin{table}[htbp]
+    \centering
+    \caption{MicroBlaze 系统模块资源分配}
+    \label{tab:module-resource}
+    \small
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{@{}p{3.5cm} p{5.5cm} p{2cm} p{2cm}@{}}
+        \toprule
+        \bfseries 模块名称 & \bfseries IP 核          & \bfseries 位宽  & \bfseries 中断 \\\midrule
+        GPIO0              & AXI GPIO\_0             & 8 bit  & $\surd$ \\
+        GPIO1              & AXI GPIO\_1             & 8 bit  & $\times$ \\
+        Timer              & AXI Timer               & 32 bit & $\surd$ \\
+        UART               & AXI Uartlite            & --     & $\surd$ \\
+        INTC               & AXI Interrupt Controller& --     & -- \\\bottomrule
+    \end{tabular}
+\end{table}
+
+% --- 表2：七段码表（4列，p{} 铺满）---
+\begin{table}[htbp]
+    \centering
+    \caption{七段数码管段码表（共阳极）}
+    \label{tab:seg-table}
+    \small
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}p{2cm} p{2.5cm} p{5cm} p{3.5cm}@{}}
+        \toprule
+        \bfseries 显示字符 & \bfseries 段码（hex） & \bfseries 段位 a g f e d c b dp & \bfseries 说明 \\\midrule
+        0 & 0x3F & 0\,0\,1\,1\,1\,1\,1\,1 & 全亮 \\
+        1 & 0x06 & 0\,0\,0\,0\,0\,1\,1\,0 & 仅 b、c 段亮 \\
+        2 & 0x5B & 0\,1\,0\,1\,1\,0\,1\,1 & -- \\
+        3 & 0x4F & 0\,1\,0\,0\,1\,1\,1\,1 & -- \\
+        4 & 0x66 & 0\,1\,1\,0\,0\,1\,1\,0 & -- \\
+        5 & 0x6D & 0\,1\,1\,0\,1\,1\,0\,1 & -- \\
+        6 & 0x7D & 0\,1\,1\,1\,1\,1\,0\,1 & -- \\
+        7 & 0x07 & 0\,0\,0\,0\,0\,1\,1\,1 & -- \\
+        8 & 0x7F & 0\,1\,1\,1\,1\,1\,1\,1 & -- \\
+        9 & 0x6F & 0\,1\,1\,0\,1\,1\,1\,1 & -- \\\bottomrule
+    \end{tabular}
+\end{table}
+
+% --- 表3：地址映射表（4列，p{} 铺满，最后一列自动换行）---
+\begin{table}[htbp]
+    \centering
+    \caption{MicroBlaze 系统地址映射表}
+    \label{tab:addr-map}
+    \small
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}p{1.2cm} p{3cm} >{\ttfamily} p{3.2cm} p{5.5cm}@{}}
+        \toprule
+        \bfseries 序号 & \bfseries 模块 & \bfseries 基地址 & \bfseries 功能说明 \\\midrule
+        1 & MicroBlaze   & --          & 32 位软核处理器，主频 100\,MHz \\
+        2 & LMB\_BRAM    & 0x00000000  & 本地程序存储器，容量 32\,KB \\
+        3 & AXI GPIO\_0  & 0x40000000  & 连接拨码开关输入，8 bit，中断通道 0 \\
+        4 & AXI GPIO\_1  & 0x40010000  & 连接数码管输出，8 bit，中断通道 1 \\
+        5 & AXI Timer    & 0x41C00000  & 定时器，用于数码管动态扫描和精确延时 \\
+        6 & AXI Uartlite & 0x40600000  & 串口通信，波特率 115200，用于调试输出 \\
+        7 & AXI Intc     & 0x41200000  & 中断控制器，汇集 7 路外设中断源 \\\bottomrule
+    \end{tabular}
+\end{table}
+
+% --- 表4：引脚分配（\midrule 分组）---
+\begin{table}[htbp]
+    \centering
+    \caption{GPIO 引脚分配表}
+    \label{tab:pin-assign}
+    \small
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{@{}p{3.5cm} p{4cm} p{3.5cm} p{4cm}@{}}
+        \toprule
+        \bfseries FPGA 引脚 & \bfseries 外设信号  & \bfseries FPGA 引脚 & \bfseries 外设信号 \\\midrule
+        R17      & SW[0]（拨码开关位 0） & P17      & SEG\_A（数码管 a 段） \\
+        T18      & SW[1]（拨码开关位 1） & R18      & SEG\_B（数码管 b 段） \\
+        U17      & SW[2]（拨码开关位 2） & T14      & SEG\_C（数码管 c 段） \\
+        U18      & SW[3]（拨码开关位 3） & U14      & SEG\_D（数码管 d 段） \\\midrule
+        N17      & BTN\_C（中央按键）    & V14      & SEG\_E（数码管 e 段） \\
+        P18      & BTN\_U（上方按键）    & V15      & SEG\_F（数码管 f 段） \\
+        M17      & BTN\_R（复位按键）    & W14      & SEG\_G（数码管 g 段） \\
+        N18      & CLK\_100M（系统时钟） & W15      & SEG\_DP（小数点）    \\\bottomrule
+    \end{tabular}
+\end{table}
+
+\tabref{tab:pin-assign} 中使用 \texttt{\textbackslash midrule} 将拨码开关与数码管两组引脚分隔，结构一目了然。
+
+表题与表注均使用宋体，编号前缀「表」已通过 \texttt{\textbackslash tablename} 设为中文。所有表格遵循 \texttt{booktabs} 三线表规范：无竖线、无着色、间距宽松。
+
+% ============================================================
+%  3. 图片示例
+% ============================================================
+\subsection{图片引用}
+
+将图片放入 \texttt{images/} 目录，支持 PNG、JPG、PDF 等格式。
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.75\textwidth]{placeholder.png}
+    \caption{PNG 位图引用示例（如实验照片、截图等）}
+    \label{fig:demo-png}
+\end{figure}
+
+Block Design 导出的 PDF 矢量图缩放无失真，推荐用于原理框图：
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{placeholder.pdf}
+    \caption{PDF 矢量图引用示例（如 Vivado Block Design 导出图）}
+    \label{fig:demo-pdf}
+\end{figure}
+
+% ============================================================
+%  4. 代码示例
+% ============================================================
+\subsection{代码示例}
+
+代码块使用 VS Code Light+ 配色高亮，支持多种语言。代码颜色仅为语法区分，打印时浅色仍可辨认。
+
+\blocktitle{（1）C 语言 — 嵌入式 GPIO 控制}
+\begin{lstlisting}[
+    style=vscode-c,
+    caption={GPIO 输入输出示例程序},
+    label={lst:c-gpio},
+]
+#include "xgpio.h"
+#include "xil_io.h"
+#include "xparameters.h"
+#include <stdint.h>
+
+static uint8_t seg_table[16] = {
+    0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07,
+    0x7F, 0x6F, 0x77, 0x7C, 0x39, 0x5E, 0x79, 0x71
+};
+
+int main(void)
+{
+    uint8_t sw_val = Xil_In8(XPAR_AXI_GPIO_0_BASEADDR);
+    uint8_t digit  = sw_val & 0x0F;
+
+    /* 将拨码低 4 位映射到七段码并输出 */
+    Xil_Out8(XPAR_AXI_GPIO_1_BASEADDR, seg_table[digit]);
+
+    while (1);  // 嵌入式主循环
+    return 0;
+}
+\end{lstlisting}
+
+\blocktitle{（2）Verilog — 数码管动态扫描（FPGA 必备）}
+\begin{lstlisting}[
+    style=vscode-verilog,
+    caption={数码管动态扫描模块},
+    label={lst:verilog-seg},
+]
+module seg_scan (
+    input  wire        clk,        // 100 MHz 系统时钟
+    input  wire        rst_n,      // 异步复位（低有效）
+    input  wire [15:0] data,       // 4 位数码管数据
+    output reg  [3:0]  seg_sel,    // 位选信号
+    output reg  [7:0]  seg_code    // 段码输出
+);
+
+    reg [15:0] cnt;                // 分频计数器
+    reg [1:0]  scan_idx;           // 扫描索引
+
+    // 分频产生约 1 kHz 扫描时钟
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            cnt <= 16'd0;
+        else if (cnt == 16'd49_999)
+            cnt <= 16'd0;
+        else
+            cnt <= cnt + 1'b1;
+    end
+
+    wire scan_clk = (cnt == 16'd49_999);
+
+    // 扫描状态机
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            scan_idx <= 2'd0;
+        else if (scan_clk)
+            scan_idx <= scan_idx + 1'b1;
+    end
+
+    // 位选译码
+    always @(*) begin
+        case (scan_idx)
+            2'd0: seg_sel = 4'b1110;
+            2'd1: seg_sel = 4'b1101;
+            2'd2: seg_sel = 4'b1011;
+            2'd3: seg_sel = 4'b0111;
+            default: seg_sel = 4'b1111;
+        endcase
+    end
+
+    // 段码输出（共阳极，低有效）
+    always @(*) begin
+        case (data[scan_idx*4 +: 4])
+            4'h0: seg_code = 8'h3F;
+            4'h1: seg_code = 8'h06;
+            4'h2: seg_code = 8'h5B;
+            4'h3: seg_code = 8'h4F;
+            4'h4: seg_code = 8'h66;
+            4'h5: seg_code = 8'h6D;
+            4'h6: seg_code = 8'h7D;
+            4'h7: seg_code = 8'h07;
+            4'h8: seg_code = 8'h7F;
+            4'h9: seg_code = 8'h6F;
+            default: seg_code = 8'h00;
+        endcase
+    end
+
+endmodule
+\end{lstlisting}
+
+\blocktitle{（3）Python — 数据处理脚本}
+\begin{lstlisting}[
+    style=vscode-python,
+    caption={十六进制日志解析脚本},
+    label={lst:py-parse},
+]
+from pathlib import Path
+from typing import List
+
+
+def parse_hex_line(line: str) -> int:
+    """将一行十六进制字符串转为整数。"""
+    return int(line.strip(), 16)
+
+
+def load_values(path: Path) -> List[int]:
+    """从文件读取并解析所有十六进制行。"""
+    with path.open(encoding="utf-8") as f:
+        return [parse_hex_line(ln) for ln in f if ln.strip()]
+
+
+if __name__ == "__main__":
+    data = load_values(Path("uart_log.txt"))
+    print(f"共读取 {len(data)} 条记录，首项 = 0x{data[0]:02X}")
+\end{lstlisting}
+
+\blocktitle{（4）引用外部源文件}
+
+推荐将源代码放在 \texttt{codes/} 目录，使用便捷命令引用（见 \coderef{lst:c-external}、\coderef{lst:py-external}）：
+
+\includeC[caption={外部 C 源文件引用示例}, label={lst:c-external}]{codes/example.c}
+
+\includePython[caption={外部 Python 源文件引用示例}, label={lst:py-external}]{codes/example.py}
+
+% ============================================================
+%  5. 交叉引用速查
+% ============================================================
+\subsection{交叉引用}
+
+常用交叉引用命令汇总如下（编号均按章独立，随章节自动更新）：
+
+\begin{itemize}
+    \item \verb|\figref{fig:demo-png}| → \figref{fig:demo-png}
+    \item \verb|\tabref{tab:module-resource}| → \tabref{tab:module-resource}
+    \item \verb|\coderef{lst:c-gpio}| → \coderef{lst:c-gpio}
+    \item \verb|\secref{sec:demo-text}| → \secref{sec:demo-text}
+\end{itemize}
+
+% ============================================================
+%  附录示例
+% ============================================================
+\appendix
+
+\section{附录示例：完整源代码}
+\label{sec:appendix-source}
+
+附录中的 section 编号自动变为「附录 A」「附录 B」…，写法与正文相同。
+
+\includeC[caption={附录 A — GPIO 控制程序}, label={lst:appendix-c}]{codes/example.c}
+
+\section{附录示例：Python 脚本}
+
+\includePython[caption={附录 B — 数据处理脚本}, label={lst:appendix-py}]{codes/example.py}
+
+% ============================================================ end 不要删除
+\end{document}
