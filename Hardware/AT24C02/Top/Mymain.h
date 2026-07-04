@@ -20,6 +20,7 @@
 #include "Serial.h"
 #include "Task.h"
 #include "bsp_at24c02.h"
+#include "at24c02_manager.h"
 
 #include "Encoder.h"
 #include "Timer_Counter.h"

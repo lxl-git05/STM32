@@ -854,6 +854,26 @@
               <FileType>5</FileType>
               <FilePath>..\Hardware\bsp_at24c02.h</FilePath>
             </File>
+            <File>
+              <FileName>at24c02_manager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\at24c02_manager.c</FilePath>
+            </File>
+            <File>
+              <FileName>at24c02_manager.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\at24c02_manager.h</FilePath>
+            </File>
+            <File>
+              <FileName>Param_AT24C02.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\Param_AT24C02.c</FilePath>
+            </File>
+            <File>
+              <FileName>Param_AT24C02.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\Param_AT24C02.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
