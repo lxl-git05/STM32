@@ -1,7 +1,7 @@
 #ifndef __MYMAIN_H
 #define __MYMAIN_H
 
-// ÏµÍ³¿â
+// ç³»ç»Ÿ
 #include "main.h"
 #include <stdlib.h>
 #include "string.h"
@@ -14,11 +14,12 @@
 #include "gpio.h"
 #include "stdbool.h"
 
-// ×ÔÉè¿â
+// é©±åŠ¨
 #include "OLED.h"
 #include "Key.h"
 #include "Serial.h"
 #include "Task.h"
+#include "bsp_at24c02.h"
 
 #include "Encoder.h"
 #include "Timer_Counter.h"
@@ -26,7 +27,7 @@
 #include "Key_Check.h"
 #include "Menu_Key.h"
 
-// ½ØºúÖ÷º¯Êý
+// å‡½æ•°å£°æ˜Ž
 void Mymain(void) ;
 
 #endif
