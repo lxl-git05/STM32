@@ -14,7 +14,6 @@ void Mymain(void)
 
     // AT24C02 初始化（硬件I2C2已在MX_I2C2_Init中初始化）
     AT24C02_Init();
-    LED_Flash_Mode_Set_Mode(LED_Flash_Slow);  // 默认慢闪
 
     while (1)
     {
