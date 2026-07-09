@@ -22,7 +22,7 @@
 #include "usart.h"  // 串口通信
 // #include "i2c.h"
 // #include "adc.h"
-// #include "dma.h"
+ #include "dma.h"
 
 // -------------------- C标准库 --------------------
 #include <string.h>
