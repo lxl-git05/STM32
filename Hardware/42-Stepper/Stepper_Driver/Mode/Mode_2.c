@@ -94,9 +94,9 @@ void Mode_2_Loop(void)
 			OLED_Printf(0,20,OLED_6X8,"M2 vel:%d",Stepper2.Speed_Now);
 			OLED_Printf(0,30,OLED_6X8,"M2 pos:%.2f",Stepper2.Pos_Now);
 			
-				OLED_Printf(0,40,OLED_6X8,"%x %x %x %x %x %x %x %x",
-				Stepper2.rx_buf[0],Stepper2.rx_buf[1],Stepper2.rx_buf[2],Stepper2.rx_buf[3],
-				Stepper2.rx_buf[4],Stepper2.rx_buf[5],Stepper2.rx_buf[6],Stepper2.rx_buf[7]) ;
+			OLED_Printf(0,40,OLED_6X8,"%x %x %x %x %x %x %x %x",
+			Stepper2.rx_buf[0],Stepper2.rx_buf[1],Stepper2.rx_buf[2],Stepper2.rx_buf[3],
+			Stepper2.rx_buf[4],Stepper2.rx_buf[5],Stepper2.rx_buf[6],Stepper2.rx_buf[7]) ;
 		}
 }
 
@@ -108,14 +108,14 @@ void Timer_5ms_Callback(void)
 		Timer_Counter_Begin() ;
 
 //		static int8_t Step_Choice = 0 ;
+//		if (Step_Choice >= 2) {Step_Choice = 0 ;}
 //		switch(Step_Choice)
 //		{
 //			case 0 : /*读取实时位置*/ Stepper_Pos_Update(&Stepper1);	 Stepper_Pos_Update(&Stepper2); break ;
 //			case 1 : /*读取实时速度*/ Stepper_Vel_Update(&Stepper1);	 Stepper_Vel_Update(&Stepper2); break ;
-//			default : Step_Choice = 0 ;	// 重新扫描读取参数
+//			default : break ;
 //		}
 //		Step_Choice ++ ;
-
 		Timer_Counter_End() ;
 }
 

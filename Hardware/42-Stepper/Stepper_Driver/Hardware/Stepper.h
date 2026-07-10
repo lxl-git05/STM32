@@ -19,6 +19,7 @@ typedef struct
 	uint8_t rxCount ;										// 读取的数据数
 	bool rxFlag ;												// 1为接收
 	uint8_t rx_buf[CMD_LEN];            // 接收缓冲(可按需调大)
+	bool tx_busy;                      // TX忙标志，发送时置1，TX完成中断清0
 	
 	// 电机参数
 	float pulse_angle;  								// 单位脉冲角度(度),需要根据 Type(0.9 or 1.8),Ratio(齿轮比),细分 三个来确定

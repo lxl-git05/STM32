@@ -644,5 +644,20 @@ int fgetc(FILE *f)
 	HAL_UART_Receive(&huart1, (uint8_t *)&ch, 1, 1000);	
 	return (ch);
 }
+
+// UART TX DMA 完成回调，清除tx_busy标志
+#include "Stepper.h"
+extern Stepper_Typedef Stepper1;
+extern Stepper_Typedef Stepper2;
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart == Stepper1.Stepper_huart) {
+    Stepper1.tx_busy = false;
+  } else if (huart == Stepper2.Stepper_huart) {
+    Stepper2.tx_busy = false;
+  }
+}
+			
 /* USER CODE END 1 */
 
