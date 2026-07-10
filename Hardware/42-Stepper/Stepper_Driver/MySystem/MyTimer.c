@@ -5,6 +5,7 @@ void Timer_Initial(void)
 {
 	HAL_TIM_Base_Start_IT(&htim16);
 	HAL_TIM_Base_Start_IT(&htim17);
+	HAL_TIM_Base_Start_IT(&htim6);		// 5ms
 }
 
 /*弱函数声明,主函数调用*/
@@ -15,6 +16,12 @@ __attribute__((weak)) void Timer_1ms_Callback(void)
 
 /*弱函数声明,主函数调用*/
 __attribute__((weak)) void Timer_20ms_Callback(void)
+{
+    // 默认空实现
+}
+
+/*弱函数声明,主函数调用*/
+__attribute__((weak)) void Timer_5ms_Callback(void)
 {
     // 默认空实现
 }
@@ -31,5 +38,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if (htim->Instance == TIM16)
 	{
 		Timer_20ms_Callback() ;	// 20ms中断
+	}
+	// 判断是否是TIM6中断
+	if (htim->Instance == TIM6)
+	{
+		Timer_5ms_Callback() ;	// 5ms中断
 	}
 }
