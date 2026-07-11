@@ -3,26 +3,38 @@
 #include "Stepper.h"
 #include "Emm_V5.h"
 
-static bool change = 0;
 static uint8_t motor_select = 1;  // 0=电机1, 1=电机2
 
 void Mode_2_Setup(void)
 {
     OLED_Clear();
     Stepper_Init();  // 步进电机初始化
+		Stepper_Angle_Dot_Update() ;	// 参数更新
 }
 
 // ============== Mode_2 主循环 ==============
 void Mode_2_Loop(void)
 {
-    OLED_Printf(0, 0, OLED_6X8, "us:%.2f func:%.2f", time_us, time_Func_us);
+	OLED_Printf(0, 0, OLED_6X8, "us:%.2f func:%.2f", time_us, time_Func_us);
 
-    if (Key_Check(KEY_0, KEY_LONG)) {
+	if (Key_Check(KEY_1, KEY_SINGLE)) 
+	{
+		Stepper_Draw_Square(0,0,0.004f,0.5f) ;
+	}
+	if (Key_Check(KEY_2, KEY_DOUBLE))
+	{	
+		Stepper_Stop_Enqueue(&Stepper1);  // 停车
+		Stepper_Stop_Enqueue(&Stepper2);  // 停车
+	}
+		
+/*
+		if (Key_Check(KEY_0, KEY_LONG)) 
+		{
         motor_select = !motor_select;
     }
 
-    OLED_Printf(0, 10, OLED_6X8, "Motor:%d", motor_select + 1);
-
+		OLED_Printf(0, 10, OLED_6X8, "Motor:%d", motor_select + 1);
+	
     if (motor_select == 0) {
         // ========== 电机1测试 (USART3) ==========
         // KEY_1单击 - 速度模式
@@ -90,6 +102,7 @@ void Mode_2_Loop(void)
         // 显示队列状态
         OLED_Printf(0, 50, OLED_6X8, "Q:%d", Stepper2.cmd_queue.count);
     }
+*/
 }
 
 // ============== 5ms定时器回调 ==============

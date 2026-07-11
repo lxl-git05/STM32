@@ -18,6 +18,7 @@
 // 硬件实现库
 #include "Con_Motor.h"
 #include "Con_Servo.h"
+#include "Con_Stepper.h"
 
 // Mode库
 #include "Mode_G.h"

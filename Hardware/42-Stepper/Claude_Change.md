@@ -25,4 +25,4 @@
 
 | 文件名 | 文件路径（相对工作区） | 操作类型 | 说明 |
 |--------|----------------------|----------|------|
-| Mode_3.c | Stepper_Driver/Mode/Mode_3.c | 重写 | 实现正方形绘制状态机：IDLE→MOVING→STOPPED、4个角点坐标数组、5ms定时器判断到达、按键启动/急停/恢复 |
+| Mode_3.c | Stepper_Driver/Mode/Mode_3.c | 重写 | 实现正方形绘制：6个点(4角+回起点+回原点)、相对位置发送(Stepper_RelPos_Enqueue)、状态机(IDLE/MOVING/STOPPED)、20ms到达判定、OLED显示XY轴当前/目标角度 |
