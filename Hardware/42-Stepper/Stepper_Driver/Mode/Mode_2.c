@@ -109,7 +109,10 @@ void Mode_2_Loop(void)
 // 处理队列命令出队和电机状态查询
 void Timer_5ms_Callback(void)
 {
-    Stepper_Polling_5ms();  // 统一处理两个电机的队列和查询,8us完成
+	if (curr_mode == Mode_2)
+	{
+		Stepper_Polling_5ms();  // 统一处理两个电机的队列和查询,8us完成
+	}
 }
 
 void Mode_2_Tick(void)

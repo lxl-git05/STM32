@@ -22,6 +22,7 @@
 #include "stm32h7xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "Stepper_PWM.h"
 #include "Stepper.h"
 /* USER CODE END Includes */
 
@@ -57,6 +58,8 @@
 
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim6;
+extern TIM_HandleTypeDef htim8;
+extern TIM_HandleTypeDef htim12;
 extern TIM_HandleTypeDef htim16;
 extern TIM_HandleTypeDef htim17;
 extern DMA_HandleTypeDef hdma_usart1_rx;
@@ -351,6 +354,22 @@ void USART3_IRQHandler(void)
   /* USER CODE BEGIN USART3_IRQn 1 */
 
   /* USER CODE END USART3_IRQn 1 */
+}
+
+/**
+  * @brief This function handles TIM8 break interrupt and TIM12 global interrupt.
+  */
+void TIM8_BRK_TIM12_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM8_BRK_TIM12_IRQn 0 */
+
+  /* USER CODE END TIM8_BRK_TIM12_IRQn 0 */
+  HAL_TIM_IRQHandler(&htim8);
+  HAL_TIM_IRQHandler(&htim12);
+  /* USER CODE BEGIN TIM8_BRK_TIM12_IRQn 1 */
+  // 每脉冲完成中断处理
+  Stepper_PWM_Pulse_Count(&Stepper_PWM_2);
+  /* USER CODE END TIM8_BRK_TIM12_IRQn 1 */
 }
 
 /**

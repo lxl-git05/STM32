@@ -806,6 +806,16 @@
               <FileType>5</FileType>
               <FilePath>..\Hardware\Emm_V5.h</FilePath>
             </File>
+            <File>
+              <FileName>Stepper_PWM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\Stepper_PWM.c</FilePath>
+            </File>
+            <File>
+              <FileName>Stepper_PWM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Hardware\Stepper_PWM.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
