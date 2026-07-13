@@ -25,8 +25,7 @@
 #include "Encoder.h"
 #include "Timer_Counter.h"
 #include "LED_Flash.h"
-#include "Key_Check.h"
-#include "Menu_Key.h"
+#include "ParamEdit.h"
 #include "Param_AT24C02.h"
 
 // 函数声明

@@ -1,21 +1,21 @@
 #include "Initial.h"
 
-// Mymain³õÊ¼»¯¼¯ºÏ,Ê¹Ö÷º¯Êı¸ü¼ò½à
+// Mymainï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void Initial_ALL(void)
 {
 	// System
-	HAL_SYSTICK_Config(SystemCoreClock / 1000);		// Systick³õÊ¼»¯
+	HAL_SYSTICK_Config(SystemCoreClock / 1000);		// Systickï¿½ï¿½Ê¼ï¿½ï¿½
 	
 	// Hardware
-	OLED_Init() ;																	// OLED³õÊ¼»¯
+	OLED_Init() ;																	// OLEDï¿½ï¿½Ê¼ï¿½ï¿½
 	
 	// Software
-	Serial_Init() ;																// ´®¿Ú³õÊ¼»¯
+	Serial_Init() ;																// ï¿½ï¿½ï¿½Ú³ï¿½Ê¼ï¿½ï¿½
 	
 	// Tools
-	LED_Flash_Mode_Init() ;												// LEDÉÁË¸¹¤¾ß³õÊ¼»¯
-	Timer_Counter_Init() ;												// Ê±¼ä´Á²â¶¨³õÊ¼»¯
+	LED_Flash_Mode_Init() ;												// LEDï¿½ï¿½Ë¸ï¿½ï¿½ï¿½ß³ï¿½Ê¼ï¿½ï¿½
+	Timer_Counter_Init() ;												// Ê±ï¿½ï¿½ï¿½ï¿½â¶¨ï¿½ï¿½Ê¼ï¿½ï¿½
 
 	// Top
-	Menu_Init() ;
+	// Menu_Init() ;   // å·²åºŸå¼ƒï¼Œæ”¹ç”¨ ParamEdit æ¨¡å—
 }

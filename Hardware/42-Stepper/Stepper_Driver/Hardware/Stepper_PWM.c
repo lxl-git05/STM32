@@ -73,13 +73,6 @@ void Stepper_PWM_Stop(Stepper_PWM_Typedef* pStepper)
     pStepper->Speed_Now = 0;
 }
 
-// 电机旋转到绝对角度
-//void Stepper_PWM_Pos_Set(Stepper_PWM_Typedef* pStepper , float Angle)
-//{
-//  
-//}
-
-
 // =================== 脉冲中断处理（需要在TIM12更新中断中调用） ===================
 
 // 每当TIM12计数器溢出（完成一个PWM脉冲）时调用此函数
