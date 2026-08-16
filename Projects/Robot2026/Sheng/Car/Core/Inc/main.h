@@ -67,8 +67,6 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define KEY0_Pin GPIO_PIN_3
 #define KEY0_GPIO_Port GPIOE
-#define KEY3_Pin GPIO_PIN_11
-#define KEY3_GPIO_Port GPIOB
 #define KEY1_Pin GPIO_PIN_13
 #define KEY1_GPIO_Port GPIOB
 #define KEY2_Pin GPIO_PIN_15

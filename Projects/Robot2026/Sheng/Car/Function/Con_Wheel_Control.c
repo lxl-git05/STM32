@@ -59,6 +59,25 @@ bool Car_Turn_F_Is_Exit(void)
 		}
 }
 
+// 2.5 Car_Turn_B 倒车（负目标直线后退，克隆 Car_Turn_F）
+void Car_Turn_B_Setup(void)
+{
+	PID_Angle_Curr_Reset() ;
+	PID_Goal_Angle_Set(0) ;
+	Motor_Pos_Clear() ;
+	PID_ALL_Pos_Reset() ;
+	PID_ALL_Pos_Set_Goal(-20) ;	// 倒车 50cm（与前进 50cm 对应）
+	glo_time = HAL_GetTick() ;	// 防 Is_Exit 用旧 glo_time 误判
+}
+void Car_Turn_B_Tick(void)
+{
+	PID_Angle_Tick(PID_ALL_Pos_Tick()) ;	// 负速度由负位置环输出给出
+}
+bool Car_Turn_B_Is_Exit(void)
+{
+	return Car_Turn_F_Is_Exit() ;		// fabs 对负目标兼容
+}
+
 // 3. Car_Turn_L
 void Car_Turn_L_Setup(void)
 {
@@ -130,6 +149,7 @@ void Car_Control(void)
         switch (curr_Status)
         {
             case Car_Turn_F   : Car_Turn_F_Tick(60) ;    break;    // 寻迹环
+            case Car_Turn_B   : Car_Turn_B_Tick() ;    	 break;    // 倒车
             case Car_Turn_L   : Car_Turn_L_Tick() ;    	 break;    // 角度环左转,直到有指令修改Status
             case Car_Turn_R   : Car_Turn_R_Tick() ;   	 break;    // 角度环右转,直到有指令修改Status
             case Car_Turn_H   : Car_Turn_H_Tick() ;  	   break;    // half圈,也就是180度翻转
@@ -141,6 +161,7 @@ void Car_Control(void)
         switch (next_Status) // setup
         {
             case Car_Turn_F   : Car_Turn_F_Setup(); break;  // 路口直行
+            case Car_Turn_B   : Car_Turn_B_Setup(); break;  // 倒车
             case Car_Turn_L   : Car_Turn_L_Setup(); break;  // 左转
             case Car_Turn_R   : Car_Turn_R_Setup(); break;  // 右转
             case Car_Turn_H   : Car_Turn_H_Setup(); break;  // 180度旋转
@@ -174,6 +195,13 @@ void Car_Control_Change(void)
 			status_tmp ++ ;
 		}
 		else if (Car_Turn_F_Is_Exit() && status_tmp == 1)
+		{
+			next_Status = Car_Stop ;
+		}
+	}
+	else if(curr_Status == Car_Turn_B)	// 倒车完成停
+	{
+		if (Car_Turn_B_Is_Exit())
 		{
 			next_Status = Car_Stop ;
 		}

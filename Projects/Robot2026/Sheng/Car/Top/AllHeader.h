@@ -18,7 +18,7 @@
 // 硬件驱动库
 #include "Key.h"
 #include "OLED.h"
-#include "Serial.h"
+#include "Serial_porting.h"
 
 
 // 软件算法库
@@ -36,6 +36,8 @@
 #include "Mode_4.h"
 #include "Mode_5.h"
 #include "Mode_6.h"
+
+//#define MPU6050_Check
 
 // Mymain初始化集合,使主函数更简洁
 void Initial_ALL(void) ;

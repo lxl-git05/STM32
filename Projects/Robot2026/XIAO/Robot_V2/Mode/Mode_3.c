@@ -101,8 +101,8 @@ void Check_Servo(void)
 		{
 			Servo_Pos_Check -= 30 ;
 		}
-//    Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check) ;	
-//		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check) ;	
+    Servo_SetDirectAngle(&Servo_1 , Servo_Pos_Check) ;	
+		Servo_SetDirectAngle(&Servo_2 , Servo_Pos_Check) ;	
 		Servo_SetDirectAngle(&Servo_3 , Servo_Pos_Check) ;
 		Servo_SetDirectAngle(&Servo_4 , Servo_Pos_Check) ;
 		

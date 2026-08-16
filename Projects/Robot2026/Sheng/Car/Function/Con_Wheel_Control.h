@@ -11,6 +11,7 @@ typedef enum
     Car_Turn_L  ,   // 角度环左转   	 2
     Car_Turn_R  ,   // 角度环右转   	 3
     Car_Turn_H  ,   // 角度环自转180度 4
+    Car_Turn_B  ,   // 直线倒车          5
 }Car_Status_Typedef ;
 
 extern Car_Status_Typedef curr_Status ;

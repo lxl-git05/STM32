@@ -178,3 +178,4 @@ vivado*.backup.log
 
 # 写忽略文件都是基于根目录进行
 /Hardware/42-Stepper/Stepper-ZiLiao
+/Projects/Robot2026/Guo/YJC_LCD

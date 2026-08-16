@@ -1,8 +1,6 @@
 #include "Mode_G.h"
 #include "AllHeader.h"
 
-//#define MPU6050_Check
-
 int Base_Speed = 0 ;
 
 Mode_Typedef curr_mode = Mode_Null   ;      	// 当前模式

@@ -86,27 +86,27 @@ void MPU6050_Raw_Deal(int Deal_dt_ms)
 {
 	// 根据加速度得到静态角度
 	// 计算翻滚角（绕 X 轴）— 使用 Y 和 Z 轴的加速度值
-	float accAngleX = atan2(MPU_Cali.AY, MPU_Cali.AZ)  * 180 / 3.14159265358 ;
+	float accAngleX = atan2(MPU_Cali.AY, MPU_Cali.AZ)  * 180 / 3.14159265358f ;
 	// 计算俯仰角（绕 Y 轴）— 使用 X 和 Z 轴的加速度值
-	float accAngleY = atan2(-MPU_Cali.AX, MPU_Cali.AZ) * 180 / 3.14159265358 ;
+	float accAngleY = atan2(-MPU_Cali.AX, MPU_Cali.AZ) * 180 / 3.14159265358f ;
 	
 	// 得到粗略积分角度
-	gyroAngleX += MPU_Cali.GX * Deal_dt_ms * 1.0 / 1000;
-	gyroAngleY += MPU_Cali.GY * Deal_dt_ms * 1.0 / 1000;
+	gyroAngleX += MPU_Cali.GX * Deal_dt_ms * 1.0f / 1000;
+	gyroAngleY += MPU_Cali.GY * Deal_dt_ms * 1.0f / 1000;
 	
 	// 得到偏航角yaw
 	if (MPU_Cali.GZ < 0)
 	{
-		MPU_Real.yaw += MPU_Cali.GZ * Deal_dt_ms * 1.0  / 1000;
+		MPU_Real.yaw += MPU_Cali.GZ * Deal_dt_ms * 1.0f  / 1000;
 	}
 	else
 	{
-		MPU_Real.yaw += MPU_Cali.GZ * Deal_dt_ms * 1.08 / 1000;		// 标定的误差参数
+		MPU_Real.yaw += MPU_Cali.GZ * Deal_dt_ms * 1.08f / 1000;		// 标定的误差参数
 	}
 	
 	// 得到互补滤波角度
-	gyroAngleX = 0.98 * gyroAngleX + 0.02 * accAngleX;
-	gyroAngleY = 0.98 * gyroAngleY + 0.02 * accAngleY;
+	gyroAngleX = 0.98f * gyroAngleX + 0.02f * accAngleX;
+	gyroAngleY = 0.98f * gyroAngleY + 0.02f * accAngleY;
 	
 	// 得到Roll和Pitch
 	MPU_Real.roll  = gyroAngleX ;

@@ -18,15 +18,11 @@ void Mode_G_Setup(void)
 // 循环loop
 void Mode_G_Loop(void)
 {
-    // 检测程序是否可行
-    if (Key_Check(KEY_0, KEY_SINGLE))// 单击
-    {
-        Flash_Mode_Set(Flash_Mode_Fast) ;   
-    }
     // 进入下一个模式
-    if (Key_Check(KEY_0, KEY_DOUBLE))// 双击
+    if (Key_Check(KEY_0, KEY_SINGLE))// 单击
     {   
         Mode_To_Next() ;
+				Flash_Mode_Set(Flash_Mode_Fast) ;   
     }
     // OLED展示
 }
