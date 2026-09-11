@@ -65,3 +65,38 @@
 |--------|----------------------|----------|------|
 
 本轮仅检查现有 ADC2、PA2～PA5 与 RP 模块配置并提供实现方案，未修改工程文件。
+
+## 2026-09-11 16:32 | 审查当前底层架构
+
+| 文件名 | 文件路径（相对工作区） | 操作类型 | 说明 |
+|--------|----------------------|----------|------|
+| JX-DaoLiBai-Template-底层架构审查.md | ./JX-DaoLiBai-Template-底层架构审查.md | 新增 | 通读工程后整理分层架构、风险分级与建议重构顺序 |
+| 底层架构与调度边界.drawio | ./底层架构与调度边界.drawio | 新增 | 绘制当前调用链、断开的周期调度链及目标中断与主循环边界 |
+
+## 2026-09-11 16:53 | 完善 Mode 多周期 Tick 调度
+
+| 文件名 | 文件路径（相对工作区） | 操作类型 | 说明 |
+|--------|----------------------|----------|------|
+| Mode_1.c | ./Mode/Mode_1.c | 修改 | 新增 Mode1 的 1ms、5ms、20ms Tick 实现入口，并将原 Tick 改为 20ms Tick |
+| Mode_1.h | ./Mode/Mode_1.h | 修改 | 声明 Mode1 的三个周期 Tick 接口 |
+| Mode_2.c | ./Mode/Mode_2.c | 修改 | 新增 Mode2 的三个周期 Tick 实现入口 |
+| Mode_2.h | ./Mode/Mode_2.h | 修改 | 声明 Mode2 的三个周期 Tick 接口 |
+| Mode_3.c | ./Mode/Mode_3.c | 修改 | 新增 Mode3 的三个周期 Tick 实现入口 |
+| Mode_3.h | ./Mode/Mode_3.h | 修改 | 声明 Mode3 的三个周期 Tick 接口 |
+| Mode_4.c | ./Mode/Mode_4.c | 修改 | 新增 Mode4 的三个周期 Tick 实现入口 |
+| Mode_4.h | ./Mode/Mode_4.h | 修改 | 声明 Mode4 的三个周期 Tick 接口 |
+| Mode_5.c | ./Mode/Mode_5.c | 修改 | 新增 Mode5 的三个周期 Tick 实现入口 |
+| Mode_5.h | ./Mode/Mode_5.h | 修改 | 声明 Mode5 的三个周期 Tick 接口 |
+| Mode_6.c | ./Mode/Mode_6.c | 修改 | 新增 Mode6 的三个周期 Tick 实现入口 |
+| Mode_6.h | ./Mode/Mode_6.h | 修改 | 声明 Mode6 的三个周期 Tick 接口 |
+| Mode_7.c | ./Mode/Mode_7.c | 修改 | 新增 Mode7 的三个周期 Tick 实现入口 |
+| Mode_7.h | ./Mode/Mode_7.h | 修改 | 声明 Mode7 的三个周期 Tick 接口 |
+| Mode_8.c | ./Mode/Mode_8.c | 修改 | 新增 Mode8 的三个周期 Tick 实现入口 |
+| Mode_8.h | ./Mode/Mode_8.h | 修改 | 声明 Mode8 的三个周期 Tick 接口 |
+| Mode_9.c | ./Mode/Mode_9.c | 修改 | 新增 Mode9 的三个周期 Tick 实现入口 |
+| Mode_9.h | ./Mode/Mode_9.h | 修改 | 声明 Mode9 的三个周期 Tick 接口 |
+| Mode_10.c | ./Mode/Mode_10.c | 修改 | 新增 Mode10 的三个周期 Tick 实现入口 |
+| Mode_10.h | ./Mode/Mode_10.h | 修改 | 声明 Mode10 的三个周期 Tick 接口 |
+| Mode_G.c | ./Mode/Mode_G.c | 修改 | 接通当前模式的 1ms、5ms、20ms Tick 分发，并修正软件分频周期 |
+| Mode_G.h | ./Mode/Mode_G.h | 修改 | 将错误的 10ms 回调声明更正为 5ms 回调 |
+| Keil 构建产物 | ./MDK-ARM/JX-DaoLiBai-Template/ | 修改 | 全量编译验证并更新 AXF、HEX、MAP 及依赖文件，结果为 0 错误、0 警告 |

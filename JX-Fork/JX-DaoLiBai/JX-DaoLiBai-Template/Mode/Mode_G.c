@@ -2,7 +2,7 @@
 #include "AllHeader.h"
 
 Mode_Typedef curr_mode = Mode_Null;
-Mode_Typedef next_mode = Mode_1;
+Mode_Typedef next_mode = Mode_2;
 
 void Mode_G_Setup(void)
 {
@@ -25,16 +25,24 @@ void Mode_G_Loop(void)
 }
 
 // Mode定时器
-// 1. 1ms定时器
-void Timer_1ms_Callback(void)
+// 2. 5ms定时器
+void Timer_5ms_Callback(void)
 {
-    Key_Tick();
-}
-
-// 2. 10ms定时器
-void Timer_10ms_Callback(void)
-{
-	
+    switch (curr_mode)
+    {
+        case Mode_Null: break;
+        case Mode_1: Mode1_5ms_Tick(); break;
+        case Mode_2: Mode2_5ms_Tick(); break;
+        case Mode_3: Mode3_5ms_Tick(); break;
+        case Mode_4: Mode4_5ms_Tick(); break;
+        case Mode_5: Mode5_5ms_Tick(); break;
+        case Mode_6: Mode6_5ms_Tick(); break;
+        case Mode_7: Mode7_5ms_Tick(); break;
+        case Mode_8: Mode8_5ms_Tick(); break;
+        case Mode_9: Mode9_5ms_Tick(); break;
+        case Mode_10: Mode10_5ms_Tick(); break;
+        default: break;
+    }
 }
 
 // 3. 20ms定时器
@@ -43,18 +51,54 @@ void Timer_20ms_Callback(void)
     switch (curr_mode)
     {
         case Mode_Null: break;
-        case Mode_1: Mode_1_Tick(); break;
-        case Mode_2: Mode_2_Tick(); break;
-        case Mode_3: Mode_3_Tick(); break;
-        case Mode_4: Mode_4_Tick(); break;
-        case Mode_5: Mode_5_Tick(); break;
-        case Mode_6: Mode_6_Tick(); break;
-        case Mode_7: Mode_7_Tick(); break;
-        case Mode_8: Mode_8_Tick(); break;
-        case Mode_9: Mode_9_Tick(); break;
-        case Mode_10: Mode_10_Tick(); break;
+        case Mode_1: Mode1_20ms_Tick(); break;
+        case Mode_2: Mode2_20ms_Tick(); break;
+        case Mode_3: Mode3_20ms_Tick(); break;
+        case Mode_4: Mode4_20ms_Tick(); break;
+        case Mode_5: Mode5_20ms_Tick(); break;
+        case Mode_6: Mode6_20ms_Tick(); break;
+        case Mode_7: Mode7_20ms_Tick(); break;
+        case Mode_8: Mode8_20ms_Tick(); break;
+        case Mode_9: Mode9_20ms_Tick(); break;
+        case Mode_10: Mode10_20ms_Tick(); break;
         default: break;
     }
+}
+
+// 1. 1ms定时器
+void Timer_1ms_Callback(void)
+{
+	// 1分频
+  Key_Tick();
+	switch (curr_mode)
+	{
+			case Mode_Null: break;
+			case Mode_1: Mode1_1ms_Tick(); break;
+			case Mode_2: Mode2_1ms_Tick(); break;
+			case Mode_3: Mode3_1ms_Tick(); break;
+			case Mode_4: Mode4_1ms_Tick(); break;
+			case Mode_5: Mode5_1ms_Tick(); break;
+			case Mode_6: Mode6_1ms_Tick(); break;
+			case Mode_7: Mode7_1ms_Tick(); break;
+			case Mode_8: Mode8_1ms_Tick(); break;
+			case Mode_9: Mode9_1ms_Tick(); break;
+			case Mode_10: Mode10_1ms_Tick(); break;
+			default: break;
+	}
+	// 5分频
+	static int count5 = 0 ;
+	if (++count5 >= 5)
+	{
+		count5 = 0 ;
+		Timer_5ms_Callback() ;
+	}
+	// 20分频
+	static int count20 = 0 ;
+	if (++count20 >= 20)
+	{
+		count20 = 0 ;
+		Timer_20ms_Callback() ;
+	}
 }
 
 // 模式转移函数

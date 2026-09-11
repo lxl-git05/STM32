@@ -29,7 +29,7 @@ void Mode_G_Setup(void);
 void Mode_G_Loop(void);
 
 void Timer_1ms_Callback(void);
-void Timer_10ms_Callback(void);
+void Timer_5ms_Callback(void);
 void Timer_20ms_Callback(void);
 
 #endif

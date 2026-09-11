@@ -5,7 +5,9 @@
 
 void Mode_9_Setup(void);
 void Mode_9_Loop(void);
-void Mode_9_Tick(void);
+void Mode9_1ms_Tick(void);
+void Mode9_5ms_Tick(void);
+void Mode9_20ms_Tick(void);
 void Mode_9_Exit(void);
 
 #endif

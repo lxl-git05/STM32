@@ -78,7 +78,14 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+	
+	
+	
+	// 暂时关闭 SysTick 中断,否则可能导致某些功能还没有进行初始化就驱动,导致指针指向空,发生越界错误
+  __disable_irq();
+	
+	
+	
   /* USER CODE END Init */
 
   /* Configure the system clock */

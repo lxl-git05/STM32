@@ -16,6 +16,7 @@
 #include "Mode_9.h"
 #include "Mode_10.h"
 
+#include "Timer_Counter.h"
 #include "OLED.h"
 #include "Key.h"
 #include "Serial_porting.h"

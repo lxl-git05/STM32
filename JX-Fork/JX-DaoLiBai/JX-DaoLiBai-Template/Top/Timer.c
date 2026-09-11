@@ -8,6 +8,8 @@ void Timer_Initial(void)
 	HAL_SYSTICK_Config(SystemCoreClock / 1000); //0.001s定时周期(SystemCoreClock / x)
 	// 20ms定时器
 //	HAL_TIM_Base_Start_IT(&htim6);
+	
+	__enable_irq(); // 开启中断
 }
 
 /*弱函数声明,主函数调用*/
@@ -17,7 +19,7 @@ __attribute__((weak)) void Timer_1ms_Callback(void)
 }
 
 /*弱函数声明,主函数调用*/
-__attribute__((weak)) void Timer_10ms_Callback(void)
+__attribute__((weak)) void Timer_5ms_Callback(void)
 {
     // 默认空实现
 }

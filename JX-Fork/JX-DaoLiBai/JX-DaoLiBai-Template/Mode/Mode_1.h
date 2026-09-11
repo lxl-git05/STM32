@@ -5,7 +5,9 @@
 
 void Mode_1_Setup(void);
 void Mode_1_Loop(void);
-void Mode_1_Tick(void);
+void Mode1_1ms_Tick(void);
+void Mode1_5ms_Tick(void);
+void Mode1_20ms_Tick(void);
 void Mode_1_Exit(void);
 
 #endif
