@@ -21,6 +21,7 @@
 #include "Serial_porting.h"
 #include "RP.h"
 #include "Motor.h"
+#include "Encoder.h"
 
 void Initial_ALL(void);
 void Initial_Timer(void);

@@ -23,6 +23,12 @@ void Mode1_Motor_Check(void)
 	Motor_SetPWM(PWM_Check) ;
 }
 
+// 3. ±‡¬Î∆˜≤‚ ‘
+void Mode1_Encoder_Check(void)
+{
+	OLED_Printf(0,20,OLED_6X8,"Encoder:%d",Encoder_Get()) ;
+}
+
 // ¥˙¬Î≤‚ ‘
 void Mode_1_Loop(void)
 {
@@ -31,7 +37,9 @@ void Mode_1_Loop(void)
 	// 1. ADC≤‚ ‘
 //	Mode1_RP_Check() ;
 	// 2. Motor≤‚ ‘
-	Mode1_Motor_Check() ;
+//	Mode1_Motor_Check() ;
+	// 3. ±‡¬Î∆˜≤‚ ‘
+	Mode1_Encoder_Check() ;
 }
 
 void Mode_1_Tick(void)
