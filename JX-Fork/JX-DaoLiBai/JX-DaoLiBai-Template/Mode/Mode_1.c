@@ -15,13 +15,23 @@ void Mode1_RP_Check(void)
 	OLED_Printf(0,50,OLED_6X8,"ADC4=%d",RP_GetValue(4)) ;
 }
 
+// 2. Motor≤‚ ‘
+int PWM_Check = 0 ;
+void Mode1_Motor_Check(void)
+{
+	OLED_Printf(0,20,OLED_6X8,"PWM=%d",PWM_Check) ;
+	Motor_SetPWM(PWM_Check) ;
+}
+
 // ¥˙¬Î≤‚ ‘
 void Mode_1_Loop(void)
 {
 	
 	OLED_Printf(0,0,OLED_8X16,"===Mode1===") ;
 	// 1. ADC≤‚ ‘
-	Mode1_RP_Check() ;
+//	Mode1_RP_Check() ;
+	// 2. Motor≤‚ ‘
+	Mode1_Motor_Check() ;
 }
 
 void Mode_1_Tick(void)

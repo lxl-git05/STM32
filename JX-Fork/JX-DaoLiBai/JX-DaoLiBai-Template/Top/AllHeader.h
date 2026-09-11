@@ -20,6 +20,7 @@
 #include "Key.h"
 #include "Serial_porting.h"
 #include "RP.h"
+#include "Motor.h"
 
 void Initial_ALL(void);
 void Initial_Timer(void);
