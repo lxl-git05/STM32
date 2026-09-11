@@ -2,7 +2,7 @@
 #include "AllHeader.h"
 
 Mode_Typedef curr_mode = Mode_Null;
-Mode_Typedef next_mode = Mode_2;
+Mode_Typedef next_mode = Mode_3;
 
 void Mode_G_Setup(void)
 {

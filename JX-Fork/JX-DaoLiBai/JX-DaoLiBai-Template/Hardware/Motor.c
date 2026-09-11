@@ -11,8 +11,9 @@ void Motor_Init(void)
 	Motor.Encoder_Cnt = 0;
 	Motor.Motor_Param = &Motor_Param ;
 	
-	PID_Init(&Motor.PID_s		  , 0.1325f , 0.093f , 0.0f , 100 , -100 , 1000) ;
-	PID_Init(&Motor.PID_Angle , 0.0f , 0.0f , 0.0f , 300 , -300 , 1000) ;
+	// PID环: 速度环PI 位置环PD
+	PID_Init(&Motor.PID_s		  , 0.1325f , 0.093f , 0.0f , 100 , -100 , 1000) ;	// PWM最大值是+-100
+	PID_Init(&Motor.PID_Angle , 3.24f , 0.0f , 1.55f , 500 , -500 , 1000) ;			// 速度实测能到600+,但是这里还是限制500吧
 	
 	PWM_Init();
 }
