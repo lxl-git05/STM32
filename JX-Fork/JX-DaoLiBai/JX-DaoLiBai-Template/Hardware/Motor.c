@@ -13,7 +13,7 @@ void Motor_Init(void)
 	
 	// PID»·: ËÙ¶È»·PI Î»ÖÃ»·PD
 	PID_Init(&Motor.PID_s		  , 0.1325f , 0.093f , 0.0f , 100 , -100 , 1000) ;	// PWM×î´óÖµÊÇ+-100
-	PID_Init(&Motor.PID_Angle , 3.24f , 0.0f , 1.55f , 500 , -500 , 1000) ;			// ËÙ¶ÈÊµ²âÄÜµ½600+,µ«ÊÇÕâÀï»¹ÊÇÏÞÖÆ500°É
+	PID_Init(&Motor.PID_Angle , 0.0f , 0.0f , 0.0f , 500 , -500 , 1000) ;			// ËÙ¶ÈÊµ²âÄÜµ½600+,µ«ÊÇÕâÀï»¹ÊÇÏÞÖÆ500°É
 	
 	PWM_Init();
 }
@@ -103,4 +103,17 @@ void Motorx_Angle_Update_Tick(Motor_Typedef *Motor , int Dir)	// Dir: ¾ÀÕýPID¿ØÖ
 	// 3. Êä³öµç»úËÙ¶È(´®ÐÐ»·Ç¶Ì×£¡£¡£¡)
 	Motor_SetSpeed(Motor, Motor->PID_Angle.setPoint * Dir);
 }
+
+// 4. µç»ú½Ç¶È»·µ¥»·PID
+void Motorx_Angle_Update_PWM_Tick(Motor_Typedef *Motor)
+{
+	// 0. Î»ÖÃ¸üÐÂ
+	Encoder_Get() ;
+	// 1. ¼ÆËã½Ç¶È
+	Motor_Angle_Update(Motor) ;
+	// 2. ¼ÆËãPID
+	PID_Update(&Motor->PID_Angle ,Motor->PID_Angle.realPoint_Now) ;
+	// 3. Êä³öµç»úËÙ¶È(´®ÐÐ»·Ç¶Ì×£¡£¡£¡)
+	Motor_SetPWM(Motor->PID_Angle.setPoint) ;
+} 
 

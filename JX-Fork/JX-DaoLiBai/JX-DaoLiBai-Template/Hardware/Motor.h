@@ -42,5 +42,7 @@ void Motor_SetSpeed(Motor_Typedef *Motor, float speed) ;
 void Motorx_Speed_Update_Tick(Motor_Typedef *Motor , uint32_t Gap_Time_ms) ;
 // 3. 电机角度环PID,并不需要知道周期,但是仍然需要放在需要周期定时器内
 void Motorx_Angle_Update_Tick(Motor_Typedef *Motor , int Dir);	// Dir: 纠正PID控制方向
+// 4. 电机角度环单环PID
+void Motorx_Angle_Update_PWM_Tick(Motor_Typedef *Motor) ;
 
 #endif

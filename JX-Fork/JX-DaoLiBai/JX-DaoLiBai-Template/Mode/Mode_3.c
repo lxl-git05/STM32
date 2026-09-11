@@ -5,7 +5,13 @@
 
 void Mode_3_Setup(void)
 {
+	// 因为是双环,所以相对PWM环,参数会变
+	Motor.PID_Angle.Kp = 3.24f ;
+	Motor.PID_Angle.Ki = 0 ;
+	Motor.PID_Angle.Kd = 1.55f ;
 	
+	Motor.PID_Angle.OutMax = 500 ;	// 驱动的是真实速度(500)，而不是PWM(100)
+	Motor.PID_Angle.OutMin =-500 ;
 }
 
 void Mode_3_Loop(void)

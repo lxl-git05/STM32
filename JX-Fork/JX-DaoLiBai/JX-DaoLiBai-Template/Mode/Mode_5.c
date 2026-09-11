@@ -19,6 +19,7 @@ void Mode5_5ms_Tick(void)
 
 void Mode5_20ms_Tick(void)
 {
+	
 }
 
 void Mode_5_Exit(void)
