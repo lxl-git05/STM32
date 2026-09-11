@@ -31,3 +31,17 @@
 | AllHeader.h | ./Top/AllHeader.h | 修改 | 将 Key 模块加入统一头文件 |
 | Mode_G.c | ./Mode/Mode_G.c | 修改 | 增加初始化保护、KEY1 单击切换和 OLED 模式号显示 |
 | Keil 构建产物 | ./MDK-ARM/JX-DaoLiBai-Template/ | 修改 | 全量编译并更新 AXF、HEX、MAP 和构建日志 |
+
+## 2026-09-11 15:00 | 从模板移植 Serial1 模块
+
+| 文件名 | 文件路径（相对工作区） | 操作类型 | 说明 |
+|--------|----------------------|----------|------|
+| Serial_base.c | ./Hardware/Serial_base.c | 新增 | 移植模板的 ABC/HEX 协议常量及初始化实现 |
+| Serial_base.h | ./Hardware/Serial_base.h | 新增 | 移植模板的协议、数据结构与错误码定义并适配现有 HAL 头文件 |
+| Serial_porting.c | ./Hardware/Serial_porting.c | 新增 | 移植模板的 Serial 收发与解析实现，仅保留 USART1 实例 |
+| Serial_porting.h | ./Hardware/Serial_porting.h | 新增 | 移植模板的 Serial API 与 Serial1 声明 |
+| AllHeader.c | ./Top/AllHeader.c | 修改 | 在全局初始化流程中调用 Serial_Init |
+| AllHeader.h | ./Top/AllHeader.h | 修改 | 将 Serial_porting 加入统一头文件 |
+| JX-DaoLiBai-Template.uvprojx | ./MDK-ARM/JX-DaoLiBai-Template.uvprojx | 修改 | 将 Serial_base.c 和 Serial_porting.c 注册到 Hardware 分组 |
+| Serial_build.log | ./MDK-ARM/Serial_build.log | 新增 | 记录本轮 Keil 全量编译结果（0 错误、0 警告） |
+| Keil 构建产物 | ./MDK-ARM/JX-DaoLiBai-Template/ | 修改 | 全量编译并更新 AXF、HEX、MAP、依赖及构建日志 |
