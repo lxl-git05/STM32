@@ -100,3 +100,11 @@
 | Mode_G.c | ./Mode/Mode_G.c | 修改 | 接通当前模式的 1ms、5ms、20ms Tick 分发，并修正软件分频周期 |
 | Mode_G.h | ./Mode/Mode_G.h | 修改 | 将错误的 10ms 回调声明更正为 5ms 回调 |
 | Keil 构建产物 | ./MDK-ARM/JX-DaoLiBai-Template/ | 修改 | 全量编译验证并更新 AXF、HEX、MAP 及依赖文件，结果为 0 错误、0 警告 |
+
+## 2026-09-11 22:30 | 补充 PB0 ADC 读取函数
+
+| 文件名 | 文件路径（相对工作区） | 操作类型 | 说明 |
+|--------|----------------------|----------|------|
+| AD.c | ./Hardware/AD.c | 修改 | 补充 ADC1 校准及 PB0/ADC1_IN8 单次轮询读取和错误处理 |
+| AD.h | ./Hardware/AD.h | 修改 | 引入 ADC1 句柄声明并定义 ADC 读取错误值 |
+| Keil 构建产物 | ./MDK-ARM/JX-DaoLiBai-Template/ | 修改 | 全量编译验证并更新 AXF、HEX、MAP 及依赖文件，结果为 0 错误、0 警告 |

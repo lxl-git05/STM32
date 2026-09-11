@@ -7,6 +7,7 @@ void Initial_ALL(void)
 	RP_Init() ;
 	Motor_Init() ;
 	Encoder_Init() ;
+	AD_Init() ;
 }
 
 void Initial_Timer(void)

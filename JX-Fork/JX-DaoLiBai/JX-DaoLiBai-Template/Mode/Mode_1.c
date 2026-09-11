@@ -54,6 +54,12 @@ void Mode1_Encoder_Speed_Check_Tick(void)
 	Motor_Speed_Update(&Motor , 20) ;
 }
 
+// 7. 倒立摆ADC读取
+void Mode1_AD_ADC_Check(void)
+{
+	OLED_Printf(0,20,OLED_6X8,"AD=%d",AD_GetValue()) ;
+}
+
 // 代码测试
 void Mode_1_Loop(void)
 {
@@ -70,8 +76,10 @@ void Mode_1_Loop(void)
 	// 5. 电机旋转角度测试,中断最好关掉，因为后续中断可能有刷新，那么Encoder_Get就不能再次出现
 //	Mode1_Encoder_Angle_Check() ;
 	// 6. 测试电机速度
-	Mode1_Encoder_Speed_Check() ;
-	Motor_SetPWM(PWM_Check) ;
+//	Mode1_Encoder_Speed_Check() ;
+//	Motor_SetPWM(PWM_Check) ;
+	// 7. 倒立摆ADC读取
+	Mode1_AD_ADC_Check() ;
 }
 
 void Mode1_1ms_Tick(void)
@@ -84,11 +92,11 @@ void Mode1_5ms_Tick(void)
 
 void Mode1_20ms_Tick(void)
 {
-	Timer_Counter_Func() ;
-	Timer_Counter_Begin() ;
-	// 6. 测试电机速度
-	Mode1_Encoder_Speed_Check_Tick() ;
-	Timer_Counter_End() ;
+//	Timer_Counter_Func() ;
+//	Timer_Counter_Begin() ;
+//	// 6. 测试电机速度
+//	Mode1_Encoder_Speed_Check_Tick() ;
+//	Timer_Counter_End() ;
 }
 
 void Mode_1_Exit(void)

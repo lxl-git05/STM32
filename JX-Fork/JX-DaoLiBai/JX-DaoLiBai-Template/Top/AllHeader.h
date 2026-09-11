@@ -23,6 +23,7 @@
 #include "RP.h"
 #include "Motor.h"
 #include "Encoder.h"
+#include "AD.h"
 
 void Initial_ALL(void);
 void Initial_Timer(void);
