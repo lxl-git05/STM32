@@ -19,6 +19,7 @@
 #include "OLED.h"
 #include "Key.h"
 #include "Serial_porting.h"
+#include "RP.h"
 
 void Initial_ALL(void);
 void Initial_Timer(void);
