@@ -5,23 +5,23 @@
 Motor_Typedef Motor ;
 Motor_Param_Typedef Motor_Param = { 11.0f , 9.27666f , 500} ;
 
-// 1. ³õÊ¼»¯
+// 1. åˆå§‹åŒ–
 void Motor_Init(void)
 {
 	Motor.Encoder_Cnt = 0;
 	Motor.Motor_Param = &Motor_Param ;
 	
-	// PID»·: ËÙ¶È»·PI Î»ÖÃ»·PD
-	PID_Init(&Motor.PID_s		  , 0.1325f , 0.093f , 0.0f , 100 , -100 , 1000) ;	// PWM×î´óÖµÊÇ+-100
-	PID_Init(&Motor.PID_Angle , 0.0f , 0.0f , 0.0f , 500 , -500 , 1000) ;			// ËÙ¶ÈÊµ²âÄÜµ½600+,µ«ÊÇÕâÀï»¹ÊÇÏÞÖÆ500°É
+	// PIDçŽ¯: é€Ÿåº¦çŽ¯PI ä½ç½®çŽ¯PD
+	PID_Init(&Motor.PID_s		  , 0.1325f , 4.65f , 0.0f , 100 , -100 , 20.0f , 0.020f) ;	// PWMæœ€å¤§å€¼æ˜¯+-100
+	PID_Init(&Motor.PID_Angle , 0.0f , 0.0f , 0.0f , 500 , -500 , 20.0f , 0.020f) ;			// é€Ÿåº¦å®žæµ‹èƒ½åˆ°600+,ä½†æ˜¯è¿™é‡Œè¿˜æ˜¯é™åˆ¶500å§
 	
 	PWM_Init();
 }
 
-// 2. ÅäÖÃPWM
+// 2. é…ç½®PWM
 void Motor_SetPWM(int8_t PWM)
 {
-	// PWMÏÞ·ù
+	// PWMé™å¹…
 	if (PWM > 100)
 	{
 		PWM = 100 ;
@@ -30,7 +30,7 @@ void Motor_SetPWM(int8_t PWM)
 	{
 		PWM = -100 ;
 	}
-	// PWMÅäÖÃ
+	// PWMé…ç½®
 	if (PWM >= 0)
 	{
 		HAL_GPIO_WritePin(AIN1_GPIO_Port , AIN1_Pin , GPIO_PIN_RESET) ;
@@ -45,30 +45,30 @@ void Motor_SetPWM(int8_t PWM)
 	}
 }
 
-// 3. µÃµ½Ò»¶ÎÖÜÆÚÄÚµç»úµÄËÙ¶È,Ê¹ÓÃM·¨²âËÙ¹«Ê½,µÃµ½MotorµÄ×ªËÙ:nÈ¦/s
+// 3. å¾—åˆ°ä¸€æ®µå‘¨æœŸå†…ç”µæœºçš„é€Ÿåº¦,ä½¿ç”¨Mæ³•æµ‹é€Ÿå…¬å¼,å¾—åˆ°Motorçš„è½¬é€Ÿ:nåœˆ/s
 void Motor_Speed_Update(Motor_Typedef *Motor , uint32_t Gap_Time_ms)
 {
-	// µÃµ½×ÜÂö³åÊý(º¬½ÃÕý·½Ïò)
+	// å¾—åˆ°æ€»è„‰å†²æ•°(å«çŸ«æ­£æ–¹å‘)
 	int Motor_CNT = Encoder_Get() ;
 	
-	// ×ªËÙn = ×ÜÂö³åÊý/±¶Æµ(4)/µ¥È¦Âö³åÊý(11)/¼õËÙ±È(9.27666)/²ÉÑùÊ±¼ä(Gap_Time_ms)
+	// è½¬é€Ÿn = æ€»è„‰å†²æ•°/å€é¢‘(4)/å•åœˆè„‰å†²æ•°(11)/å‡é€Ÿæ¯”(9.27666)/é‡‡æ ·æ—¶é—´(Gap_Time_ms)
 	Motor->PID_s.realPoint_Now = (float)Motor_CNT * 60 * 1000 / Gap_Time_ms /
 		(4 * Motor->Motor_Param->PPR * Motor->Motor_Param->ReductionRatio)   ;
 }
 
-// 4. µÃµ½µ±Ç°µç»úÐý×ªµÄ½Ç¶È
+// 4. å¾—åˆ°å½“å‰ç”µæœºæ—‹è½¬çš„è§’åº¦
 void Motor_Angle_Update(Motor_Typedef *Motor)
 {
-	// µÃµ½½Ç¶È = È¦Êý * 360
+	// å¾—åˆ°è§’åº¦ = åœˆæ•° * 360
 	float curr_Angle = (float)Encoder_cnt_Get() * 360.0f / 
 		(4 * Motor->Motor_Param->PPR * Motor->Motor_Param->ReductionRatio)   ;
 	
-	// ¼ÇÂ¼µ±Ç°½Ç¶È
+	// è®°å½•å½“å‰è§’åº¦
 	Motor->PID_Angle.realPoint_Now = curr_Angle ;
 }
 
-// ======================= Func²ã =======================
-// 1. ÉèÖÃµç»úgoalËÙ¶È
+// ======================= Funcå±‚ =======================
+// 1. è®¾ç½®ç”µæœºgoalé€Ÿåº¦
 void Motor_SetSpeed(Motor_Typedef *Motor, float speed)
 {
     if (speed >= Motor->Motor_Param->Motor_Max_Speed)
@@ -82,38 +82,38 @@ void Motor_SetSpeed(Motor_Typedef *Motor, float speed)
     Motor->PID_s.goalPoint = speed ;
 }
 
-// 2. µç»úËÙ¶È¸üÐÂ
+// 2. ç”µæœºé€Ÿåº¦æ›´æ–°
 void Motorx_Speed_Update_Tick(Motor_Typedef *Motor , uint32_t Gap_Time_ms)
 {
-    // 1. ¼ÆËãÕæÊµËÙ¶È£¨±àÂëÆ÷£©
+    // 1. è®¡ç®—çœŸå®žé€Ÿåº¦ï¼ˆç¼–ç å™¨ï¼‰
     Motor_Speed_Update(Motor , Gap_Time_ms) ;
-    // 2. PID¼ÆËã
+    // 2. PIDè®¡ç®—
     PID_Update(&Motor->PID_s , Motor->PID_s.realPoint_Now) ;
-    // 3. Êä³öPWM
+    // 3. è¾“å‡ºPWM
     Motor_SetPWM(Motor->PID_s.setPoint);
 }
 
-// 3. µç»ú½Ç¶È»·PID,²¢²»ÐèÒªÖªµÀÖÜÆÚ,µ«ÊÇÈÔÈ»ÐèÒª·ÅÔÚÐèÒªÖÜÆÚ¶¨Ê±Æ÷ÄÚ
-void Motorx_Angle_Update_Tick(Motor_Typedef *Motor , int Dir)	// Dir: ¾ÀÕýPID¿ØÖÆ·½Ïò
+// 3. ç”µæœºè§’åº¦çŽ¯PID,å¹¶ä¸éœ€è¦çŸ¥é“å‘¨æœŸ,ä½†æ˜¯ä»ç„¶éœ€è¦æ”¾åœ¨éœ€è¦å‘¨æœŸå®šæ—¶å™¨å†…
+void Motorx_Angle_Update_Tick(Motor_Typedef *Motor , int Dir)	// Dir: çº æ­£PIDæŽ§åˆ¶æ–¹å‘
 {
-	// 1. ¼ÆËã½Ç¶È
+	// 1. è®¡ç®—è§’åº¦
 	Motor_Angle_Update(Motor) ;
-	// 2. ¼ÆËãPID
+	// 2. è®¡ç®—PID
 	PID_Update(&Motor->PID_Angle ,Motor->PID_Angle.realPoint_Now) ;
-	// 3. Êä³öµç»úËÙ¶È(´®ÐÐ»·Ç¶Ì×£¡£¡£¡)
+	// 3. è¾“å‡ºç”µæœºé€Ÿåº¦(ä¸²è¡ŒçŽ¯åµŒå¥—ï¼ï¼ï¼)
 	Motor_SetSpeed(Motor, Motor->PID_Angle.setPoint * Dir);
 }
 
-// 4. µç»ú½Ç¶È»·µ¥»·PID
+// 4. ç”µæœºè§’åº¦çŽ¯å•çŽ¯PID
 void Motorx_Angle_Update_PWM_Tick(Motor_Typedef *Motor)
 {
-	// 0. Î»ÖÃ¸üÐÂ
+	// 0. ä½ç½®æ›´æ–°
 	Encoder_Get() ;
-	// 1. ¼ÆËã½Ç¶È
+	// 1. è®¡ç®—è§’åº¦
 	Motor_Angle_Update(Motor) ;
-	// 2. ¼ÆËãPID
+	// 2. è®¡ç®—PID
 	PID_Update(&Motor->PID_Angle ,Motor->PID_Angle.realPoint_Now) ;
-	// 3. Êä³öµç»úËÙ¶È(´®ÐÐ»·Ç¶Ì×£¡£¡£¡)
+	// 3. è¾“å‡ºç”µæœºé€Ÿåº¦(ä¸²è¡ŒçŽ¯åµŒå¥—ï¼ï¼ï¼)
 	Motor_SetPWM(Motor->PID_Angle.setPoint) ;
 } 
 

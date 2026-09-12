@@ -2,7 +2,7 @@
 #include "AllHeader.h"
 
 Mode_Typedef curr_mode = Mode_Null;
-Mode_Typedef next_mode = Mode_1;
+Mode_Typedef next_mode = Mode_5;
 
 void Mode_G_Setup(void)
 {
@@ -92,9 +92,9 @@ void Timer_1ms_Callback(void)
 		count5 = 0 ;
 		Timer_5ms_Callback() ;
 	}
-	// 20·ÖÆµ
+	// 50·ÖÆµ
 	static int count20 = 0 ;
-	if (++count20 >= 20)
+	if (++count20 >= 50)
 	{
 		count20 = 0 ;
 		Timer_20ms_Callback() ;

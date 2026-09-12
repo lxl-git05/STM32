@@ -2,20 +2,38 @@
 #include "MyPID.h"
 
 // 用来一般化初始化PID结构体
-void PID_Init(Pid_Typedef *pid, float kp, float ki, float kd , float OutMax , float OutMin , float ioutMax )
+void PID_Init(Pid_Typedef *pid, float kp, float ki, float kd , float OutMax , float OutMin , float ioutMax , float dt_s )
 {
+	if ((pid == NULL) || (dt_s <= 0.0f))
+	{
+		return;
+	}
+
 	pid->Kp = kp;
 	pid->Ki = ki;
 	pid->Kd = kd;
+	pid->dt_s = dt_s;
 
 	pid->OutMax = OutMax 	 ;	// 输出限幅最大值
 	pid->OutMin = OutMin 	 ;	// 输出限幅最小值
 	pid->ioutMax = ioutMax ;	// 积分限幅
+	pid->goalPoint = 0.0f;
+	pid->deadspace = 0.0f;
+	pid->d_style = 0.0f;
+	pid->d_filter = 0.0f;
+	pid->PID_Func = NULL;
+
+	PID_Param_Reset(pid);
 }
 
 // PID值更新,更新值直接写入PID的Output
 void PID_Update(Pid_Typedef *pid, float ActualValue)
 {
+	if ((pid == NULL) || (pid->dt_s <= 0.0f))
+	{
+		return;
+	}
+
 	// 更新上次误差
 	pid->LastError = pid->PreError;
 	// 得到本次误差
@@ -29,9 +47,9 @@ void PID_Update(Pid_Typedef *pid, float ActualValue)
 		pid->PID_Func() ;
 	}
 	// 微分误差:*微分先行*(默认为0,也就是不先行)
-	float dError = (1.0f - pid->d_style)*(pid->PreError - pid->LastError) - pid->d_style * (pid->realPoint_Now - pid->realPoint_Bef);
+	float dError = ((1.0f - pid->d_style)*(pid->PreError - pid->LastError) - pid->d_style * (pid->realPoint_Now - pid->realPoint_Bef)) / pid->dt_s;
 	// 累次积分
-	pid->SumError += pid->PreError ;
+	pid->SumError += pid->PreError * pid->dt_s ;
 	// *积分限幅*
 	if (pid->SumError > pid->ioutMax)
 	{
