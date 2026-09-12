@@ -12,15 +12,10 @@ void Mode_5_Setup(void)
 {
 	PID_Init(&PID_AD , 0.23f , 3.08f , 0.00943f , 100 , -100 , 5.0f , 0.005f) ;
 	PID_AD.goalPoint = CENTER_ANGLE ;
-	
-	Motor.PID_Angle.OutMax = 100 ;
-	Motor.PID_Angle.OutMin =-100 ;
-	
+
 //	Motor.PID_Angle.d_style = 1.0f ;
 //	Motor.PID_Angle.d_filter = 0.9f ;
-	Motor.PID_Angle.Kp = 0.622f ;
-	Motor.PID_Angle.Ki = 0.38f ;
-	Motor.PID_Angle.Kd = 0.138f;
+	PID_Init(&Motor.PID_Angle , 0.622f , 0.152f , 0.345f , 100 , -100 , 50.0f , 0.050f) ;			// 速度实测能到600+,但是这里还是限制500吧
 }
 
 void Mode_5_Loop(void)

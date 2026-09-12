@@ -65,6 +65,8 @@ void Timer_20ms_Callback(void)
     }
 }
 
+int Counter = 50 ;
+
 // 1. 1ms¶¨Ê±Æ÷
 void Timer_1ms_Callback(void)
 {
@@ -94,8 +96,9 @@ void Timer_1ms_Callback(void)
 	}
 	// 50·ÖÆµ
 	static int count20 = 0 ;
-	if (++count20 >= 50)
+	if (++count20 >= Counter)
 	{
+		Motor.PID_Angle.dt_s = Counter * 1.0 / 1000 ;
 		count20 = 0 ;
 		Timer_20ms_Callback() ;
 	}

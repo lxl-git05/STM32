@@ -13,7 +13,6 @@ void Motor_Init(void)
 	
 	// PID环: 速度环PI 位置环PD
 	PID_Init(&Motor.PID_s		  , 0.1325f , 4.65f , 0.0f , 100 , -100 , 20.0f , 0.020f) ;	// PWM最大值是+-100
-	PID_Init(&Motor.PID_Angle , 0.0f , 0.0f , 0.0f , 500 , -500 , 20.0f , 0.020f) ;			// 速度实测能到600+,但是这里还是限制500吧
 	
 	PWM_Init();
 }
