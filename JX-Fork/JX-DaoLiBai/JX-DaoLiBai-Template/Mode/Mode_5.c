@@ -1,7 +1,7 @@
 #include "AllHeader.h"
 
 // 倒立摆
-bool isOpen = false ;			// 是否启动
+uint8_t State = 0 ;				// 是否启动
 uint16_t Angle ;					// 读取角度
 #define CENTER_ANGLE 2060	// 倒立摆接近中心
 #define CENTER_RANGE 800	// 倒立摆可调范围
@@ -24,28 +24,35 @@ void Mode_5_Loop(void)
 	// 按键切换倒立摆是否使能
 	if (Key_Check(KEY_1 , KEY_SINGLE))
 	{
-		isOpen = !isOpen ;
+		if (State != 4)
+		{
+			State = 4 ;	// 暂时是4而不是起摆
+		}
+		else
+		{
+			State = 0 ;	
+		}
 	}
 	// LED指示倒立摆状态
-	if ( isOpen) {HAL_GPIO_WritePin(LED0_GPIO_Port , LED0_Pin ,GPIO_PIN_RESET) ;}	// 开启->亮
-	if (!isOpen) {HAL_GPIO_WritePin(LED0_GPIO_Port , LED0_Pin ,GPIO_PIN_SET  ) ;} // 关闭->灭
+	if ( State == 4) {HAL_GPIO_WritePin(LED0_GPIO_Port , LED0_Pin ,GPIO_PIN_RESET) ;}	 // 开启->亮
+	if ( State != 4) {HAL_GPIO_WritePin(LED0_GPIO_Port , LED0_Pin ,GPIO_PIN_SET  ) ;}  // 关闭->灭
 	// OLED展示
 	OLED_Printf(0,20,OLED_6X8,"AD=%04d",Angle) ;
 	// 串口调试
-	// 串口配置PID和速度
+	// 1. 内环
 //	Serial_SetFloatData(&Serial1, "Kp",   "Kp=%f",   &PID_AD.Kp);
 //	Serial_SetFloatData(&Serial1, "Ki",   "Ki=%f",   &PID_AD.Ki);
 //	Serial_SetFloatData(&Serial1, "Kd",   "Kd=%f",   &PID_AD.Kd);
 //	Serial_SetFloatData(&Serial1, "Goal", "Goal=%f", &PID_AD.goalPoint);
 //	// 串口打印变量
 //	Serial_printf(&Serial1, "%.2f,%.2f,%.2f\n", PID_AD.goalPoint, PID_AD.realPoint_Now, PID_AD.setPoint);
-	
-	Serial_SetFloatData(&Serial1, "Kp",   "Kp=%f",   &Motor.PID_Angle.Kp);
-	Serial_SetFloatData(&Serial1, "Ki",   "Ki=%f",   &Motor.PID_Angle.Ki);
-	Serial_SetFloatData(&Serial1, "Kd",   "Kd=%f",   &Motor.PID_Angle.Kd);
-	Serial_SetFloatData(&Serial1, "Goal", "Goal=%f", &Motor.PID_Angle.goalPoint);
-	// 串口打印变量
-	Serial_printf(&Serial1, "%.2f,%.2f,%.2f\n", Motor.PID_Angle.goalPoint, Motor.PID_Angle.realPoint_Now, Motor.PID_Angle.setPoint);
+		// 2. 外环
+//	Serial_SetFloatData(&Serial1, "Kp",   "Kp=%f",   &Motor.PID_Angle.Kp);
+//	Serial_SetFloatData(&Serial1, "Ki",   "Ki=%f",   &Motor.PID_Angle.Ki);
+//	Serial_SetFloatData(&Serial1, "Kd",   "Kd=%f",   &Motor.PID_Angle.Kd);
+//	Serial_SetFloatData(&Serial1, "Goal", "Goal=%f", &Motor.PID_Angle.goalPoint);
+//	// 串口打印变量
+//	Serial_printf(&Serial1, "%.2f,%.2f,%.2f\n", Motor.PID_Angle.goalPoint, Motor.PID_Angle.realPoint_Now, Motor.PID_Angle.setPoint);
 }
 
 void Mode5_1ms_Tick(void)
@@ -54,10 +61,10 @@ void Mode5_1ms_Tick(void)
 	Angle = AD_GetValue() ;
 	if (!(Angle > CENTER_ANGLE - CENTER_RANGE && Angle < CENTER_ANGLE + CENTER_RANGE))	// 角度在可调范围之外
 	{
-		isOpen = false ;	// 赶快关掉
+		State = 0 ;	// 赶快关掉
 	}
 	// 关闭的时候PWM为0
-	if (!isOpen)
+	if (State == 0)
 	{
 		Motor_SetPWM(0) ;
 	}
@@ -65,7 +72,7 @@ void Mode5_1ms_Tick(void)
 
 void Mode5_5ms_Tick(void)
 {
-	if (isOpen)
+	if (State == 4)
 	{
 		// 内环PID：倒立摆角度环
 		// 1. 读取当前角度(1ms已经完成)
@@ -81,7 +88,7 @@ void Mode5_5ms_Tick(void)
 void Mode5_20ms_Tick(void)
 {
 	Timer_Counter_Func() ;
-	if (isOpen)
+	if (State == 4)
 	{
 		// 外环PID: 倒立摆位置环
 		// 1. 计算角度
