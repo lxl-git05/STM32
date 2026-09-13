@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "OLED.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -114,10 +114,16 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
+	OLED_Init() ;
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+		OLED_Printf(0,0,OLED_6X8,"Default") ;
+		HAL_GPIO_WritePin(LED0_GPIO_Port , LED0_Pin , GPIO_PIN_SET) ;
+    osDelay(500);
+		HAL_GPIO_WritePin(LED0_GPIO_Port , LED0_Pin , GPIO_PIN_RESET) ;
+		OLED_Update() ;
+		osDelay(500);
   }
   /* USER CODE END StartDefaultTask */
 }
