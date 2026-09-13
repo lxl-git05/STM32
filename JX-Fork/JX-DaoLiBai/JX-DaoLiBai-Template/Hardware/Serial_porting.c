@@ -83,7 +83,6 @@ static void Serial_Parse_HEX(Serial_Typedef *pSerial, uint16_t Size)
     }
 
     pSerial->HEX_Data.len = LEN;
-//		Timer_Counter_Func() ;
     pSerial->HEX_Data.frame_valid = true;
 }
 

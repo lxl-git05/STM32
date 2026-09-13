@@ -33,7 +33,7 @@ void Motor_SetPWM(int8_t PWM) ;
 // 3. 得到一段周期内电机的速度,使用M法测速公式,得到Motor的转速:n圈/s
 void Motor_Speed_Update(Motor_Typedef *Motor , uint32_t Gap_Time_ms) ;
 // 4. 得到当前电机旋转的角度
-void Motor_Angle_Update(Motor_Typedef *Motor) ;
+float Motor_Angle_Update(Motor_Typedef *Motor) ;
 
 // ======================= Func层 =======================
 // 1. 设置电机goal速度

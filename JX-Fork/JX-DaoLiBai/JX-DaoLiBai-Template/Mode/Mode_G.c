@@ -1,6 +1,8 @@
 #include "Mode_G.h"
 #include "AllHeader.h"
 
+extern Pid_Typedef PID_AD ;
+
 Mode_Typedef curr_mode = Mode_Null;
 Mode_Typedef next_mode = Mode_5;
 
@@ -65,7 +67,8 @@ void Timer_20ms_Callback(void)
     }
 }
 
-int Counter = 50 ;
+int Counter = 50 ;		// 50ms基准
+int Counter_Nei = 5 ;	// 5ms基准
 
 // 1. 1ms定时器
 void Timer_1ms_Callback(void)
@@ -89,8 +92,9 @@ void Timer_1ms_Callback(void)
 	}
 	// 5分频
 	static int count5 = 0 ;
-	if (++count5 >= 5)
+	if (++count5 >= Counter_Nei)
 	{
+		PID_AD.dt_s = Counter_Nei * 1.0 / 1000 ;
 		count5 = 0 ;
 		Timer_5ms_Callback() ;
 	}

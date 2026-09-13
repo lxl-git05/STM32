@@ -56,14 +56,16 @@ void Motor_Speed_Update(Motor_Typedef *Motor , uint32_t Gap_Time_ms)
 }
 
 // 4. 得到当前电机旋转的角度
-void Motor_Angle_Update(Motor_Typedef *Motor)
+float Motor_Angle_Update(Motor_Typedef *Motor)
 {
 	// 得到角度 = 圈数 * 360
 	float curr_Angle = (float)Encoder_cnt_Get() * 360.0f / 
 		(4 * Motor->Motor_Param->PPR * Motor->Motor_Param->ReductionRatio)   ;
 	
 	// 记录当前角度
-	Motor->PID_Angle.realPoint_Now = curr_Angle ;
+//	Motor->PID_Angle.realPoint_Now = curr_Angle ;
+	
+	return curr_Angle ;
 }
 
 // ======================= Func层 =======================
