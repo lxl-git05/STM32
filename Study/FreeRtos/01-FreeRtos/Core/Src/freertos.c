@@ -57,7 +57,18 @@ const osThreadAttr_t defaultTask_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-
+void MyTask1(void *argument)
+{
+	OLED_Init() ;
+	static int OLED_Num = 0;
+	while(1)
+	{
+		OLED_Printf(0, 0,OLED_6X8,"Default") ;
+		OLED_Printf(0,20,OLED_6X8,"OLED_Num:%d",OLED_Num++) ;
+		OLED_Update() ;
+		osDelay(500);
+	}
+}
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
@@ -96,6 +107,9 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+	// 自己添加任务
+	xTaskCreate(MyTask1,"MyTask1",128,NULL,osPriorityNormal,NULL) ;	// 创建OLED展示任务
+	
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -114,15 +128,13 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
-	OLED_Init() ;
+	
   /* Infinite loop */
   for(;;)
   {
-		OLED_Printf(0,0,OLED_6X8,"Default") ;
 		HAL_GPIO_WritePin(LED0_GPIO_Port , LED0_Pin , GPIO_PIN_SET) ;
     osDelay(500);
 		HAL_GPIO_WritePin(LED0_GPIO_Port , LED0_Pin , GPIO_PIN_RESET) ;
-		OLED_Update() ;
 		osDelay(500);
   }
   /* USER CODE END StartDefaultTask */
