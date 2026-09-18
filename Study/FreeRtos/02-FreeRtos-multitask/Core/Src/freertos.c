@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "OLED.h"
+#include "Timer_Counter.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,6 +58,8 @@ const osThreadAttr_t defaultTask_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
+
+TaskHandle_t Task1_Handle = NULL;
 void MyTask1(void *argument)
 {
 	OLED_Init() ;
@@ -67,6 +70,24 @@ void MyTask1(void *argument)
 		OLED_Printf(0,20,OLED_6X8,"OLED_Num:%d",OLED_Num++) ;
 		OLED_Update() ;
 		osDelay(1000);
+	}
+}
+
+// 任务2是静态任务
+TaskHandle_t Task2_Handle = NULL;
+StackType_t  Task2_Stack_Buf[128] ;
+StaticTask_t Task2_TCB 					 ;
+
+void MyTask2(void *argument)
+{
+	uint32_t Task2_Last = xTaskGetTickCount() ;
+	while(1)
+	{
+		HAL_GPIO_WritePin(LED_Y_GPIO_Port , LED_R_Pin , GPIO_PIN_SET); 
+		vTaskDelay(2000);
+		HAL_GPIO_WritePin(LED_Y_GPIO_Port , LED_R_Pin , GPIO_PIN_RESET); 
+		vTaskDelayUntil(&Task2_Last , 4000) ;
+		// Timer_Counter_Func() ;
 	}
 }
 /* USER CODE END FunctionPrototypes */
@@ -108,8 +129,8 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
 	// 自己添加任务
-	xTaskCreate(MyTask1,"MyTask1",128,NULL,osPriorityNormal,NULL) ;	// 创建OLED展示任务
-	
+	xTaskCreate(MyTask1,"MyTask1",128,NULL,osPriorityNormal,&Task1_Handle) ;	// 创建OLED展示任务
+	Task2_Handle = xTaskCreateStatic(MyTask2,"MyTask2",128,NULL,osPriorityNormal,Task2_Stack_Buf,&Task2_TCB) ;	// 黄光闪烁任务
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -124,6 +145,7 @@ void MX_FREERTOS_Init(void) {
   * @param  argument: Not used
   * @retval None
   */
+int cmd = 0 ;
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void *argument)
 {
@@ -132,10 +154,33 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
+		// 灯光闪烁任务
 		HAL_GPIO_WritePin(LED0_GPIO_Port , LED0_Pin , GPIO_PIN_SET) ;
     osDelay(500);
 		HAL_GPIO_WritePin(LED0_GPIO_Port , LED0_Pin , GPIO_PIN_RESET) ;
 		osDelay(500);
+		// 进行句柄实验
+		if (cmd == 1)	// 删除任务2: 黄色灯光闪烁任务
+		{
+			vTaskDelete(Task2_Handle) ;	
+		}
+		else if (cmd == 2)	// 删除自己
+		{
+			vTaskDelete(NULL) ;
+		}
+		else if (cmd == 3)	// 挂起任务2
+		{
+			vTaskSuspend(Task2_Handle);
+		}
+		else if (cmd == 4)	// 恢复任务2
+		{
+			vTaskResume(Task2_Handle);
+		}
+		// 这里单列,否则else if永远轮不到这里
+		if (cmd != 0)
+		{
+			cmd = 0 ;
+		}
   }
   /* USER CODE END StartDefaultTask */
 }
