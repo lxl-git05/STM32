@@ -44,6 +44,7 @@
  *----------------------------------------------------------*/
 
 /* USER CODE BEGIN Includes */
+#define configUSE_QUEUE_SETS 1
 /* Section where include file can be added */
 /* USER CODE END Includes */
 

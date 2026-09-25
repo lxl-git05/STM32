@@ -25,8 +25,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+/* ===================== 1/4 头文件导入 ===================== */
 #include "OLED.h"
 #include "Timer_Counter.h"
+#include "Serial_porting.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,6 +60,32 @@ const osThreadAttr_t defaultTask_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
+
+/* ===================== 2/4 Queue Set 必需配置检查 ===================== */
+
+/* 1. 必须打开 Queue Set 功能 */
+#if !defined(configUSE_QUEUE_SETS)
+
+    #error "configUSE_QUEUE_SETS is not defined! Please add: #define configUSE_QUEUE_SETS 1"
+
+#elif (configUSE_QUEUE_SETS != 1)
+
+    #error "configUSE_QUEUE_SETS must be 1 to use Queue Sets!"
+
+#endif
+
+/* 2. 如果你使用 xQueueCreateSet()，必须支持动态内存分配 */
+#if !defined(configSUPPORT_DYNAMIC_ALLOCATION)
+
+    #error "configSUPPORT_DYNAMIC_ALLOCATION is not defined!"
+
+#elif (configSUPPORT_DYNAMIC_ALLOCATION != 1)
+
+    #error "configSUPPORT_DYNAMIC_ALLOCATION must be 1 when using xQueueCreateSet()!"
+
+#endif
+
+/* ===================== 3/4 自定义任务创建 ===================== */
 
 TaskHandle_t Task1_Handle = NULL;
 void MyTask1(void *argument)
@@ -128,9 +156,6 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
-	// 自己添加任务
-	xTaskCreate(MyTask1,"MyTask1",128,NULL,osPriorityNormal,&Task1_Handle) ;	// 创建OLED展示任务
-	Task2_Handle = xTaskCreateStatic(MyTask2,"MyTask2",128,NULL,osPriorityNormal,Task2_Stack_Buf,&Task2_TCB) ;	// 黄光闪烁任务
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -145,11 +170,18 @@ void MX_FREERTOS_Init(void) {
   * @param  argument: Not used
   * @retval None
   */
+
+/* ===================== 4/4 默认任务 ===================== */
 int cmd = 0 ;
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
+	// 外设初始化: 建议都在default创建任务之前进行所有外设的初始化,防止其他任务调用硬件的时候出现操作NULL的情况
+	Serial_Init() ;	Serial_printf(&Serial1 , "Hello\r\n") ;
+	// 自己添加任务
+	xTaskCreate(MyTask1,"MyTask1",128,NULL,osPriorityNormal,&Task1_Handle) ;	// 创建OLED展示任务
+	Task2_Handle = xTaskCreateStatic(MyTask2,"MyTask2",128,NULL,osPriorityNormal,Task2_Stack_Buf,&Task2_TCB) ;	// 黄光闪烁任务
 	
   /* Infinite loop */
   for(;;)
