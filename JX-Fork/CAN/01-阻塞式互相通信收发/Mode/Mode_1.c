@@ -14,8 +14,16 @@ uint8_t RxData[8];
 
 void Mode_1_Setup(void) 
 {
+	// 本工程默认是正常模式, 如果想要使用环回模式测试硬件,取消这里的注释即可
+	/*
+	hcan1.Init.Mode = CAN_MODE_LOOPBACK;
+	if (HAL_CAN_Init(&hcan1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+	*/
 	MyCAN_Init();
-//	hcan1.Init.Mode = CAN_MODE_LOOPBACK ;	// 如果想要使用环回模式测试硬件,取消这里的注释即可
+	
 }
 void Mode_1_Loop(void)
 {
