@@ -18,6 +18,7 @@ typedef struct
 
 /* Call after MX_CAN1_Init(); configure FIFO0 filters and start CAN1. */
 void MyCAN_Init(void);
+void MyCAN_Filter_Init(CAN_FilterTypeDef *Filter) ;	// 实验函数
 /* Standard data frame: ID <= 0x7FF, Length <= 8; foreground only, 100 ms timeout.
  * The tutorial's void interface does not report transmission success/failure. */
 void MyCAN_Transmit(MyCAN_Tx_Msg* Tx_Msg) ;

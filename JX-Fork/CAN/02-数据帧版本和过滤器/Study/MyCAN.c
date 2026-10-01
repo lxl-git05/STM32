@@ -21,8 +21,30 @@ void MyCAN_Init(void)
 	{
 		if (HAL_CAN_Start(&hcan1) != HAL_OK) Error_Handler();
 	}
-	
-	
+}
+
+// 可以直观查看过滤器(纯粹实验使用)
+void MyCAN_Filter_Init(CAN_FilterTypeDef *Filter)
+{
+	if (Filter == NULL)
+	{
+		return;
+	}
+
+	/* 配置过滤器 */
+	if (HAL_CAN_ConfigFilter(&hcan1, Filter) != HAL_OK)
+	{
+		Error_Handler();
+	}
+
+	/* 启动CAN */
+	if (HAL_CAN_GetState(&hcan1) != HAL_CAN_STATE_LISTENING)
+	{
+		if (HAL_CAN_Start(&hcan1) != HAL_OK)
+		{
+			Error_Handler();
+		}
+	}
 }
 
 // 阻塞式发送

@@ -4,7 +4,7 @@
 // 描述: 自发自收
 
 uint8_t KeyNum;
-uint32_t TxID = 0x555;
+uint32_t TxID = 0x777;
 uint8_t TxLength = 4;
 uint8_t TxData[8] = {0x11, 0x22, 0x33, 0x44};
 
