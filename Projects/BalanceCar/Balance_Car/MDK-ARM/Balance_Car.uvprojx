@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../User/AllHeader;../User/Function;../User/Hardware;../User/Initial;../User/Msg;../User/Software;../User/Task</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../User/AllHeader;../User/Function;../User/Hardware;../User/Initial;../User/Msg;../User/Software;../User/Task;../User/ISR</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1619,15 +1619,36 @@
         </Group>
         <Group>
           <GroupName>User/Hardware</GroupName>
+          <Files>
+          </Files>
         </Group>
         <Group>
           <GroupName>User/Software</GroupName>
+          <Files>
+          </Files>
         </Group>
         <Group>
           <GroupName>User/Function</GroupName>
+          <Files>
+          </Files>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>
+        </Group>
+        <Group>
+          <GroupName>User/ISR</GroupName>
+          <Files>
+            <File>
+              <FileName>ISR.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../User/ISR/ISR.c</FilePath>
+            </File>
+            <File>
+              <FileName>ISR.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>../User/ISR/ISR.h</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>

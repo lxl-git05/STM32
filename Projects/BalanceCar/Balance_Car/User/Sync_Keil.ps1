@@ -25,7 +25,7 @@ $content = $includeRegex.Replace($content, [System.Text.RegularExpressions.Match
     $match.Groups[1].Value + ($paths -join ';') + $match.Groups[3].Value
 }, 1)
 
-$layers = @('Initial', 'AllHeader', 'Task', 'Msg', 'Hardware', 'Software', 'Function')
+$layers = @('Initial', 'AllHeader', 'ISR', 'Task', 'Msg', 'Hardware', 'Software', 'Function')
 foreach ($layer in $layers) {
     $groupName = 'User/' + $layer
     $group = "        <Group>`r`n          <GroupName>$groupName</GroupName>`r`n          <Files>`r`n"

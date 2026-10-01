@@ -22,6 +22,7 @@
 
 /* Add actual Hardware, Software and Function module headers here. */
 #include "Initial.h"
+#include "ISR.h"
 #include "Msg.h"
 #include "App_Task.h"
 

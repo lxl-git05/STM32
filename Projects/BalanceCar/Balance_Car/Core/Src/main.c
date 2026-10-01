@@ -31,6 +31,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "Initial.h"
+#include "ISR.h"
 
 /* USER CODE END Includes */
 
@@ -199,6 +200,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
+  ISR_TIM_Handler(htim);
 
   /* USER CODE END Callback 1 */
 }

@@ -12,6 +12,7 @@ User 位于 CubeMX 项目 Balance_Car 内，与 Core、Drivers、Middlewares 同
 |---|---|
 | Initial | Hardware_Init、Task_Init 统一入口；Initial.h 同时声明 Msg_Init |
 | AllHeader | 聚合公共头文件，只供 .c 按需使用 |
+| ISR | HAL 回调分发、短小硬件处理及 FreeRTOS FromISR 通知 |
 | Task | 创建任务、周期与调度，调用 Function |
 | Msg | 在 Msg.c 唯一定义用户共享 RTOS 句柄，Msg.h extern 声明；Msg_Init 创建通信对象 |
 | Hardware | 设备驱动及硬件协议，调用 HAL |
@@ -31,7 +32,7 @@ User 位于 CubeMX 项目 Balance_Car 内，与 Core、Drivers、Middlewares 同
 
 ## Keil 与 CubeMX 再生成
 
-当前七个目录都已加入 Keil Include Path 和 Group。添加模块子目录或重新 Generate Code 后，关闭 Keil 工程，在本工作区运行：
+当前八个目录都已加入 Keil Include Path 和 Group。添加模块子目录或重新 Generate Code 后，关闭 Keil 工程，在本工作区运行：
 
 ```powershell
 powershell -NoProfile -File .\Balance_Car\User\Sync_Keil.ps1

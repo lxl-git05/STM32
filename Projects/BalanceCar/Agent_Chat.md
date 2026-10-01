@@ -4,7 +4,24 @@
 
 现在需要你开始帮我进行硬件底层的加入
 
++ MPU6050
 
+  + IIC驱动，可以参考D:\github\HUST_STI\HUST_STI_1\Templete\Templete_STM32F407ZGT6\Template_F407ZGT6\IMU，但是我只需要MPU6050，不再需要这种解耦底层设计
+  + Func层建立Ma滤波，其他滤波都不要
+  + 也就是最终只有4个文件，硬件底层驱动和滤波文件
+
++ OLED、串口参考D:\github\2-2-STM32\STM32\Templates\Template_F103C8T6的硬件驱动
+
+  + 串口需要在ISR进行各自的入口进入，其中遵从协议的只有Serial1
+  + 另外两个Serial暂时脱离于协议之外，也不需要初始化
+
++ 按键暂时不需要载入
+
++ tools也载入
+
++ 其他的不需要
+
+  
 
 
 

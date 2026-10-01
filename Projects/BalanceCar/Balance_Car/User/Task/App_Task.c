@@ -16,7 +16,7 @@ void App_Task_Init(void)
 void App_Task(void *argument)
 {
     (void)argument;
-
+	
     while(1)
     {
         vTaskDelay(pdMS_TO_TICKS(1000U));
