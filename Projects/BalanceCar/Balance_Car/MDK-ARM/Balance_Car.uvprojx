@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../User/AllHeader;../User/Function;../User/Hardware;../User/Initial;../User/Msg;../User/Software;../User/Task</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1561,6 +1561,70 @@
               </FileOption>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>User/Initial</GroupName>
+          <Files>
+            <File>
+              <FileName>Initial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../User/Initial/Initial.c</FilePath>
+            </File>
+            <File>
+              <FileName>Initial.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>../User/Initial/Initial.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>User/AllHeader</GroupName>
+          <Files>
+            <File>
+              <FileName>AllHeader.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>../User/AllHeader/AllHeader.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>User/Task</GroupName>
+          <Files>
+            <File>
+              <FileName>App_Task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../User/Task/App_Task.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_Task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>../User/Task/App_Task.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>User/Msg</GroupName>
+          <Files>
+            <File>
+              <FileName>Msg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../User/Msg/Msg.c</FilePath>
+            </File>
+            <File>
+              <FileName>Msg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>../User/Msg/Msg.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>User/Hardware</GroupName>
+        </Group>
+        <Group>
+          <GroupName>User/Software</GroupName>
+        </Group>
+        <Group>
+          <GroupName>User/Function</GroupName>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>
