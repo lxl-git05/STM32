@@ -1,4 +1,5 @@
 #include "ISR.h"
+#include "Serial_porting.h"
 
 /* HAL_TIM_PeriodElapsedCallback remains in main.c because CubeMX generates
    the TIM4 HAL timebase there. Its USER CODE section forwards here. */
@@ -31,16 +32,39 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     }
 }
 
+/* ReceiveToIdle DMA dispatch is separate from ordinary RxCplt. */
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t size)
+{
+    if (huart->Instance == USART1)
+    {
+        Serial_RxEventCallback(huart, size);
+    }
+    else if (huart->Instance == USART2)
+    {
+        /* ESP32 raw receive entry reserved; not initialized. */
+    }
+    else if (huart->Instance == USART3)
+    {
+        /* Motor raw receive entry reserved; not initialized. */
+    }
+}
+
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
-    /* Add port-specific completion dispatch when a driver needs it. */
-    (void)huart;
+    /* USART1 DMA TX: advance the ring buffer and start pending data. */
+    if (huart->Instance == USART1)
+    {
+        Serial_TxCpltCallback(huart);
+    }
 }
 
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
-    /* Save error state or notify a task; perform recovery in task context. */
-    (void)huart;
+    if (huart->Instance == USART1)
+    {
+        Serial_ErrorCallback(huart);
+    }
+    /* USART2/3 have no user receive initialization or protocol yet. */
 }
 
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)

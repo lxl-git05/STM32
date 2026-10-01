@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../User/AllHeader;../User/Function;../User/Hardware;../User/Initial;../User/Msg;../User/Software;../User/Task;../User/ISR</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Middlewares/Third_Party/FreeRTOS/Source/include;../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2;../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3;../User/Config;../User/Function;../User/Hardware;../User/Software;../User/Task;../User/Tools</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1563,32 +1563,27 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>User/Initial</GroupName>
-          <Files>
-            <File>
-              <FileName>Initial.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../User/Initial/Initial.c</FilePath>
-            </File>
-            <File>
-              <FileName>Initial.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>../User/Initial/Initial.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>User/AllHeader</GroupName>
+          <GroupName>Config</GroupName>
           <Files>
             <File>
               <FileName>AllHeader.h</FileName>
               <FileType>5</FileType>
-              <FilePath>../User/AllHeader/AllHeader.h</FilePath>
+              <FilePath>..\User\Config\AllHeader.h</FilePath>
+            </File>
+            <File>
+              <FileName>Initial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Config\Initial.c</FilePath>
+            </File>
+            <File>
+              <FileName>ISR.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Config\ISR.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>User/Task</GroupName>
+          <GroupName>Task</GroupName>
           <Files>
             <File>
               <FileName>App_Task.c</FileName>
@@ -1596,59 +1591,92 @@
               <FilePath>../User/Task/App_Task.c</FilePath>
             </File>
             <File>
-              <FileName>App_Task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>../User/Task/App_Task.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>User/Msg</GroupName>
-          <Files>
-            <File>
-              <FileName>Msg.c</FileName>
+              <FileName>UI_Task.c</FileName>
               <FileType>1</FileType>
-              <FilePath>../User/Msg/Msg.c</FilePath>
+              <FilePath>..\User\Task\UI_Task.c</FilePath>
             </File>
             <File>
-              <FileName>Msg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>../User/Msg/Msg.h</FilePath>
+              <FileName>KEY_Task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Task\KEY_Task.c</FilePath>
+            </File>
+            <File>
+              <FileName>Debug_Task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Task\Debug_Task.c</FilePath>
+            </File>
+            <File>
+              <FileName>MPU6050_Task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Task\MPU6050_Task.c</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>User/Hardware</GroupName>
+          <GroupName>Hardware</GroupName>
           <Files>
+            <File>
+              <FileName>Battery.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Hardware\Battery.c</FilePath>
+            </File>
+            <File>
+              <FileName>Key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Hardware\Key.c</FilePath>
+            </File>
+            <File>
+              <FileName>OLED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Hardware\OLED.c</FilePath>
+            </File>
+            <File>
+              <FileName>OLED_Data.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Hardware\OLED_Data.c</FilePath>
+            </File>
+            <File>
+              <FileName>Serial_base.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Hardware\Serial_base.c</FilePath>
+            </File>
+            <File>
+              <FileName>MPU6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Hardware\MPU6050.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>User/Software</GroupName>
+          <GroupName>Function</GroupName>
           <Files>
+            <File>
+              <FileName>Serial_porting.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Function\Serial_porting.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>User/Function</GroupName>
+          <GroupName>Software</GroupName>
+        </Group>
+        <Group>
+          <GroupName>Tools</GroupName>
           <Files>
+            <File>
+              <FileName>TaskMonitor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\User\Tools\TaskMonitor.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer_Counter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../User/Tools/Timer_Counter.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>
-        </Group>
-        <Group>
-          <GroupName>User/ISR</GroupName>
-          <Files>
-            <File>
-              <FileName>ISR.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>../User/ISR/ISR.c</FilePath>
-            </File>
-            <File>
-              <FileName>ISR.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>../User/ISR/ISR.h</FilePath>
-            </File>
-          </Files>
         </Group>
       </Groups>
     </Target>

@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "Initial.h"
+#include "TaskMonitor.h"
 
 /* USER CODE END Includes */
 
@@ -64,6 +65,23 @@ const osThreadAttr_t defaultTask_attributes = {
 void StartDefaultTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
+
+/* Hook prototypes */
+void configureTimerForRunTimeStats(void);
+unsigned long getRunTimeCounterValue(void);
+
+/* USER CODE BEGIN 1 */
+/* Functions needed when configGENERATE_RUN_TIME_STATS is on */
+__weak void configureTimerForRunTimeStats(void)
+{
+  TaskMonitor_ClockInit();
+}
+
+__weak unsigned long getRunTimeCounterValue(void)
+{
+  return TaskMonitor_ClockUs();
+}
+/* USER CODE END 1 */
 
 /**
   * @brief  FreeRTOS initialization
